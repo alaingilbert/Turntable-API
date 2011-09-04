@@ -23,40 +23,40 @@ A simple nodejs wrapper for the turntable API
 
 # Documentation
 
-## roomNow ( [callback:fn] )
+### roomNow ( [callback:fn] )
 
-## listRooms ( skip=0:int [, callback:fn] )
+### listRooms ( skip=0:int [, callback:fn] )
 
-## roomRegister ( roomId:string [, callback:fn] )
+### roomRegister ( roomId:string [, callback:fn] )
 
-## roomDeregister ( [callback:fn] )
+### roomDeregister ( [callback:fn] )
 
-## roomInfo ( [callback:fn] )
+### roomInfo ( [callback:fn] )
 
-## speak ( msg:string [, callback:fn] )
+### speak ( msg:string [, callback:fn] )
 
-## bootUser ( userId:string [, callback:fn] )
+### bootUser ( userId:string [, callback:fn] )
 
-## addDj ( [callback:fn] )
+### addDj ( [callback:fn] )
 
-## remDj ( [[userId:string, ]callback:fn] )
+### remDj ( [[userId:string, ]callback:fn] )
 
-## stopSong ( [callback:fn] )
+### stopSong ( [callback:fn] )
 
-## vote ( val:enum('up', 'down') [, callback:fn] )
+### vote ( val:enum('up', 'down') [, callback:fn] )
 
-## userAuthenticate ( [callback:fn] )
+### userAuthenticate ( [callback:fn] )
 
-## userInfo ( [callback:fn] )
+### userInfo ( [callback:fn] )
 
-## modifyLaptop ( laptop:enum('linux', 'mac', 'pc', 'chrome') [, callback:fn] )
+### modifyLaptop ( laptop:enum('linux', 'mac', 'pc', 'chrome') [, callback:fn] )
 
-## modifyName ( name:string [, callback:fn] )
+### modifyName ( name:string [, callback:fn] )
 
-## setAvatar ( avatarId:int [, callback:fn] )
+### setAvatar ( avatarId:int [, callback:fn] )
 
-## playlistAll ( playlistName:string [, callback:fn] )
+### playlistAll ( playlistName:string [, callback:fn] )
 
-## playlistAdd ( playlistName:string, songId:string [, callback:fn] )
+### playlistAdd ( playlistName:string, songId:string [, callback:fn] )
 
-## playlistRemove ( playlistName:string, index:int [, callback:fn] )
+### playlistRemove ( playlistName:string, index:int [, callback:fn] )
