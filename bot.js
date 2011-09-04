@@ -47,7 +47,7 @@ var Bot = function () {
       if (!self._isConnected) {
          if (msg.data == '~m~10~m~no_session') {
             self._isConnected = true;
-            self.user_authenticate(function () {
+            self.userAuthenticate(function () {
                self.callback(self);
             });
          }
@@ -177,23 +177,23 @@ Bot.prototype.close = function () {
    this.ws.close();
 };
 
-Bot.prototype.room_now = function (callback) {
+Bot.prototype.roomNow = function (callback) {
    var rq = { api: 'room.now' };
    this._send(rq, callback);
 };
 
-Bot.prototype.list_rooms = function (skip, callback) {
+Bot.prototype.listRooms = function (skip, callback) {
    skip = skip !== undefined ? skip : 0;
    var rq = { api: 'room.list_rooms', skip: skip };
    this._send(rq, callback);
 };
 
-Bot.prototype.room_register = function (roomId, callback) {
+Bot.prototype.roomRegister = function (roomId, callback) {
    var rq = { api: 'room.register', roomid: roomId };
    this._send(rq, callback);
 };
 
-Bot.prototype.room_deregister = function (callback) {
+Bot.prototype.roomDeregister = function (callback) {
    var rq = { api: 'room.deregister', roomid: this.roomId };
    this._send(rq, callback);
 };

@@ -5,7 +5,7 @@
    var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
 
    var bot = new Bot(AUTH, USERID, function () {
-   bot.room_register(ROOMID, function () {
+   bot.roomRegister(ROOMID, function () {
 
    bot.on('speak', function (data) {
       // Get the data

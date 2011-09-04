@@ -24,13 +24,13 @@ A simple nodejs wrapper for the turntable API
 
 # Documentation
 
-## room_now ( [callback:fn] )
+## roomNow ( [callback:fn] )
 
-## list_rooms ( skip=0:int [, callback:fn] )
+## listRooms ( skip=0:int [, callback:fn] )
 
-## room_register ( roomId:string [, callback:fn] )
+## roomRegister ( roomId:string [, callback:fn] )
 
-## room_deregister ( [callback:fn] )
+## roomDeregister ( [callback:fn] )
 
 ## roomInfo ( [callback:fn] )
 
