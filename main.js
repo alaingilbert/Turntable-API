@@ -4,7 +4,7 @@
    var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
    var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
 
-   var bot = new Bot(AUTH, USERID, function(sender) {
+   var bot = new Bot(AUTH, USERID, function () {
    bot.user_authenticate(function () {
    bot.room_register(ROOMID, function () {
 

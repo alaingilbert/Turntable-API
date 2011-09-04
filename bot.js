@@ -25,7 +25,7 @@ var events    = require('events').EventEmitter;
 
 var DEBUG     = false;
 
-var Bot = function() {
+var Bot = function () {
    this.auth          = arguments[0];
    this.userId        = arguments[1];
    this.callback      = arguments[2];
@@ -39,7 +39,7 @@ var Bot = function() {
    this._isConnected  = false;
 
    this.ws = new WebSocket('ws://chat2.turntable.fm:80/socket.io/websocket');
-   this.ws.onmessage = function(msg) {
+   this.ws.onmessage = function (msg) {
       var data = msg.data;
 
       if (!self._isConnected) {
@@ -120,15 +120,15 @@ var Bot = function() {
 
 Bot.prototype.__proto__ = events.prototype;
 
-Bot.prototype._heartbeat = function(msg) {
+Bot.prototype._heartbeat = function (msg) {
    this._send(msg);
 };
 
-Bot.prototype.toString = function() {
+Bot.prototype.toString = function () {
    return '';
 };
 
-Bot.prototype._send = function(msg, callback) {
+Bot.prototype._send = function (msg, callback) {
    this.ws.send('~m~'+msg.length+'~m~'+msg);
    if (callback) {
       this._cmds.push([this._msgId, callback]);
@@ -136,22 +136,22 @@ Bot.prototype._send = function(msg, callback) {
    this._msgId++;
 }
 
-Bot.prototype.close = function() {
+Bot.prototype.close = function () {
    this.ws.close();
 };
 
-Bot.prototype.room_now = function(callback) {
+Bot.prototype.room_now = function (callback) {
    var rq = '{"api":"room.now","msgid":'+this._msgId+',"clientid":"'+this.clientId+'"}';
    this._send(rq, callback);
 };
 
-Bot.prototype.room_list_rooms = function(skip, callback) {
+Bot.prototype.room_list_rooms = function (skip, callback) {
    skip = skip !== undefined ? skip : 0;
    var rq = '{"api":"room.list_rooms","skip":'+skip+',"msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
    this._send(rq, callback);
 };
 
-Bot.prototype.room_register = function(roomId, callback) {
+Bot.prototype.room_register = function (roomId, callback) {
    var rq = '{"api":"room.register","roomid":"'+roomId+'","msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
    this._send(rq, callback);
 };
@@ -161,7 +161,7 @@ Bot.prototype.room_deregister = function (roomId, callback) {
    this._send(rq, callback);
 };
 
-Bot.prototype.room_info = function(roomId, callback) {
+Bot.prototype.room_info = function (roomId, callback) {
    var rq = '{"api":"room.info","roomid":"'+roomId+'","msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
    this._send(rq, callback);
 };
@@ -199,7 +199,7 @@ Bot.prototype.room_vote = function (roomId, val, currentSongId, callback) {
    this._send(rq, callback);
 };
 
-Bot.prototype.user_authenticate = function(callback) {
+Bot.prototype.user_authenticate = function (callback) {
    var rq = '{"api":"user.authenticate","msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
    this._send(rq, callback);
 };
