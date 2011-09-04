@@ -182,7 +182,7 @@ Bot.prototype.room_now = function (callback) {
    this._send(rq, callback);
 };
 
-Bot.prototype.room_list_rooms = function (skip, callback) {
+Bot.prototype.list_rooms = function (skip, callback) {
    skip = skip !== undefined ? skip : 0;
    var rq = { api: 'room.list_rooms', skip: skip };
    this._send(rq, callback);
@@ -208,12 +208,12 @@ Bot.prototype.speak = function (msg, callback) {
    this._send(rq, callback);
 };
 
-Bot.prototype.room_boot_user = function (userId, callback) {
+Bot.prototype.bootUser = function (userId, callback) {
    var rq = { api: 'room.boot_user', roomid: this.roomId, target_userid: userId };
    this._send(rq, callback);
 };
 
-Bot.prototype.room_add_dj = function (callback) {
+Bot.prototype.addDj = function (callback) {
    var rq = { api: 'room.add_dj', roomid: this.roomId };
    this._send(rq, callback);
 };
@@ -236,7 +236,7 @@ Bot.prototype.room_rem_dj = function () {
    this._send(rq, callback);
 };
 
-Bot.prototype.room_stop_song = function (callback) {
+Bot.prototype.stopSong = function (callback) {
    var rq = { api: 'room.stop_song', roomid: this.roomId };
    this._send(rq, callback);
 };
@@ -249,44 +249,44 @@ Bot.prototype.vote = function (val, callback) {
    this._send(rq, callback);
 };
 
-Bot.prototype.user_authenticate = function (callback) {
+Bot.prototype.userAuthenticate = function (callback) {
    var rq = { api: 'user.authenticate' };
    this._send(rq, callback);
 };
 
-Bot.prototype.user_info = function (callback) {
+Bot.prototype.userInfo = function (callback) {
    var rq = { api: 'user.info' };
    this._send(rq, callback);
 };
 
-Bot.prototype.user_modify_laptop = function (laptop, callback) {
+Bot.prototype.modifyLaptop = function (laptop, callback) {
    var rq = { api: 'user.modify', laptop: laptop };
    this._send(rq, callback);
 };
 
-Bot.prototype.user_modify_name = function (name, callback) {
+Bot.prototype.modifyName = function (name, callback) {
    var rq = { api: 'user.modify', name: name };
    this._send(rq, callback);
 };
 
-Bot.prototype.user_set_avatar = function (avatarId, callback) {
+Bot.prototype.setAvatar = function (avatarId, callback) {
    var rq = { api: 'user.set_avatar', avatarid: avatarId };
    this._send(rq, callback);
 };
 
-Bot.prototype.playlist_all = function (playlistName, callback) {
+Bot.prototype.playlistAll = function (playlistName, callback) {
    if (!playlistName) { playlistName = 'default'; }
    var rq = { api: 'playlist.all', playlist_name: playlistName };
    this._send(rq, callback);
 };
 
-Bot.prototype.playlist_add = function (playlistName, songId, callback) {
+Bot.prototype.playlistAdd = function (playlistName, songId, callback) {
    if (!playlistName) { playlistName = 'default'; }
    var rq = { api: 'playlist.add', playlist_name: playlistName, song_dict: { fileid: songId }, index: 0 };
    this._send(rq, callback);
 };
 
-Bot.prototype.playlist_remove = function (playlistName, index, callback) {
+Bot.prototype.playlistRemove = function (playlistName, index, callback) {
    if (!playlistName) { playlistName = 'default'; }
    var rq = { api: 'playlist.remove', playlist_name: playlistName, index: index };
    this._send(rq, callback);

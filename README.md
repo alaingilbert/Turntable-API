@@ -21,3 +21,43 @@ A simple nodejs wrapper for the turntable API
 
        }); }); });
     })();
+
+# Documentation
+
+## room_now ( [callback:fn] )
+
+## list_rooms ( skip=0:int [, callback:fn] )
+
+## room_register ( roomId:string [, callback:fn] )
+
+## room_deregister ( [callback:fn] )
+
+## roomInfo ( [callback:fn] )
+
+## speak ( msg:string [, callback:fn] )
+
+## bootUser ( userId:string [, callback:fn] )
+
+## addDj ( [callback:fn] )
+
+## remDj ( [[userId:string, ]callback:fn] )
+
+## stopSong ( [callback:fn] )
+
+## vote ( val:enum('up', 'down') [, callback:fn] )
+
+## userAuthenticate ( [callback:fn] )
+
+## userInfo ( [callback:fn] )
+
+## modifyLaptop ( laptop:enum('linux', 'mac', 'pc', 'chrome') [, callback:fn] )
+
+## modifyName ( name:string [, callback:fn] )
+
+## setAvatar ( avatarId:int [, callback:fn] )
+
+## playlistAll ( playlistName:string [, callback:fn] )
+
+## playlistAdd ( playlistName:string, songId:string [, callback:fn] )
+
+## playlistRemove ( playlistName:string, index:int [, callback:fn] )
