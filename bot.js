@@ -22,15 +22,17 @@
 
 var WebSocket = require('./websocket').WebSocket;
 var events    = require('events').EventEmitter;
+var crypto    = require('crypto');
 
-var DEBUG     = false;
+var DEBUG     = true;
 
 var Bot = function () {
+   var self           = this;
    this.auth          = arguments[0];
    this.userId        = arguments[1];
    this.callback      = arguments[2];
-
-   var self           = this;
+   this.roomId        = null;
+   this.currentSongId = null;
    this.lastHeartbeat = new Date();
    this.lastActivity  = new Date();
    this.clientId      = new Date().getTime() + '-0.59633534294921572';
@@ -45,7 +47,9 @@ var Bot = function () {
       if (!self._isConnected) {
          if (msg.data == '~m~10~m~no_session') {
             self._isConnected = true;
-            self.callback(self);
+            self.user_authenticate(function () {
+               self.callback(self);
+            });
          }
          return;
       }
@@ -64,14 +68,39 @@ var Bot = function () {
       if (DEBUG) { console.log(data); }
       var json = JSON.parse(data.substr(data.indexOf('{'), len));
       for (var i=0; i<self._cmds.length; i++) {
-         var id = self._cmds[i][0];
-         var clb = self._cmds[i][1];
-         if (id == json['msgid']) {
+         var id  = self._cmds[i][0];
+         var rq  = self._cmds[i][1];
+         var clb = self._cmds[i][2];
+         if (id == json.msgid) {
+            switch (rq.api) {
+               case 'room.info':
+                  if (json.success === true) {
+                     var currentSong = json.room.metadata.current_song;
+                     if (currentSong) {
+                        self.currentSongId = currentSong._id;
+                     }
+                  }
+                  break;
+               case 'room.register':
+                  if (json.success === true) {
+                     self.roomId = rq.roomid;
+                     self.roomInfo(clb);
+                     clb = null;
+                  }
+                  break;
+               case 'room.deregister':
+                  if (json.success === true) {
+                     self.roomId = null;
+                  }
+                  break;
+            }
+
             if (clb) {
                clb(self, json);
-               self._cmds.splice(i, 1);
-               break;
             }
+
+            self._cmds.splice(i, 1);
+            break;
          }
       }
 
@@ -86,6 +115,7 @@ var Bot = function () {
             self.emit('deregistered', json);
             break;
          case 'newsong':
+            self.currentSongId = json.room.metadata.current_song._id;
             self.emit('newsong', json);
             break;
          case 'update_votes':
@@ -128,10 +158,17 @@ Bot.prototype.toString = function () {
    return '';
 };
 
-Bot.prototype._send = function (msg, callback) {
+Bot.prototype._send = function (rq, callback) {
+   rq.msgid    = this._msgId;
+   rq.clientid = this.clientId;
+   rq.userid   = this.userId;
+   rq.userauth = this.auth;
+
+   var msg = JSON.stringify(rq);
+
    this.ws.send('~m~'+msg.length+'~m~'+msg);
    if (callback) {
-      this._cmds.push([this._msgId, callback]);
+      this._cmds.push([this._msgId, rq, callback]);
    }
    this._msgId++;
 }
@@ -141,104 +178,117 @@ Bot.prototype.close = function () {
 };
 
 Bot.prototype.room_now = function (callback) {
-   var rq = '{"api":"room.now","msgid":'+this._msgId+',"clientid":"'+this.clientId+'"}';
+   var rq = { api: 'room.now' };
    this._send(rq, callback);
 };
 
 Bot.prototype.room_list_rooms = function (skip, callback) {
    skip = skip !== undefined ? skip : 0;
-   var rq = '{"api":"room.list_rooms","skip":'+skip+',"msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
+   var rq = { api: 'room.list_rooms', skip: skip };
    this._send(rq, callback);
 };
 
 Bot.prototype.room_register = function (roomId, callback) {
-   var rq = '{"api":"room.register","roomid":"'+roomId+'","msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
+   var rq = { api: 'room.register', roomid: roomId };
    this._send(rq, callback);
 };
 
-Bot.prototype.room_deregister = function (roomId, callback) {
-   var rq = '{"api":"room.deregister","roomid":"'+roomId+'","msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
+Bot.prototype.room_deregister = function (callback) {
+   var rq = { api: 'room.deregister', roomid: this.roomId };
    this._send(rq, callback);
 };
 
-Bot.prototype.room_info = function (roomId, callback) {
-   var rq = '{"api":"room.info","roomid":"'+roomId+'","msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
+Bot.prototype.roomInfo = function (callback) {
+   var rq = { api: 'room.info', roomid: this.roomId };
    this._send(rq, callback);
 };
 
-Bot.prototype.room_speak = function (roomId, msg, callback) {
-   var rq = '{"api":"room.speak","roomid":"'+roomId+'","text":"'+msg+'","msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
+Bot.prototype.speak = function (msg, callback) {
+   var rq = { api: 'room.speak', roomid: this.roomId, text: msg };
    this._send(rq, callback);
 };
 
-Bot.prototype.room_boot_user = function (roomId, userId, callback) {
-   var rq = '{"api":"room.boot_user","roomid":"'+roomId+'","target_userid":"'+userId+'","msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
+Bot.prototype.room_boot_user = function (userId, callback) {
+   var rq = { api: 'room.boot_user', roomid: this.roomId, target_userid: userId };
    this._send(rq, callback);
 };
 
-Bot.prototype.room_add_dj = function (roomId, callback) {
-   var rq = '{"api":"room.add_dj","roomid":"'+roomId+'","msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
+Bot.prototype.room_add_dj = function (callback) {
+   var rq = { api: 'room.add_dj', roomid: this.roomId };
    this._send(rq, callback);
 };
 
-Bot.prototype.room_rem_dj = function (roomId, callback) {
-   var rq = '{"api":"room.rem_dj","roomid":"'+roomId+'","msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
+Bot.prototype.room_rem_dj = function () {
+   if (arguments.length == 1) {
+      if (typeof arguments[0] === 'function') {
+         var djId     = null;
+         var callback = arguments[0];
+      } else if (typeof arguments[0] === 'string') {
+         var djId     = arguments[0];
+         var callback = null;
+      }
+   } else if (arguments.length == 2) {
+      var djId     = arguments[0];
+      var callback = arguments[1];
+   }
+   var rq = { api: 'room.rem_dj', roomid: this.roomId };
+   if (djId) { rq.djid = djId; }
    this._send(rq, callback);
 };
 
-Bot.prototype.room_stop_song = function (roomId, callback) {
-   var rq = '{"api":"room.stop_song","roomid":"'+roomId+'","msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
+Bot.prototype.room_stop_song = function (callback) {
+   var rq = { api: 'room.stop_song', roomid: this.roomId };
    this._send(rq, callback);
 };
 
-Bot.prototype.room_vote = function (roomId, val, currentSongId, callback) {
-   var vh = crypto.createHash("sha1").update(roomId+val+currentSongId).digest('hex');
+Bot.prototype.vote = function (val, callback) {
+   var vh = crypto.createHash("sha1").update(this.roomId + val + this.currentSongId).digest('hex');
    var th = crypto.createHash("sha1").update(Math.random().toString()).digest('hex');
    var ph = crypto.createHash("sha1").update(Math.random().toString()).digest('hex');
-   var rq = '{"api":"room.vote","roomid":"'+roomId+'","val":"'+val+'","vh":"'+vh+'","th":"'+th+'","ph":"'+ph+'","msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
+   var rq = { api: 'room.vote', roomid: this.roomId, val: val, vh: vh, th: th, ph: ph };
    this._send(rq, callback);
 };
 
 Bot.prototype.user_authenticate = function (callback) {
-   var rq = '{"api":"user.authenticate","msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
+   var rq = { api: 'user.authenticate' };
    this._send(rq, callback);
 };
 
 Bot.prototype.user_info = function (callback) {
-   var rq = '{"api":"user.info","msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
+   var rq = { api: 'user.info' };
    this._send(rq, callback);
 };
 
 Bot.prototype.user_modify_laptop = function (laptop, callback) {
-   var rq = '{"api":"user.modify","laptop":"'+laptop+'","msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
+   var rq = { api: 'user.modify', laptop: laptop };
    this._send(rq, callback);
 };
 
 Bot.prototype.user_modify_name = function (name, callback) {
-   var rq = '{"api":"user.modify","name":"'+name+'","msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
+   var rq = { api: 'user.modify', name: name };
    this._send(rq, callback);
 };
 
 Bot.prototype.user_set_avatar = function (avatarId, callback) {
-   var rq = '{"api":"user.set_avatar","avatarid":"'+avatarId+'","msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
+   var rq = { api: 'user.set_avatar', avatarid: avatarId };
    this._send(rq, callback);
 };
 
 Bot.prototype.playlist_all = function (playlistName, callback) {
    if (!playlistName) { playlistName = 'default'; }
-   var rq = '{"api":"playlist.all","playlist_name":"'+playlistName+'","msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
+   var rq = { api: 'playlist.all', playlist_name: playlistName };
    this._send(rq, callback);
 };
 
 Bot.prototype.playlist_add = function (playlistName, songId, callback) {
    if (!playlistName) { playlistName = 'default'; }
-   var rq = '{"api":"playlist.add","playlist_name":"'+playlistName+'","song_dict":{"fileid":"'+songId+'"},"index":0,"msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
+   var rq = { api: 'playlist.add', playlist_name: playlistName, song_dict: { fileid: songId }, index: 0 };
    this._send(rq, callback);
 };
 
 Bot.prototype.playlist_remove = function (playlistName, index, callback) {
    if (!playlistName) { playlistName = 'default'; }
-   var rq = '{"api":"playlist.remove","playlist_name":"'+playlistName+'","index":'+index+',"msgid":'+this._msgId+',"clientid":"'+this.clientId+'","userid":"'+this.userId+'","userauth":"'+this.auth+'"}';
+   var rq = { api: 'playlist.remove', playlist_name: playlistName, index: index };
    this._send(rq, callback);
 };
 
