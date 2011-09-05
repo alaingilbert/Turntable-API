@@ -55,6 +55,7 @@ Bot.prototype.onMessage = function (msg) {
    if (data.match(heartbeat_rgx)) {
       self._heartbeat(data.match(heartbeat_rgx)[1]);
       self.lastHeartbeat = new Date();
+      self.roomNow(); // TODO: see if it's really usefull
       return;
    }
 
@@ -158,7 +159,8 @@ Bot.prototype.onMessage = function (msg) {
 };
 
 Bot.prototype._heartbeat = function (msg) {
-   this._send(msg);
+   this.ws.send('~m~'+msg.length+'~m~'+msg);
+   this._msgId++;
 };
 
 Bot.prototype.toString = function () {
@@ -213,7 +215,6 @@ Bot.prototype.roomRegister = function (roomId, callback) {
    var self = this;
    var infos = this.getHashedAddr(roomId);
    var url = 'ws://'+infos[0]+':'+infos[1]+'/socket.io/websocket';
-   console.log(url);
    this.ws.close();
    this._isConnected = false;
    this.callback = function () {
