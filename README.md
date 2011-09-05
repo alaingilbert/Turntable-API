@@ -24,29 +24,52 @@ A simple nodejs wrapper for the turntable API
        }); });
     })();
 
+
 # Documentation
+
 
 ## Events
 
 ### on('registered', function (data) { })
 
+Triggered when a user register in the room.
+
 ### on('deregistered', function (data) { })
+
+Triggered when a user leave the room.
 
 ### on('speak', function (data) { })
 
+Triggered when a new message is send via the chat.
+
 ### on('newsong', function (data) { })
+
+Triggered when a new song start.
 
 ### on('update_votes', function (data) { })
 
+Triggered when a user vote.
+
 ### on('booted_user', function (data) { })
+
+Triggered when a user is booted.
 
 ### on('update_user', function (data) { })
 
+Triggered when a user change his name/infos.
+
 ### on('add_dj', function (data) { })
+
+Triggered when a user take a dj spot.
 
 ### on('rem_dj', function (data) { })
 
+Triggered when a user leave a dj spot.
+
 ### on('new_moderator', function (data) { })
+
+Triggered when a user is granted to moderator title.
+
 
 ## Actions
 
