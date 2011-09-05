@@ -39,116 +39,123 @@ var Bot = function () {
    this._msgId        = 0;
    this._cmds         = [];
    this._isConnected  = false;
+   this.CHATSERVER_ADDRS = [["chat2.turntable.fm", 80], ["chat3.turntable.fm", 80]];
 
    this.ws = new WebSocket('ws://chat2.turntable.fm:80/socket.io/websocket');
-   this.ws.onmessage = function (msg) {
-      var data = msg.data;
-
-      if (!self._isConnected) {
-         if (msg.data == '~m~10~m~no_session') {
-            self._isConnected = true;
-            self.userAuthenticate(function () {
-               if (self.callback) { self.callback(self); }
-            });
-         }
-         return;
-      }
-
-      var heartbeat_rgx = /~m~[0-9]+~m~(~h~[0-9]+)/;
-      if (data.match(heartbeat_rgx)) {
-         self._heartbeat(data.match(heartbeat_rgx)[1]);
-         self.lastHeartbeat = new Date();
-         return;
-      }
-
-      this.lastActivity = new Date();
-
-      var len_rgx = /~m~([0-9]+)~m~/;
-      var len = data.match(len_rgx)[1];
-      if (DEBUG) { console.log(data); }
-      var json = JSON.parse(data.substr(data.indexOf('{'), len));
-      for (var i=0; i<self._cmds.length; i++) {
-         var id  = self._cmds[i][0];
-         var rq  = self._cmds[i][1];
-         var clb = self._cmds[i][2];
-         if (id == json.msgid) {
-            switch (rq.api) {
-               case 'room.info':
-                  if (json.success === true) {
-                     var currentSong = json.room.metadata.current_song;
-                     if (currentSong) {
-                        self.currentSongId = currentSong._id;
-                     }
-                  }
-                  break;
-               case 'room.register':
-                  if (json.success === true) {
-                     self.roomId = rq.roomid;
-                     self.roomInfo(clb);
-                     clb = null;
-                  }
-                  break;
-               case 'room.deregister':
-                  if (json.success === true) {
-                     self.roomId = null;
-                  }
-                  break;
-            }
-
-            if (clb) {
-               clb(self, json);
-            }
-
-            self._cmds.splice(i, 1);
-            break;
-         }
-      }
-
-      switch(json['command']) {
-         case 'registered':
-            self.emit('registered', json);
-            break;
-         case 'deregistered':
-            self.emit('deregistered', json);
-            break;
-         case 'speak':
-            self.emit('speak', json);
-            break;
-         case 'newsong':
-            self.currentSongId = json.room.metadata.current_song._id;
-            self.emit('newsong', json);
-            break;
-         case 'update_votes':
-            self.emit('update_votes', json);
-            break;
-         case 'booted_user':
-            self.emit('booted_user', json);
-            break;
-         case 'update_user':
-            self.emit('update_user', json);
-            break;
-         case 'add_dj':
-            self.emit('add_dj', json);
-            break;
-         case 'rem_dj':
-            self.emit('rem_dj', json);
-            break;
-         case 'new_moderator':
-            self.emit('new_moderator', json);
-            break;
-         default:
-            if (json['command']) {
-               //console.log('Command: ', json);
-            } else if (typeof(json['msgid']) == 'number') {
-               if (!json['success']) {
-                  //console.log(json);
-               }
-            }
-      }
-   }
+   this.ws.onmessage = function (msg) { self.onMessage(msg); };
 };
 
 Bot.prototype.__proto__ = events.prototype;
+
+Bot.prototype.onMessage = function (msg) {
+   var self = this;
+   var data = msg.data;
+
+   var heartbeat_rgx = /~m~[0-9]+~m~(~h~[0-9]+)/;
+   if (data.match(heartbeat_rgx)) {
+      self._heartbeat(data.match(heartbeat_rgx)[1]);
+      self.lastHeartbeat = new Date();
+      return;
+   }
+
+   if (DEBUG) { console.log('> '+data); }
+
+   if (!self._isConnected) {
+      if (msg.data == '~m~10~m~no_session') {
+         self._isConnected = true;
+         self.userAuthenticate(function () {
+            var clb = self.callback;
+            self.callback = null;
+            if (clb) { clb(self); }
+         });
+      }
+      return;
+   }
+
+   this.lastActivity = new Date();
+
+   var len_rgx = /~m~([0-9]+)~m~/;
+   var len = data.match(len_rgx)[1];
+   var json = JSON.parse(data.substr(data.indexOf('{'), len));
+   for (var i=0; i<self._cmds.length; i++) {
+      var id  = self._cmds[i][0];
+      var rq  = self._cmds[i][1];
+      var clb = self._cmds[i][2];
+      if (id == json.msgid) {
+         switch (rq.api) {
+            case 'room.info':
+               if (json.success === true) {
+                  var currentSong = json.room.metadata.current_song;
+                  if (currentSong) {
+                     self.currentSongId = currentSong._id;
+                  }
+               }
+               break;
+            case 'room.register':
+               if (json.success === true) {
+                  self.roomId = rq.roomid;
+                  self.roomInfo(clb);
+                  clb = null;
+               }
+               break;
+            case 'room.deregister':
+               if (json.success === true) {
+                  self.roomId = null;
+               }
+               break;
+         }
+
+         if (clb) {
+            clb(self, json);
+         }
+
+         self._cmds.splice(i, 1);
+         break;
+      }
+   }
+
+   switch(json['command']) {
+      case 'registered':
+         self.emit('registered', json);
+         break;
+      case 'deregistered':
+         self.emit('deregistered', json);
+         break;
+      case 'speak':
+         self.emit('speak', json);
+         break;
+      case 'newsong':
+         self.currentSongId = json.room.metadata.current_song._id;
+         self.emit('newsong', json);
+         break;
+      case 'update_votes':
+         self.emit('update_votes', json);
+         break;
+      case 'booted_user':
+         self.emit('booted_user', json);
+         break;
+      case 'update_user':
+         self.emit('update_user', json);
+         break;
+      case 'add_dj':
+         self.emit('add_dj', json);
+         break;
+      case 'rem_dj':
+         self.emit('rem_dj', json);
+         break;
+      case 'new_moderator':
+         self.emit('new_moderator', json);
+         break;
+      default:
+         if (json['command']) {
+            //console.log('Command: ', json);
+         } else if (typeof(json['msgid']) == 'number') {
+            if (!json['success']) {
+               //console.log(json);
+            }
+         }
+   }
+};
 
 Bot.prototype._heartbeat = function (msg) {
    this._send(msg);
@@ -166,12 +173,26 @@ Bot.prototype._send = function (rq, callback) {
 
    var msg = JSON.stringify(rq);
 
+   //console.log('< '+msg);
    this.ws.send('~m~'+msg.length+'~m~'+msg);
    if (callback) {
       this._cmds.push([this._msgId, rq, callback]);
    }
    this._msgId++;
 }
+
+Bot.prototype.hashMod = function (a, b) {
+   var d = crypto.createHash("sha1").update(a).digest('hex');
+   var c = 0;
+   for (var i=0; i<d.length; i++) {
+      c += d.charCodeAt(i);
+   }
+   return c % b;
+};
+
+Bot.prototype.getHashedAddr = function (a) {
+   return this.CHATSERVER_ADDRS[this.hashMod(a, this.CHATSERVER_ADDRS.length)];
+},
 
 Bot.prototype.close = function () {
    this.ws.close();
@@ -189,8 +210,18 @@ Bot.prototype.listRooms = function (skip, callback) {
 };
 
 Bot.prototype.roomRegister = function (roomId, callback) {
-   var rq = { api: 'room.register', roomid: roomId };
-   this._send(rq, callback);
+   var self = this;
+   var infos = this.getHashedAddr(roomId);
+   var url = 'ws://'+infos[0]+':'+infos[1]+'/socket.io/websocket';
+   console.log(url);
+   this.ws.close();
+   this._isConnected = false;
+   this.callback = function () {
+      var rq = { api: 'room.register', roomid: roomId };
+      self._send(rq, callback);
+   };
+   this.ws = new WebSocket(url);
+   this.ws.onmessage = function (msg) { self.onMessage(msg); };
 };
 
 Bot.prototype.roomDeregister = function (callback) {

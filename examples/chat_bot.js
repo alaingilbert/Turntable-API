@@ -1,5 +1,5 @@
 (function () {
-   var Bot    = require('ttapi');
+   var Bot    = require('../index');
    var AUTH   = 'auth+live+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
    var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
    var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
