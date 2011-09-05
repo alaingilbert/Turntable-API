@@ -2,11 +2,14 @@
 
 A simple nodejs wrapper for the turntable API
 
+## Installation
+    npm install ttapi
+
 ## Examples
 
 ### Simple
     (function () {
-       var Bot    = require('./bot').Bot;
+       var Bot    = require('ttapi');
        var AUTH   = 'auth+live+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
        var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
        var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
