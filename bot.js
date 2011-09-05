@@ -30,8 +30,12 @@ var Bot = function () {
    var self           = this;
    this.auth          = arguments[0];
    this.userId        = arguments[1];
-   this.callback      = arguments[2];
-   this.roomId        = null;
+   if (arguments.length == 3) {
+      this.roomId     = arguments[2];
+   } else {
+      this.roomId     = null;
+   }
+   this.callback      = null;
    this.currentSongId = null;
    this.lastHeartbeat = new Date();
    this.lastActivity  = new Date();
@@ -41,8 +45,18 @@ var Bot = function () {
    this._isConnected  = false;
    this.CHATSERVER_ADDRS = [["chat2.turntable.fm", 80], ["chat3.turntable.fm", 80]];
 
-   this.ws = new WebSocket('ws://chat2.turntable.fm:80/socket.io/websocket');
+   var infos = this.getHashedAddr(this.roomId ? this.roomId : Math.random().toString());
+   var url = 'ws://'+infos[0]+':'+infos[1]+'/socket.io/websocket';
+
+   this.ws = new WebSocket(url);
    this.ws.onmessage = function (msg) { self.onMessage(msg); };
+   if (this.roomId) {
+      // TODO: Should not be here... see the other todo (in roomRegister)
+      this.callback = function () {
+         var rq = { api: 'room.register', roomid: self.roomId };
+         self._send(rq, null);
+      };
+   }
 };
 
 Bot.prototype.__proto__ = events.prototype;
@@ -65,9 +79,8 @@ Bot.prototype.onMessage = function (msg) {
       self.userAuthenticate(function () {
          if (!self._isConnected) {
             self.emit('ready');
-         } else {
-            self.callback();
          }
+         self.callback();
          self._isConnected = true;
       });
       return;
@@ -177,7 +190,7 @@ Bot.prototype._send = function (rq, callback) {
 
    var msg = JSON.stringify(rq);
 
-   //console.log('< '+msg);
+   console.log('< '+msg);
    this.ws.send('~m~'+msg.length+'~m~'+msg);
    this._cmds.push([this._msgId, rq, callback]);
    this._msgId++;
@@ -220,6 +233,7 @@ Bot.prototype.roomRegister = function (roomId, callback) {
       var rq = { api: 'room.register', roomid: roomId };
       self._send(rq, callback);
    };
+   // TODO: This should not be here at all...
    this.ws = new WebSocket(url);
    this.ws.onmessage = function (msg) { self.onMessage(msg); };
 };

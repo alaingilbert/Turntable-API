@@ -16,11 +16,7 @@ This bot respond to anybody who write "/hello" on the chat.
     var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
     var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
 
-    var bot = new Bot(AUTH, USERID);
-
-    bot.on('ready', function (data) {
-       bot.roomRegister(ROOMID);
-    });
+    var bot = new Bot(AUTH, USERID, ROOMID);
 
     bot.on('speak', function (data) {
        // Get the data
