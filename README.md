@@ -7,7 +7,35 @@ A simple nodejs wrapper for the turntable API
 
 ## Examples
 
+### Chat bot
+
+This bot respond to anybody who write "/hello" on the chat.
+
+    (function () {
+       var Bot    = require('ttapi');
+       var AUTH   = 'auth+live+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+       var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
+       var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
+
+       var bot = new Bot(AUTH, USERID, function () {
+       bot.roomRegister(ROOMID, function () {
+
+       bot.on('speak', function (data) {
+          // Get the data
+          var name = data.name;
+          var text = data.text;
+
+          // Respond to "/hello" command
+          if (text.match(/^\/hello$/)) {
+             bot.speak('Hey! How are you '+name+' ?');
+          }
+       });
+
+       }); });
+    })();
+
 ### Simple
+
     (function () {
        var Bot    = require('ttapi');
        var AUTH   = 'auth+live+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
