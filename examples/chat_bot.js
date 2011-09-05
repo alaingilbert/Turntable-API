@@ -1,22 +1,21 @@
-(function () {
-   var Bot    = require('../index');
-   var AUTH   = 'auth+live+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
-   var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
-   var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
+var Bot    = require('../index');
+var AUTH   = 'auth+live+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
+var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
 
-   var bot = new Bot(AUTH, USERID, function () {
-   bot.roomRegister(ROOMID, function () {
+var bot = new Bot(AUTH, USERID);
 
-   bot.on('speak', function (data) {
-      // Get the data
-      var name = data.name;
-      var text = data.text;
+bot.on('ready', function (data) {
+   bot.roomRegister(ROOMID);
+});
 
-      // Respond to "/hello" command
-      if (text.match(/^\/hello$/)) {
-         bot.speak('Hey! How are you '+name+' ?');
-      }
-   });
+bot.on('speak', function (data) {
+   // Get the data
+   var name = data.name;
+   var text = data.text;
 
-   }); });
-})();
+   // Respond to "/hello" command
+   if (text.match(/^\/hello$/)) {
+      bot.speak('Hey! How are you '+name+' ?');
+   }
+});

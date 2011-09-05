@@ -11,47 +11,43 @@ A simple nodejs wrapper for the turntable API
 
 This bot respond to anybody who write "/hello" on the chat.
 
-    (function () {
-       var Bot    = require('ttapi');
-       var AUTH   = 'auth+live+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
-       var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
-       var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
+    var Bot    = require('ttapi');
+    var AUTH   = 'auth+live+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+    var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
+    var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
 
-       var bot = new Bot(AUTH, USERID, function () {
-       bot.roomRegister(ROOMID, function () {
+    var bot = new Bot(AUTH, USERID);
 
-       bot.on('speak', function (data) {
-          // Get the data
-          var name = data.name;
-          var text = data.text;
+    bot.on('ready', function (data) {
+       bot.roomRegister(ROOMID);
+    });
 
-          // Respond to "/hello" command
-          if (text.match(/^\/hello$/)) {
-             bot.speak('Hey! How are you '+name+' ?');
-          }
-       });
+    bot.on('speak', function (data) {
+       // Get the data
+       var name = data.name;
+       var text = data.text;
 
-       }); });
-    })();
+       // Respond to "/hello" command
+       if (text.match(/^\/hello$/)) {
+          bot.speak('Hey! How are you '+name+' ?');
+       }
+    });
 
 ### Simple
 
-    (function () {
-       var Bot    = require('ttapi');
-       var AUTH   = 'auth+live+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
-       var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
-       var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
+    var Bot    = require('ttapi');
+    var AUTH   = 'auth+live+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+    var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
+    var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
 
-       var bot = new Bot(AUTH, USERID, function () {
-       bot.roomRegister(ROOMID, function () {
+    var bot = new Bot(AUTH, USERID);
 
-       bot.on('speak',        function (data) { console.log('Someone has spoken', data); });
-       bot.on('update_votes', function (data) { console.log('Someone has voted',  data); });
-       bot.on('registered',   function (data) { console.log('Someone registered', data); });
+    bot.on('ready',        function (data) { bot.roomRegister(ROOMID); });
+    bot.on('roomChanged',  function (data) { console.log('The bot has changed room.', data); });
 
-       }); });
-    })();
-
+    bot.on('speak',        function (data) { console.log('Someone has spoken', data); });
+    bot.on('update_votes', function (data) { console.log('Someone has voted',  data); });
+    bot.on('registered',   function (data) { console.log('Someone registered', data); });
 
 # Documentation
 

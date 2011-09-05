@@ -61,15 +61,15 @@ Bot.prototype.onMessage = function (msg) {
 
    if (DEBUG) { console.log('> '+data); }
 
-   if (!self._isConnected) {
-      if (msg.data == '~m~10~m~no_session') {
+   if (msg.data == '~m~10~m~no_session') {
+      self.userAuthenticate(function () {
+         if (!self._isConnected) {
+            self.emit('ready');
+         } else {
+            self.callback();
+         }
          self._isConnected = true;
-         self.userAuthenticate(function () {
-            var clb = self.callback;
-            self.callback = null;
-            if (clb) { clb(self); }
-         });
-      }
+      });
       return;
    }
 
@@ -95,7 +95,9 @@ Bot.prototype.onMessage = function (msg) {
             case 'room.register':
                if (json.success === true) {
                   self.roomId = rq.roomid;
-                  self.roomInfo(clb);
+                  self.roomInfo(function (sender, data) {
+                     self.emit('roomChanged', data);
+                  });
                   clb = null;
                }
                break;
@@ -177,9 +179,7 @@ Bot.prototype._send = function (rq, callback) {
 
    //console.log('< '+msg);
    this.ws.send('~m~'+msg.length+'~m~'+msg);
-   if (callback) {
-      this._cmds.push([this._msgId, rq, callback]);
-   }
+   this._cmds.push([this._msgId, rq, callback]);
    this._msgId++;
 }
 
@@ -216,7 +216,6 @@ Bot.prototype.roomRegister = function (roomId, callback) {
    var infos = this.getHashedAddr(roomId);
    var url = 'ws://'+infos[0]+':'+infos[1]+'/socket.io/websocket';
    this.ws.close();
-   this._isConnected = false;
    this.callback = function () {
       var rq = { api: 'room.register', roomid: roomId };
       self._send(rq, callback);
