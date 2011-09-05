@@ -48,7 +48,7 @@ var Bot = function () {
          if (msg.data == '~m~10~m~no_session') {
             self._isConnected = true;
             self.userAuthenticate(function () {
-               self.callback(self);
+               if (self.callback) { self.callback(self); }
             });
          }
          return;
@@ -108,11 +108,11 @@ var Bot = function () {
          case 'registered':
             self.emit('registered', json);
             break;
-         case 'speak':
-            self.emit('speak', json);
-            break;
          case 'deregistered':
             self.emit('deregistered', json);
+            break;
+         case 'speak':
+            self.emit('speak', json);
             break;
          case 'newsong':
             self.currentSongId = json.room.metadata.current_song._id;

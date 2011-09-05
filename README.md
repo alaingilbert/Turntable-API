@@ -26,6 +26,30 @@ A simple nodejs wrapper for the turntable API
 
 # Documentation
 
+## Events
+
+### on('registered', function (data) { })
+
+### on('deregistered', function (data) { })
+
+### on('speak', function (data) { })
+
+### on('newsong', function (data) { })
+
+### on('update_votes', function (data) { })
+
+### on('booted_user', function (data) { })
+
+### on('update_user', function (data) { })
+
+### on('add_dj', function (data) { })
+
+### on('rem_dj', function (data) { })
+
+### on('new_moderator', function (data) { })
+
+## Actions
+
 ### roomNow ( [callback:fn] )
 
 ### listRooms ( skip=0:int [, callback:fn] )

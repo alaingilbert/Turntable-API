@@ -8,6 +8,7 @@
     "type": "git",
     "url": "git://github.com/alaingilbert/Turntable-API.git"
   },
+  "main": "index.js",
   "engines": {
     "node": ">= v0.4.8"
   },
