@@ -8,6 +8,9 @@ var bot = new Bot(AUTH, USERID, ROOMID);
 var theUsersList = { };
 
 bot.on('roomChanged', function (data) {
+   // Reset the users list
+   theUsersList = { };
+
    var users = data.users;
    for (var i=0; i<users.length; i++) {
       var user = users[i];
