@@ -121,7 +121,7 @@ Bot.prototype.onMessage = function (msg) {
          }
 
          if (clb) {
-            clb(self, json);
+            clb(json);
          }
 
          self._cmds.splice(i, 1);
