@@ -107,7 +107,7 @@ Bot.prototype.onMessage = function (msg) {
             case 'room.register':
                if (json.success === true) {
                   self.roomId = rq.roomid;
-                  self.roomInfo(function (sender, data) {
+                  self.roomInfo(function (data) {
                      self.emit('roomChanged', data);
                   });
                   clb = null;
