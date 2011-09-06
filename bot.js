@@ -24,8 +24,6 @@ var WebSocket = require('./websocket').WebSocket;
 var events    = require('events').EventEmitter;
 var crypto    = require('crypto');
 
-var DEBUG     = true;
-
 var Bot = function () {
    var self           = this;
    this.auth          = arguments[0];
@@ -35,6 +33,7 @@ var Bot = function () {
    } else {
       this.roomId     = null;
    }
+   this.debug         = false;
    this.callback      = null;
    this.currentSongId = null;
    this.lastHeartbeat = new Date();
@@ -73,7 +72,7 @@ Bot.prototype.onMessage = function (msg) {
       return;
    }
 
-   if (DEBUG) { console.log('> '+data); }
+   if (this.debug) { console.log('> '+data); }
 
    if (msg.data == '~m~10~m~no_session') {
       self.userAuthenticate(function () {
@@ -190,7 +189,7 @@ Bot.prototype._send = function (rq, callback) {
 
    var msg = JSON.stringify(rq);
 
-   console.log('< '+msg);
+   if (this.debug) { console.log('< '+msg); }
    this.ws.send('~m~'+msg.length+'~m~'+msg);
    this._cmds.push([this._msgId, rq, callback]);
    this._msgId++;
