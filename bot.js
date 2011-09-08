@@ -255,8 +255,8 @@ Bot.prototype.speak = function (msg, callback) {
    this._send(rq, callback);
 };
 
-Bot.prototype.bootUser = function (userId, callback) {
-   var rq = { api: 'room.boot_user', roomid: this.roomId, target_userid: userId };
+Bot.prototype.bootUser = function (userId, reason, callback) {
+   var rq = { api: 'room.boot_user', roomid: this.roomId, target_userid: userId, reason: reason };
    this._send(rq, callback);
 };
 

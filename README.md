@@ -127,7 +127,7 @@ Get the current room informations.
 
 Broadcast a message on the chat.
 
-### bootUser ( userId:string [, callback:fn] )
+### bootUser ( userId:string, reason:string [, callback:fn] )
 
 Boot a user.
 
