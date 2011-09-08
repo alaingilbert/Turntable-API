@@ -50,49 +50,21 @@ This bot respond to anybody who write "/hello" on the chat.
 
 ## Events
 
+[Here are some examples of the data that you'll receive from those events.](https://github.com/alaingilbert/Turntable-API/tree/master/turntable_data)
+
 ### on('registered', function (data) { })
 
 Triggered when a user register in the room.
-
-    { "command": "registered",
-      "user": [{
-         "name": "@anonymous",
-         "created": 1305232325.64,
-         "laptop": "pc",
-         "userid": "xxxxxxxxxxxxxxxxxxxxxxxx",
-         "acl": 0,
-         "fans": 14,
-         "points": 152,
-         "avatarid": 10
-      }],
-      "success": true }
 
 
 ### on('deregistered', function (data) { })
 
 Triggered when a user leave the room.
 
-    { "command": "deregistered",
-      "user": [{
-         "name": "@anonymous",
-         "created": 1324043222.72,
-         "laptop": "pc",
-         "userid": "xxxxxxxxxxxxxxxxxxxxxxxx",
-         "acl": 0,
-         "fans": 2,
-         "points": 168,
-         "avatarid": 12
-      }],
-      "success": true }
 
 ### on('speak', function (data) { })
 
 Triggered when a new message is send via the chat.
-
-    { "command": "speak",
-      "userid": "xxxxxxxxxxxxxxxxxxxxxxxx",
-      "name": "@anonyme",
-      "text": "Hey !" }
 
 
 ### on('newsong', function (data) { })
@@ -103,16 +75,6 @@ Triggered when a new song start.
 
 Triggered when a user vote.
 
-    { "command": "update_votes",
-      "room": {
-         "metadata": {
-            "upvotes": 10,
-            "downvotes": 2,
-            "listeners": 188,
-            "votelog": [["xxxxxxxxxxxxxxxxxxxxxxxx", "up"]]
-         }
-      },
-      "success": true }
 
 ### on('booted_user', function (data) { })
 
