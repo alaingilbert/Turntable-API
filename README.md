@@ -71,6 +71,10 @@ Triggered when a new message is send via the chat.
 
 Triggered when a new song start.
 
+### on('nosong', function (data) { })
+
+Triggered when there is no song.
+
 ### on('update_votes', function (data) { })
 
 Triggered when a user vote.
@@ -148,6 +152,8 @@ Add yourself as a Dj.
 Remove a Dj.
 
 ### stopSong ( [callback:fn] )
+
+Skip the current song.
 
 ### vote ( val:enum('up', 'down') [, callback:fn] )
 

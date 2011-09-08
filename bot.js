@@ -139,6 +139,9 @@ Bot.prototype.onMessage = function (msg) {
       case 'speak':
          self.emit('speak', json);
          break;
+      case 'nosong':
+         self.emit('nosong', json);
+         break;
       case 'newsong':
          self.currentSongId = json.room.metadata.current_song._id;
          self.emit('newsong', json);
