@@ -134,43 +134,91 @@ Triggered when a user leave a dj spot.
 
 Triggered when a user is granted to moderator title.
 
+### on('rem_moderator', function (data) { })
+
+Triggered when a user loose his moderator title.
+
 
 ## Actions
 
 ### roomNow ( [callback:fn] )
 
+Get the turntable server time.
+
 ### listRooms ( skip=0:int [, callback:fn] )
+
+Get 20 rooms.
 
 ### roomRegister ( roomId:string [, callback:fn] )
 
+Register in a room.
+
 ### roomDeregister ( [callback:fn] )
+
+Deregister from the current room.
 
 ### roomInfo ( [callback:fn] )
 
+Get the current room informations.
+
 ### speak ( msg:string [, callback:fn] )
+
+Broadcast a message on the chat.
 
 ### bootUser ( userId:string [, callback:fn] )
 
+Boot a user.
+
+### addModerator ( userId:string [, callback:fn] )
+
+Add a moderator.
+
+### remModerator ( userId:string [, callback:fn] )
+
+Remove a moderator.
+
 ### addDj ( [callback:fn] )
 
+Add yourself as a Dj.
+
 ### remDj ( [[userId:string, ]callback:fn] )
+
+Remove a Dj.
 
 ### stopSong ( [callback:fn] )
 
 ### vote ( val:enum('up', 'down') [, callback:fn] )
 
+Vote for the current song.
+
 ### userAuthenticate ( [callback:fn] )
+
+Authenticate the user.
 
 ### userInfo ( [callback:fn] )
 
+Get the current user informations.
+
 ### modifyLaptop ( laptop:enum('linux', 'mac', 'pc', 'chrome') [, callback:fn] )
+
+Modify your laptop.
 
 ### modifyName ( name:string [, callback:fn] )
 
+Modify your name.
+
 ### setAvatar ( avatarId:int [, callback:fn] )
+
+Set your avatar.
 
 ### playlistAll ( playlistName:string [, callback:fn] )
 
+Get all informations about a playlist.
+
 ### playlistAdd ( playlistName:string, songId:string [, callback:fn] )
 
+Add a song on a playlist.
+
 ### playlistRemove ( playlistName:string, index:int [, callback:fn] )
+
+Remove a song on a playlist.

@@ -161,6 +161,9 @@ Bot.prototype.onMessage = function (msg) {
       case 'new_moderator':
          self.emit('new_moderator', json);
          break;
+      case 'rem_moderator':
+         self.emit('rem_moderator', json);
+         break;
       default:
          if (json['command']) {
             //console.log('Command: ', json);
@@ -254,6 +257,17 @@ Bot.prototype.speak = function (msg, callback) {
 
 Bot.prototype.bootUser = function (userId, callback) {
    var rq = { api: 'room.boot_user', roomid: this.roomId, target_userid: userId };
+   this._send(rq, callback);
+};
+
+
+Bot.prototype.addModerator = function (userId, callback) {
+   var rq = { api: 'room.add_moderator', roomid: this.roomId, target_userid: userId };
+   this._send(rq, callback);
+};
+
+Bot.prototype.remModerator = function (userId, callback) {
+   var rq = { api: 'room.rem_moderator', roomid: this.roomId, target_userid: userId };
    this._send(rq, callback);
 };
 
