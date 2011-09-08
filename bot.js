@@ -262,7 +262,7 @@ Bot.prototype.addDj = function (callback) {
    this._send(rq, callback);
 };
 
-Bot.prototype.room_rem_dj = function () {
+Bot.prototype.remDj = function () {
    if (arguments.length == 1) {
       if (typeof arguments[0] === 'function') {
          var djId     = null;
