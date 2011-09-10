@@ -20,9 +20,10 @@
  * IN THE SOFTWARE.
  */
 
-var WebSocket = require('./websocket').WebSocket;
-var events    = require('events').EventEmitter;
-var crypto    = require('crypto');
+var WebSocket = require('./websocket').WebSocket
+  , events    = require('events').EventEmitter
+  , crypto    = require('crypto')
+  , http      = require('http');
 
 var Bot = function () {
    var self           = this;
@@ -59,6 +60,15 @@ var Bot = function () {
 };
 
 Bot.prototype.__proto__ = events.prototype;
+
+
+Bot.prototype.listen = function (port) {
+   var self = this;
+   http.createServer(function (req, res) {
+      self.emit('httpRequest', req, res);
+   }).listen(port);
+};
+
 
 Bot.prototype.onMessage = function (msg) {
    var self = this;
