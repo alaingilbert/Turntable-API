@@ -48,20 +48,21 @@ This bot respond to anybody who write "/hello" on the chat.
 
 [Here are some examples of the data that you'll receive from those events.](https://github.com/alaingilbert/Turntable-API/tree/master/turntable_data)
 
+### on('httpRequest', function (request, response) { })
+
+Triggered when the bot receive an http request.
+
 ### on('registered', function (data) { })
 
 Triggered when a user register in the room.
-
 
 ### on('deregistered', function (data) { })
 
 Triggered when a user leave the room.
 
-
 ### on('speak', function (data) { })
 
 Triggered when a new message is send via the chat.
-
 
 ### on('newsong', function (data) { })
 
@@ -74,7 +75,6 @@ Triggered when there is no song.
 ### on('update_votes', function (data) { })
 
 Triggered when a user vote.
-
 
 ### on('booted_user', function (data) { })
 
@@ -102,6 +102,10 @@ Triggered when a user loose his moderator title.
 
 
 ## Actions
+
+### listen ( port, address )
+
+Start an http server.
 
 ### roomNow ( [callback:fn] )
 

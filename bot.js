@@ -62,11 +62,11 @@ var Bot = function () {
 Bot.prototype.__proto__ = events.prototype;
 
 
-Bot.prototype.listen = function (port) {
+Bot.prototype.listen = function (port, address) {
    var self = this;
    http.createServer(function (req, res) {
       self.emit('httpRequest', req, res);
-   }).listen(port);
+   }).listen(port, address);
 };
 
 
