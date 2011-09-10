@@ -11,11 +11,7 @@ A simple nodejs wrapper for the turntable API
 
 This bot respond to anybody who write "/hello" on the chat.
 
-    var Bot    = require('ttapi');
-    var AUTH   = 'auth+live+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
-    var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
-    var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
-
+    var Bot = require('ttapi');
     var bot = new Bot(AUTH, USERID, ROOMID);
 
     bot.on('speak', function (data) {
@@ -24,6 +20,40 @@ This bot respond to anybody who write "/hello" on the chat.
           bot.speak('Hey! How are you '+data.name+' ?');
        }
     });
+
+
+### Http Server
+
+This bot create an http server and give his version number when we ask for "http://127.0.0.1:8080/version/" this page.
+
+    var Bot = require('ttapi');
+    var bot = new Bot(AUTH, USERID, ROOMID);
+    bot.listen(8080, '127.0.0.1');
+    
+    var myScriptVersion = '0.0.0';
+    
+    bot.on('httpRequest', function (req, res) {
+       var method = req.method;
+       var url    = req.url;
+       switch (url) {
+          case '/version/':
+             if (method == 'GET') {
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                return res.end('{"version":"'+myScriptVersion+'"}');
+             } else {
+                res.writeHead(500);
+                return res.end();
+             }
+             break;
+       }
+       res.writeHead(500);
+       return res.end();
+    });
+
+You can easily test it like this:
+
+    curl http://127.0.0.1:8080/version/
+
 
 ### Simple
 
