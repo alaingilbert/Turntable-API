@@ -39,15 +39,17 @@ This bot create an http server and give his version number when we ask for "http
           case '/version/':
              if (method == 'GET') {
                 res.writeHead(200, { 'Content-Type': 'application/json' });
-                return res.end('{"version":"'+myScriptVersion+'"}');
+                res.end('{"version":"'+myScriptVersion+'"}');
              } else {
                 res.writeHead(500);
-                return res.end();
+                res.end();
              }
              break;
+          default:
+             res.writeHead(500);
+             res.end();
+             break;
        }
-       res.writeHead(500);
-       return res.end();
     });
 
 You can easily test it like this:
