@@ -52,9 +52,32 @@ This bot create an http server and give his version number when we ask for "http
        }
     });
 
-You can easily test it like this:
 
-    curl http://127.0.0.1:8080/version/
+### TCP Server
+
+This bot open a tcp server. That will allow you to easily communicate with the bot via a terminal.
+
+    var Bot = require('ttapi');
+    var bot = new Bot(AUTH, USERID, ROOMID);
+    bot.tcpListen(8080, '127.0.0.1');
+    
+    var myScriptVersion = 'V0.0.0';
+    
+    bot.on('tcpConnect', function (socket) { });
+    bot.on('tcpMessage', function (socket, msg) {
+       if (msg == 'version') {
+          socket.write('>> '+myScriptVersion+'\n');
+       }
+    });
+    bot.on('tcpEnd', function (socket) { });
+
+You can communicate with the bot like this:
+
+    nc 127.0.0.1 8080
+
+And then type:
+
+    version
 
 
 ### Simple
@@ -79,6 +102,18 @@ You can easily test it like this:
 ## Events
 
 [Here are some examples of the data that you'll receive from those events.](https://github.com/alaingilbert/Turntable-API/tree/master/turntable_data)
+
+### on('tcpConnect', function (socket) { })
+
+Triggered when a socket open a connection.
+
+### on('tcpMessage', function (socket, msg) { })
+
+Triggered when the bot receive a message.
+
+### on('tcpEnd', function (socket) { })
+
+Triggered when a socket close its connection.
 
 ### on('httpRequest', function (request, response) { })
 
@@ -134,6 +169,10 @@ Triggered when a user loose his moderator title.
 
 
 ## Actions
+
+### tcpListen ( port, address )
+
+Start an tcp server.
 
 ### listen ( port, address )
 

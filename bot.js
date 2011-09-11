@@ -24,6 +24,7 @@ var WebSocket   = require('./websocket').WebSocket
   , events      = require('events').EventEmitter
   , crypto      = require('crypto')
   , http        = require('http')
+  , net         = require('net')
   , querystring = require('querystring');
 
 var Bot = function () {
@@ -74,6 +75,25 @@ Bot.prototype.listen = function (port, address) {
          var data = querystring.parse(dataStr);
          req._POST = data;
          self.emit('httpRequest', req, res);
+      });
+   }).listen(port, address);
+};
+
+
+Bot.prototype.tcpListen = function (port, address) {
+   var self = this;
+   net.createServer(function (socket) {
+      socket.on('connect', function () {
+         self.emit('tcpConnect', socket);
+      });
+      socket.on('data', function (data) {
+         var msg = data.toString();
+         if (msg[msg.length - 1] == '\n') {
+            self.emit('tcpMessage', socket, msg.substr(0, msg.length-1));
+         }
+      });
+      socket.on('end', function () {
+         self.emit('tcpEnd', socket);
       });
    }).listen(port, address);
 };
