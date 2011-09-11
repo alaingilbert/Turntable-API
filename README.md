@@ -172,11 +172,11 @@ Triggered when a user loose his moderator title.
 
 ### tcpListen ( port, address )
 
-Start an tcp server.
+Start a tcp server.
 
 ### listen ( port, address )
 
-Start an http server.
+Start a http server.
 
 ### roomNow ( [callback:fn] )
 
