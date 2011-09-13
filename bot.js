@@ -179,6 +179,7 @@ Bot.prototype.onMessage = function (msg) {
          self.emit('speak', json);
          break;
       case 'nosong':
+         self.currentSongId = null;
          self.emit('nosong', json);
          break;
       case 'newsong':
