@@ -294,7 +294,7 @@ Bot.prototype.roomInfo = function (callback) {
 };
 
 Bot.prototype.speak = function (msg, callback) {
-   var rq = { api: 'room.speak', roomid: this.roomId, text: msg };
+   var rq = { api: 'room.speak', roomid: this.roomId, text: msg.toString() };
    this._send(rq, callback);
 };
 
