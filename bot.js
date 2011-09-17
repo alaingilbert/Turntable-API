@@ -375,6 +375,16 @@ Bot.prototype.setAvatar = function (avatarId, callback) {
    this._send(rq, callback);
 };
 
+Bot.prototype.becomeFan = function (userId, callback) {
+   var rq = { api: 'user.become_fan', djid: userId };
+   this._send(rq, callback);
+};
+
+Bot.prototype.removeFan = function (userId, callback) {
+   var rq = { api: 'user.remove_fan', djid: userId };
+   this._send(rq, callback);
+};
+
 Bot.prototype.playlistAll = function (playlistName, callback) {
    if (!playlistName) { playlistName = 'default'; }
    var rq = { api: 'playlist.all', playlist_name: playlistName };

@@ -250,6 +250,14 @@ Modify your name.
 
 Set your avatar.
 
+### becomeFan ( userId:string [, callback:fn] )
+
+Fan someone.
+
+### removeFan ( userId:string [, callback:fn] )
+
+Unfan someone.
+
 ### playlistAll ( playlistName:string [, callback:fn] )
 
 Get all informations about a playlist.

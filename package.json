@@ -10,7 +10,7 @@
   },
   "main": "index.js",
   "engines": {
-    "node": ">= v0.4.8"
+    "node": ">= v0.4.9"
   },
   "dependencies": {},
   "devDependencies": {}
