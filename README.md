@@ -96,6 +96,12 @@ And then type:
     bot.on('update_votes', function (data) { console.log('Someone has voted',  data); });
     bot.on('registered',   function (data) { console.log('Someone registered', data); });
 
+
+# Debugging
+
+    bot.debug = true;
+
+
 # Documentation
 
 
