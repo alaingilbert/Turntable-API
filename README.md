@@ -101,6 +101,8 @@ And then type:
 
     bot.debug = true;
 
+That will print on the terminal all the data that you get and all the data that you send.
+
 
 # Documentation
 
