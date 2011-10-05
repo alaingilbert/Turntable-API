@@ -11,65 +11,69 @@ A simple nodejs wrapper for the turntable API
 
 This bot respond to anybody who write "/hello" on the chat.
 
-    var Bot = require('ttapi');
-    var bot = new Bot(AUTH, USERID, ROOMID);
+```js
+var Bot = require('ttapi');
+var bot = new Bot(AUTH, USERID, ROOMID);
 
-    bot.on('speak', function (data) {
-       // Respond to "/hello" command
-       if (data.text.match(/^\/hello$/)) {
-          bot.speak('Hey! How are you '+data.name+' ?');
-       }
-    });
-
+bot.on('speak', function (data) {
+   // Respond to "/hello" command
+   if (data.text.match(/^\/hello$/)) {
+      bot.speak('Hey! How are you '+data.name+' ?');
+   }
+});
+```
 
 ### Http Server
 
 This bot create an http server and give his version number when we ask for "http://127.0.0.1:8080/version/" this page.
 
-    var Bot = require('ttapi');
-    var bot = new Bot(AUTH, USERID, ROOMID);
-    bot.listen(8080, '127.0.0.1');
-    
-    var myScriptVersion = '0.0.0';
-    
-    bot.on('httpRequest', function (req, res) {
-       var method = req.method;
-       var url    = req.url;
-       switch (url) {
-          case '/version/':
-             if (method == 'GET') {
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.end('{"version":"'+myScriptVersion+'"}');
-             } else {
-                res.writeHead(500);
-                res.end();
-             }
-             break;
-          default:
-             res.writeHead(500);
-             res.end();
-             break;
-       }
-    });
+```js
+var Bot = require('ttapi');
+var bot = new Bot(AUTH, USERID, ROOMID);
+bot.listen(8080, '127.0.0.1');
 
+var myScriptVersion = '0.0.0';
+
+bot.on('httpRequest', function (req, res) {
+   var method = req.method;
+   var url    = req.url;
+   switch (url) {
+      case '/version/':
+         if (method == 'GET') {
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end('{"version":"'+myScriptVersion+'"}');
+         } else {
+            res.writeHead(500);
+            res.end();
+         }
+         break;
+      default:
+         res.writeHead(500);
+         res.end();
+         break;
+   }
+});
+```
 
 ### TCP Server
 
 This bot open a tcp server. That will allow you to easily communicate with the bot via a terminal.
 
-    var Bot = require('ttapi');
-    var bot = new Bot(AUTH, USERID, ROOMID);
-    bot.tcpListen(8080, '127.0.0.1');
-    
-    var myScriptVersion = 'V0.0.0';
-    
-    bot.on('tcpConnect', function (socket) { });
-    bot.on('tcpMessage', function (socket, msg) {
-       if (msg == 'version') {
-          socket.write('>> '+myScriptVersion+'\n');
-       }
-    });
-    bot.on('tcpEnd', function (socket) { });
+```js
+var Bot = require('ttapi');
+var bot = new Bot(AUTH, USERID, ROOMID);
+bot.tcpListen(8080, '127.0.0.1');
+
+var myScriptVersion = 'V0.0.0';
+
+bot.on('tcpConnect', function (socket) { });
+bot.on('tcpMessage', function (socket, msg) {
+   if (msg == 'version') {
+      socket.write('>> '+myScriptVersion+'\n');
+   }
+});
+bot.on('tcpEnd', function (socket) { });
+```
 
 You can communicate with the bot like this:
 
@@ -82,24 +86,27 @@ And then type:
 
 ### Simple
 
-    var Bot    = require('ttapi');
-    var AUTH   = 'auth+live+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
-    var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
-    var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
+```js
+var Bot    = require('ttapi');
+var AUTH   = 'auth+live+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
+var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
 
-    var bot = new Bot(AUTH, USERID);
+var bot = new Bot(AUTH, USERID);
 
-    bot.on('ready',        function (data) { bot.roomRegister(ROOMID); });
-    bot.on('roomChanged',  function (data) { console.log('The bot has changed room.', data); });
+bot.on('ready',        function (data) { bot.roomRegister(ROOMID); });
+bot.on('roomChanged',  function (data) { console.log('The bot has changed room.', data); });
 
-    bot.on('speak',        function (data) { console.log('Someone has spoken', data); });
-    bot.on('update_votes', function (data) { console.log('Someone has voted',  data); });
-    bot.on('registered',   function (data) { console.log('Someone registered', data); });
-
+bot.on('speak',        function (data) { console.log('Someone has spoken', data); });
+bot.on('update_votes', function (data) { console.log('Someone has voted',  data); });
+bot.on('registered',   function (data) { console.log('Someone registered', data); });
+```
 
 # Debugging
 
-    bot.debug = true;
+```js
+bot.debug = true;
+```
 
 That will print on the terminal all the data that you get and all the data that you send.
 
