@@ -131,6 +131,10 @@ Triggered when a user leave the room.
 
 Triggered when a new message is send via the chat.
 
+### on('endsong', function (data) { })
+
+Triggered at the end of the song. (Just before the newsong/nosong event)
+
 ### on('newsong', function (data) { })
 
 Triggered when a new song start.
