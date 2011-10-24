@@ -184,8 +184,10 @@ Bot.prototype.onMessage = function (msg) {
          self.emit('nosong', json);
          break;
       case 'newsong':
+         if (self.currentSongId) {
+            self.emit('endsong');
+         }
          self.currentSongId = json.room.metadata.current_song._id;
-         self.emit('endsong');
          self.emit('newsong', json);
          break;
       case 'update_votes':
