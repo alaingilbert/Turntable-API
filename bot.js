@@ -180,7 +180,6 @@ Bot.prototype.onMessage = function (msg) {
          break;
       case 'nosong':
          self.currentSongId = null;
-         self.emit('endsong');
          self.emit('nosong', json);
          break;
       case 'newsong':
