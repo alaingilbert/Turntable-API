@@ -180,11 +180,11 @@ Bot.prototype.onMessage = function (msg) {
          break;
       case 'nosong':
          self.currentSongId = null;
-         self.emit('endsong');
          self.emit('nosong', json);
          break;
       case 'newsong':
          self.currentSongId = json.room.metadata.current_song._id;
+         self.emit('endsong');
          self.emit('newsong', json);
          break;
       case 'update_votes':
