@@ -289,12 +289,12 @@ Unfan someone.
 
 ### playlistAll ( playlistName:string [, callback:fn] )
 
-Get all informations about a playlist.
+Get all informations about a playlist. The default playlist name used by turntable is "default".
 
 ### playlistAdd ( playlistName:string, songId:string [, callback:fn] )
 
-Add a song on a playlist.
+Add a song on a playlist. The default playlist name used by turntable for queueing songs is "default".
 
 ### playlistRemove ( playlistName:string, index:int [, callback:fn] )
 
-Remove a song on a playlist.
+Remove a song on a playlist. The default playlist name used by turntable is "default".
