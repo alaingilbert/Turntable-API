@@ -292,8 +292,9 @@ Bot.prototype.roomDeregister = function (callback) {
    this._send(rq, callback);
 };
 
-Bot.prototype.roomInfo = function (callback) {
+Bot.prototype.roomInfo = function (callback, extended) {
    var rq = { api: 'room.info', roomid: this.roomId };
+   if (typeof extended == 'boolean' && !extended) rq.extended = false;
    this._send(rq, callback);
 };
 
@@ -364,6 +365,23 @@ Bot.prototype.userInfo = function (callback) {
    this._send(rq, callback);
 };
 
+Bot.prototype.getProfile = function () {
+   if (arguments.length == 1) {
+      if (typeof arguments[0] === 'function') {
+         var userId   = this.userId;
+         var callback = arguments[0];
+      } else if (typeof arguments[0] === 'string') {
+         var userId   = arguments[0];
+         var callback = null;
+      }
+   } else if (arguments.length == 2) {
+      var userId   = arguments[0];
+      var callback = arguments[1];
+   }
+   var rq = {api: 'user.get_profile', userid: userId};
+   this._send(rq, callback);
+};
+
 Bot.prototype.modifyLaptop = function (laptop, callback) {
    var rq = { api: 'user.modify', laptop: laptop };
    this._send(rq, callback);
@@ -372,6 +390,38 @@ Bot.prototype.modifyLaptop = function (laptop, callback) {
 Bot.prototype.modifyName = function (name, callback) {
    var rq = { api: 'user.modify', name: name };
    this._send(rq, callback);
+};
+
+Bot.prototype.modifyProfile = function (profile, callback) {
+   if (typeof profile.name != 'string' || typeof profile.twitter != 'string' || typeof profile.facebook != 'string' || typeof profile.website != 'string' || typeof profile.about != 'string' || typeof profile.topartists != 'string' || typeof profile.hangout != 'string') {
+      this.getProfile(this.userId, function(data) {
+         if (data.success) {
+            var rq = {
+               api:        'user.modify_profile',
+               name:       (profile.name) ? profile.name : data.name,
+               twitter:    (profile.twitter) ? profile.twitter : data.twitter,
+               facebook:   (profile.facebook) ? profile.facebook : data.facebook,
+               website:    (profile.website) ? profile.website : data.website,
+               about:      (profile.about) ? profile.about : data.about,
+               topartists: (profile.topartists) ? profile.topartists : data.topartists,
+               hangout:    (profile.hangout) ? profile.hangout : data.hangout
+            };
+            this._send(rq, callback);
+         } else callback(data);
+      });
+   } else {
+      var rq = {
+         api:        'user.modify_profile',
+         name:       profile.name,
+         twitter:    profile.twitter,
+         facebook:   profile.facebook,
+         website:    profile.website,
+         about:      profile.about,
+         topartists: profile.topartists,
+         hangout:    profile.hangout
+      };
+      this._send(rq, callback);
+   }
 };
 
 Bot.prototype.setAvatar = function (avatarId, callback) {
