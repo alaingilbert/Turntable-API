@@ -140,15 +140,19 @@ Triggered when a socket close its connection.
 
 Triggered when the bot receive an http request.
 
-### on('registered', function (data) { })
+### on('roomChanged', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/room_infos.js)) { })
+
+Triggered when the bot enter in a room.
+
+### on('registered', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/registered.js)) { })
 
 Triggered when a user register in the room.
 
-### on('deregistered', function (data) { })
+### on('deregistered', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/deregistered.js)) { })
 
 Triggered when a user leave the room.
 
-### on('speak', function (data) { })
+### on('speak', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/speak.js)) { })
 
 Triggered when a new message is send via the chat.
 
@@ -156,15 +160,15 @@ Triggered when a new message is send via the chat.
 
 Triggered at the end of the song. (Just before the newsong/nosong event)
 
-### on('newsong', function (data) { })
+### on('newsong', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/newsong.js)) { })
 
 Triggered when a new song start.
 
-### on('nosong', function (data) { })
+### on('nosong', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/nosong.js)) { })
 
 Triggered when there is no song.
 
-### on('update_votes', function (data) { })
+### on('update_votes', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/update_votes.js)) { })
 
 Triggered when a user vote.
 
@@ -180,15 +184,15 @@ Triggered when a user change his name/infos.
 
 Triggered when a user take a dj spot.
 
-### on('rem_dj', function (data) { })
+### on('rem_dj', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/rem_dj.js)) { })
 
 Triggered when a user leave a dj spot.
 
-### on('new_moderator', function (data) { })
+### on('new_moderator', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/new_moderator.js)) { })
 
 Triggered when a user is granted to moderator title.
 
-### on('rem_moderator', function (data) { })
+### on('rem_moderator', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/rem_moderator.js)) { })
 
 Triggered when a user loose his moderator title.
 
@@ -293,12 +297,13 @@ Unfan someone.
 
 ### playlistAll ( playlistName:string [, callback:fn] )
 
-Get all informations about a playlist.
+Get all informations about a playlist. The default playlist name used by turntable is "default". Passing false as the playlist name will use "default".
 
 ### playlistAdd ( playlistName:string, songId:string [, callback:fn] )
 
-Add a song on a playlist.
+Add a song on a playlist. The default playlist name used by turntable for queueing songs is "default". Passing false as the playlist name will use "default".
 
 ### playlistRemove ( playlistName:string, index:int [, callback:fn] )
 
-Remove a song on a playlist.
+Remove a song on a playlist. The default playlist name used by turntable is "default". Passing false as the playlist name will use "default".
+
