@@ -234,7 +234,7 @@ Bot.prototype.toString = function () {
 Bot.prototype._send = function (rq, callback) {
    rq.msgid    = this._msgId;
    rq.clientid = this.clientId;
-   rq.userid   = this.userId;
+   rq.userid   = rq.userid || this.userId;
    rq.userauth = this.auth;
 
    var msg = JSON.stringify(rq);
@@ -292,8 +292,19 @@ Bot.prototype.roomDeregister = function (callback) {
    this._send(rq, callback);
 };
 
-Bot.prototype.roomInfo = function (callback) {
+Bot.prototype.roomInfo = function () {
    var rq = { api: 'room.info', roomid: this.roomId };
+   var callback = null;
+   if (arguments.length == 1) {
+      if (typeof arguments[0] === 'function') {
+         callback = arguments[0];
+      } else if (arguments[0] === 'boolean') {
+         rq.extended = arguments[0];
+      }
+   } else if (arguments.length == 2) {
+      rq.extended = arguments[0];
+      callback    = arguments[1];
+   }
    this._send(rq, callback);
 };
 
@@ -361,6 +372,34 @@ Bot.prototype.userAuthenticate = function (callback) {
 
 Bot.prototype.userInfo = function (callback) {
    var rq = { api: 'user.info' };
+   this._send(rq, callback);
+};
+
+Bot.prototype.getProfile = function () {
+   var rq       = { api: 'user.get_profile' };
+   var callback = null;
+   if (arguments.length == 1) {
+      if (typeof arguments[0] === 'function') {
+         callback = arguments[0];
+      } else if (typeof arguments[0] === 'string') {
+         rq.userid    = arguments[0];
+      }
+   } else if (arguments.length == 2) {
+      rq.userid = arguments[0];
+      callback  = arguments[1];
+   }
+   this._send(rq, callback);
+};
+
+Bot.prototype.modifyProfile = function (profile, callback) {
+   var rq = { api: 'user.modify_profile' };
+   if (profile.name)       { rq.name       = profile.name;       }
+   if (profile.twitter)    { rq.twitter    = profile.twitter;    }
+   if (profile.facebook)   { rq.facebook   = profile.facebook;   }
+   if (profile.website)    { rq.website    = profile.website;    }
+   if (profile.about)      { rq.about      = profile.about;      }
+   if (profile.topartists) { rq.topartists = profile.topartists; }
+   if (profile.hangout)    { rq.hangout    = profile.hangout;    }
    this._send(rq, callback);
 };
 

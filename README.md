@@ -219,9 +219,9 @@ Register in a room.
 
 Deregister from the current room.
 
-### roomInfo ( [callback:fn] )
+### roomInfo ( [[extended=true:bool, ]callback:fn] )
 
-Get the current room informations.
+Get the current room informations. Do not include song log if 'extended' is false.
 
 ### speak ( msg:string [, callback:fn] )
 
@@ -262,6 +262,14 @@ Authenticate the user.
 ### userInfo ( [callback:fn] )
 
 Get the current user informations.
+
+### getProfile ( [[userId:string, ]callback:fn] )
+
+Get a user profile.
+
+### modifyProfile ( profile:object( name:string, twitter:string, facebook:string, website:string, about:string, topartists:string, hangout:string ) [, callback:fn] )
+
+Modify your profile. Any missing properties from the 'profile' object will be replaced with the current values.
 
 ### modifyLaptop ( laptop:enum('linux', 'mac', 'pc', 'chrome') [, callback:fn] )
 
