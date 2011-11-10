@@ -211,6 +211,9 @@ Bot.prototype.onMessage = function (msg) {
       case 'rem_moderator':
          self.emit('rem_moderator', json);
          break;
+      case 'snagged':
+         self.emit('snagged', json);
+         break;
       default:
          if (json['command']) {
             //console.log('Command: ', json);
