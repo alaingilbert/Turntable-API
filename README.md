@@ -196,6 +196,10 @@ Triggered when a user is granted to moderator title.
 
 Triggered when a user loose his moderator title.
 
+### on('snagged', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/snagged.js)) { })
+
+Triggered when a user queues the currently playing song.
+
 
 ## Actions
 
