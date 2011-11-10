@@ -1,0 +1,4 @@
+{
+   "command": "snagged",
+   "userid": "xxxxxxxxxxxxxxxxxxxxxxxx"
+}
