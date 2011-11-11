@@ -146,7 +146,7 @@ Triggered when the bot enter in a room.
 
 ### on('registered', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/registered.js)) { })
 
-Triggered when a user register in the room.
+Triggered when a user enter the room.
 
 ### on('deregistered', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/deregistered.js)) { })
 
