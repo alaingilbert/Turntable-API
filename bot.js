@@ -489,8 +489,30 @@ Bot.prototype.playlistAdd = function () {
    this._send(rq, callback);
 };
 
-Bot.prototype.playlistRemove = function (playlistName, index, callback) {
-   if (!playlistName) { playlistName = 'default'; }
+Bot.prototype.playlistRemove = function () {
+   var playlistName = 'default'
+     , index        = 0
+     , callback     = null;
+
+   switch (arguments.length) {
+      case 1:
+         index = arguments[0];
+         break;
+      case 2:
+         if (typeof arguments[0] == 'string' && typeof arguments[1] == 'number') {
+            playlistName = arguments[0];
+            index        = arguments[1];
+         } else if (typeof arguments[0] == 'number' && typeof arguments[1] == 'function') {
+            index        = arguments[0];
+            callback     = arguments[1];
+         }
+         break;
+      case 3:
+         playlistName = arguments[0];
+         index        = arguments[1];
+         callback     = arguments[2];
+         break;
+   }
    var rq = { api: 'playlist.remove', playlist_name: playlistName, index: index };
    this._send(rq, callback);
 };
