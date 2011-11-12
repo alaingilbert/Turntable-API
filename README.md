@@ -299,9 +299,21 @@ Fan someone.
 
 Unfan someone.
 
-### playlistAll ( playlistName:string [, callback:fn] )
+### playlistAll ( [ playlistName:string, ] callback:fn )
 
-Get all informations about a playlist. The default playlist name used by turntable is "default". Passing false as the playlist name will use "default".
+Get all informations about a playlist.
+
+#### Arguments
+
+* `playlistName` (optional) default: `default`
+* `callback` (required)
+
+#### Examples
+
+```js
+bot.playlistAll(callback);
+bot.playlistAll(playlistName, callback);
+```
 
 ### playlistAdd ( [ playlistName:string, ] songId:string [, index:int [, callback:fn]] )
 
@@ -330,7 +342,7 @@ bot.playlistAdd(false, songId);           // Backward compatibility
 
 ### playlistRemove ( [ playlistName:string, ] index:int [, callback:fn ] )
 
-Remove a song on a playlist. The default playlist name used by turntable is "default". Passing false as the playlist name will use "default".
+Remove a song on a playlist.
 
 #### Arguments
 
