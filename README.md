@@ -332,3 +332,22 @@ bot.playlistAdd(false, songId);           // Backward compatibility
 
 Remove a song on a playlist. The default playlist name used by turntable is "default". Passing false as the playlist name will use "default".
 
+### playlistReorder ( [ playlistName:string, ] indexFrom:int, indexTo:int [, callback:fn ] )
+
+Reorder a playlist. Take the song at index `indexFrom` and move it to index `indexTo`.
+
+#### Arguments
+
+* `playlistName` (optional) default: `default`
+* `indexFrom` (required) default: `0`
+* `indexTo` (required) default: `0`
+* `callback` (optional)
+
+#### Examples
+
+```js
+bot.playlistReorder(indexFrom, indexTo);
+bot.playlistReorder(indexFrom, indexTo, callback);
+bot.playlistReorder(playlistName, indexFrom, indexTo);
+bot.playlistReorder(playlistName, indexFrom, indexTo, callback);
+```
