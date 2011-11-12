@@ -328,9 +328,24 @@ bot.playlistAdd(false, songId, callback); // Backward compatibility
 bot.playlistAdd(false, songId);           // Backward compatibility
 ````
 
-### playlistRemove ( playlistName:string, index:int [, callback:fn] )
+### playlistRemove ( [ playlistName:string, ] index:int [, callback:fn ] )
 
 Remove a song on a playlist. The default playlist name used by turntable is "default". Passing false as the playlist name will use "default".
+
+#### Arguments
+
+* `playlistName` (optional) default: `default`
+* `index` (optional) default: `0`
+* `callback` (optional)
+
+#### Examples
+```js
+bot.playlistRemove();
+bot.playlistRemove(index);
+bot.playlistRemove(index, callback);
+bot.playlistRemove(playlistName, index);
+bot.playlistRemove(playlistName, index, callback);
+```
 
 ### playlistReorder ( [ playlistName:string, ] indexFrom:int, indexTo:int [, callback:fn ] )
 
