@@ -431,8 +431,19 @@ Bot.prototype.removeFan = function (userId, callback) {
    this._send(rq, callback);
 };
 
-Bot.prototype.playlistAll = function (playlistName, callback) {
-   if (!playlistName) { playlistName = 'default'; }
+Bot.prototype.playlistAll = function () {
+   var playlistName = 'default'
+     , callback     = null;
+   switch (arguments.length) {
+      case 1:
+         if      (typeof arguments[0] == 'string'  ) { playlistName = arguments[0]; }
+         else if (typeof arguments[0] == 'function') { callback     = arguments[0]; }
+         break
+      case 2:
+         playlistName = arguments[0];
+         callback     = arguments[1];
+         break;
+   }
    var rq = { api: 'playlist.all', playlist_name: playlistName };
    this._send(rq, callback);
 };
