@@ -495,4 +495,36 @@ Bot.prototype.playlistRemove = function (playlistName, index, callback) {
    this._send(rq, callback);
 };
 
+Bot.prototype.playlistReorder = function () {
+   var playlistName = 'default'
+     , indexFrom    = 0
+     , indexTo      = 0
+     , callback     = null;
+   switch (arguments.length) {
+      case 2:
+         indexFrom = arguments[0];
+         indexTo   = arguments[1];
+         break;
+      case 3:
+         if (typeof arguments[0] == 'string' && typeof arguments[1] == 'number' && typeof arguments[2] == 'number') {
+            playlistName = arguments[0];
+            indexFrom    = arguments[1];
+            indexTo      = arguments[2];
+         } else if (typeof arguments[0] == 'number' && typeof arguments[1] == 'number' && typeof arguments[2] == 'function') {
+            indexFrom    = arguments[0];
+            indexTo      = arguments[1];
+            callback     = arguments[2];
+         }
+         break;
+      case 4:
+         playlistName = arguments[0];
+         indexFrom    = arguments[1];
+         indexTo      = arguments[2];
+         callback     = arguments[3];
+         break;
+   }
+   var rq = { api: 'playlist.reorder', playlist_name: playlistName, index_from: indexFrom, index_to: indexTo };
+   this._send(rq, callback);
+};
+
 exports.Bot = Bot;
