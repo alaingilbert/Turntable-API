@@ -437,9 +437,55 @@ Bot.prototype.playlistAll = function (playlistName, callback) {
    this._send(rq, callback);
 };
 
-Bot.prototype.playlistAdd = function (playlistName, songId, callback) {
-   if (!playlistName) { playlistName = 'default'; }
-   var rq = { api: 'playlist.add', playlist_name: playlistName, song_dict: { fileid: songId }, index: 0 };
+Bot.prototype.playlistAdd = function () {
+   var playlistName = 'default'
+     , songId       = null
+     , index        = 0
+     , callback     = null;
+   switch (arguments.length) {
+      case 1:
+         songId       = arguments[0];
+         break;
+      case 2:
+         if (typeof arguments[0] == 'string' && typeof arguments[1] == 'string') {
+            playlistName = arguments[0];
+            songId       = arguments[1];
+         } else if (typeof arguments[0] == 'string' && typeof arguments[1] == 'function') {
+            songId       = arguments[0];
+            callback     = arguments[1];
+         } else if (typeof arguments[0] == 'string' && typeof arguments[1] == 'number') {
+            songId       = arguments[0];
+            index        = arguments[1];
+         } else if (typeof arguments[0] == 'boolean' && typeof arguments[1] == 'string') {
+            songId       = arguments[1];
+         }
+         break;
+      case 3:
+         if (typeof arguments[0] == 'string' && typeof arguments[1] == 'string' && typeof arguments[2] == 'number') {
+            playlistName = arguments[0];
+            songId       = arguments[1];
+            index        = arguments[2];
+         } else if (typeof arguments[0] == 'string' && typeof arguments[1] == 'string' && typeof arguments[2] == 'function') {
+            playlistName = arguments[0];
+            songId       = arguments[1];
+            callback     = arguments[2];
+         } else if (typeof arguments[0] == 'string' && typeof arguments[1] == 'number' && typeof arguments[2] == 'function') {
+            songId       = arguments[0];
+            index        = arguments[1];
+            callback     = arguments[2];
+         } else if (typeof arguments[0] == 'boolean' && typeof arguments[1] == 'string' && typeof arguments[2] == 'function') {
+            songId       = arguments[1];
+            callback     = arguments[2];
+         }
+         break;
+      case 4:
+         playlistName = arguments[0];
+         songId       = arguments[1];
+         index        = arguments[2];
+         callback     = arguments[3];
+         break;
+   }
+   var rq = { api: 'playlist.add', playlist_name: playlistName, song_dict: { fileid: songId }, index: index };
    this._send(rq, callback);
 };
 
