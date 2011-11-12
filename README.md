@@ -303,9 +303,30 @@ Unfan someone.
 
 Get all informations about a playlist. The default playlist name used by turntable is "default". Passing false as the playlist name will use "default".
 
-### playlistAdd ( playlistName:string, songId:string [, callback:fn] )
+### playlistAdd ( [ playlistName:string, ] songId:string [, index:int [, callback:fn]] )
 
-Add a song on a playlist. The default playlist name used by turntable for queueing songs is "default". Passing false as the playlist name will use "default".
+Add a song on a playlist.
+
+#### Arguments
+
+* `playlistName` (optional) default: `default`
+* `songId` (required)
+* `index` (optional) default: `0`
+* `callback` (optional)
+
+#### Examples
+
+```js
+bot.playlistAdd(songId);
+bot.playlistAdd(songId, idx);
+bot.playlistAdd(songId, callback);
+bot.playlistAdd(songId, idx, callback);
+bot.playlistAdd(playlistName, songId, idx);
+bot.playlistAdd(playlistName, songId, callback);
+bot.playlistAdd(playlistName, songId, idx, callback);
+bot.playlistAdd(false, songId, callback); // Backward compatibility
+bot.playlistAdd(false, songId);           // Backward compatibility
+````
 
 ### playlistRemove ( playlistName:string, index:int [, callback:fn] )
 
