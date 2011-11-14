@@ -275,9 +275,27 @@ Get the current user informations.
 
 Get a user profile.
 
-### modifyProfile ( profile:object( name:string, twitter:string, facebook:string, website:string, about:string, topartists:string, hangout:string ) [, callback:fn] )
+### modifyProfile ( profile:obj [, callback:fn] )
 
 Modify your profile. Any missing properties from the 'profile' object will be replaced with the current values.
+
+#### Arguments
+
+* `profile`:obj (required)
+  * `name`:string (optional)
+  * `twitter`:string (optional)
+  * `facebook`:string (optional)
+  * `website`:string (optional)
+  * `about`:string (optional)
+  * `topartists`:string (optional)
+  * `hangout`:string (optional)
+* `callback`:fn (optional)
+
+#### Examples
+
+```js
+bot.modifyProfile({ website:'http://ttdashboard.com/', about:'My bot.' }, callback);
+```
 
 ### modifyLaptop ( laptop:enum('linux', 'mac', 'pc', 'chrome') [, callback:fn] )
 
