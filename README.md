@@ -180,7 +180,7 @@ Triggered when a user is booted.
 
 Triggered when a user change his name/infos.
 
-### on('add_dj', function (data) { })
+### on('add_dj', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/add_dj.js)) { })
 
 Triggered when a user take a dj spot.
 
