@@ -130,7 +130,7 @@ Triggered when a socket open a connection.
 
 ### on('tcpMessage', function (socket, msg) { })
 
-Triggered when the bot receive a message.
+Triggered when the bot receive a tcp message.
 
 ### on('tcpEnd', function (socket) { })
 
