@@ -2,12 +2,6 @@
 
 A simple nodejs wrapper for the turntable API
 
-# Warning
-
-ttapi will not work with the latest release of `NodeJs (v0.5.8)`.
-
-It work well on v0.4.8 (tested).
-
 ## Installation
     npm install ttapi
 
