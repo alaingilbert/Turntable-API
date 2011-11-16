@@ -11,6 +11,8 @@ It work well on v0.4.8 (tested).
 ## Installation
     npm install ttapi
 
+Find your `AUTH`, `USERID` and `ROOMID` with [that bookmarklet](http://alaingilbert.github.com/Turntable-API/bookmarklet.html). 
+
 ## Examples
 
 ### Chat bot
