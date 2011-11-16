@@ -59,3 +59,9 @@ bot.on('rem_dj', function (data) {
    var user = data.user[0];
    usersList[user.userid].lastActivity = new Date();
 });
+
+// Someone add the surrent song to his playlist.
+bot.on('snagged', function (data) {
+   var userid = data.userid;
+   usersList[userid].lastActivity = new Date();
+});
