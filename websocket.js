@@ -35,7 +35,7 @@ var events = require('events');
 var http = require('http');
 var net = require('net');
 var urllib = require('url');
-var sys = require('sys');
+var sys = require('util');
 
 var FRAME_NO = 0;
 var FRAME_LO = 1;
@@ -500,10 +500,22 @@ var WebSocket = function(url, proto, opts) {
         //      un-inspected to net.Stream.connect(). The latter accepts a
         //      string as its first argument to connect to a UNIX socket.
         var httpClient = undefined;
+        var oldVersion = false;
         switch (getUrlScheme(url)) {
         case 'ws':
             var u = urllib.parse(url);
-            httpClient = http.createClient(u.port || 80, u.hostname);
+            var options = {
+               port: u.port || 80,
+               host: u.hostname,
+               path: u.path,
+               headers: httpHeaders
+            };
+            if (+/^v0.([0-9]+).[0-9]+$/.exec(process.version)[1] <= 4) {
+                httpClient = http.createClient(u.port || 80, u.hostname);
+                oldVersion = true;
+            } else {
+                httpClient = http.request(options);
+            }
             httpPath = (u.pathname || '/') + (u.search || '');
             httpHeaders.Host = u.hostname + (u.port ? (":" + u.port) : "");
             break;
@@ -611,7 +623,8 @@ var WebSocket = function(url, proto, opts) {
             errorListener(e);
         });
 
-        var httpReq = httpClient.request(httpPath, httpHeaders);
+        if (oldVersion) { var httpReq = httpClient.request(httpPath, httpHeaders); }
+        else            { var httpReq = httpClient; }
 
         httpReq.write(challenge, 'binary');
         httpReq.end();
