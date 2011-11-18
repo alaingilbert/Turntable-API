@@ -1,33 +1,3 @@
-/**
- * Copyright (c) 2010, Peter Griess <pg@std.in>
- * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- * 
- *     * Redistributions of source code must retain the above copyright notice,
- *       this list of conditions and the following disclaimer.
- * 
- *     * Redistributions in binary form must reproduce the above copyright notice,
- *       this list of conditions and the following disclaimer in the documentation
- *       and/or other materials provided with the distribution.
- * 
- *     * Neither the name of node-websocket-client nor the names of its
- *       contributors may be used to endorse or promote products derived from this
- *       software without specific prior written permission.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
 var assert = require('assert');
 var buffer = require('buffer');
 var crypto = require('crypto');
@@ -35,7 +5,10 @@ var events = require('events');
 var http = require('http');
 var net = require('net');
 var urllib = require('url');
-var sys = require('util');
+
+var reg = /^v0.([0-9]+).[0-9]+$/.exec(process.version);
+var oldVersion = reg ? +reg[1] <= 4 : false;
+var sys = oldVersion ? require('sys') : require('util');
 
 var FRAME_NO = 0;
 var FRAME_LO = 1;
@@ -500,24 +473,18 @@ var WebSocket = function(url, proto, opts) {
         //      un-inspected to net.Stream.connect(). The latter accepts a
         //      string as its first argument to connect to a UNIX socket.
         var httpClient = undefined;
-        var oldVersion = false;
         switch (getUrlScheme(url)) {
         case 'ws':
             var u = urllib.parse(url);
+            httpPath = (u.pathname || '/') + (u.search || '');
+            httpHeaders.Host = u.hostname + (u.port ? (":" + u.port) : "");
             var options = {
                port: u.port || 80,
                host: u.hostname,
-               path: u.path,
+               path: httpPath,
                headers: httpHeaders
             };
-            if (+/^v0.([0-9]+).[0-9]+$/.exec(process.version)[1] <= 4) {
-                httpClient = http.createClient(u.port || 80, u.hostname);
-                oldVersion = true;
-            } else {
-                httpClient = http.request(options);
-            }
-            httpPath = (u.pathname || '/') + (u.search || '');
-            httpHeaders.Host = u.hostname + (u.port ? (":" + u.port) : "");
+            httpClient = oldVersion ? http.createClient(u.port || 80, u.hostname) : http.request(options);
             break;
 
         case 'ws+unix':
@@ -623,8 +590,7 @@ var WebSocket = function(url, proto, opts) {
             errorListener(e);
         });
 
-        if (oldVersion) { var httpReq = httpClient.request(httpPath, httpHeaders); }
-        else            { var httpReq = httpClient; }
+        var httpReq = oldVersion ? httpClient.request(httpPath, httpHeaders) : httpClient;
 
         httpReq.write(challenge, 'binary');
         httpReq.end();
