@@ -313,6 +313,14 @@ Fan someone.
 
 Unfan someone.
 
+### snag ( [ callback:fn ] )
+
+Snag the song.
+
+#### Warning
+
+This function will not add the song into the queue.
+
 ### playlistAll ( [ playlistName:string, ] callback:fn )
 
 Get all informations about a playlist.
