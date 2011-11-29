@@ -38,6 +38,7 @@ var Bot = function () {
    }
    this.debug         = false;
    this.callback      = null;
+   this.currentDjId   = null;
    this.currentSongId = null;
    this.lastHeartbeat = new Date();
    this.lastActivity  = new Date();
@@ -137,7 +138,11 @@ Bot.prototype.onMessage = function (msg) {
          switch (rq.api) {
             case 'room.info':
                if (json.success === true) {
+                  var currentDj   = json.room.metadata.current_dj;
                   var currentSong = json.room.metadata.current_song;
+                  if (currentDj) {
+                     self.currentDjId = currentDj;
+                  }
                   if (currentSong) {
                      self.currentSongId = currentSong._id;
                   }
@@ -179,6 +184,7 @@ Bot.prototype.onMessage = function (msg) {
          self.emit('speak', json);
          break;
       case 'nosong':
+         self.currentDjId   = null;
          self.currentSongId = null;
          self.emit('endsong');
          self.emit('nosong', json);
@@ -187,6 +193,7 @@ Bot.prototype.onMessage = function (msg) {
          if (self.currentSongId) {
             self.emit('endsong');
          }
+         self.currentDjId   = json.room.metadata.current_dj;
          self.currentSongId = json.room.metadata.current_song._id;
          self.emit('newsong', json);
          break;
@@ -357,6 +364,27 @@ Bot.prototype.remDj = function () {
 
 Bot.prototype.stopSong = function (callback) {
    var rq = { api: 'room.stop_song', roomid: this.roomId };
+   this._send(rq, callback);
+};
+
+Bot.prototype.snag = function (callback) {
+   var sh = crypto.createHash("sha1").update(Math.random().toString()).digest('hex');
+   var fh = crypto.createHash("sha1").update(Math.random().toString()).digest('hex');
+
+   var i  = [ this.userId, this.currentDjId, this.currentSongId, this.roomId, 'queue', 'board', 'false', sh ];
+   var vh = crypto.createHash("sha1").update(i.join('/')).digest('hex');
+
+   var rq = { api      : 'snag.add'
+            , djid     : this.currentDjId
+            , songid   : this.currentSongId
+            , roomid   : this.roomId
+            , site     : 'queue'
+            , location : 'board'
+            , in_queue : 'false'
+            , vh       : vh
+            , sh       : sh
+            , fh       : fh
+            };
    this._send(rq, callback);
 };
 
