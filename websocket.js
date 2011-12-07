@@ -36,7 +36,7 @@ var http = require('http');
 var net = require('net');
 var urllib = require('url');
 
-var reg = /^v0.([0-9]+).[0-9]+(-pre)?$/.exec(process.version);
+var reg = /^v0.([0-9]+)/i.exec(process.version);
 var oldVersion = reg ? +reg[1] <= 4 : false;
 var sys = oldVersion ? require('sys') : require('util');
 
