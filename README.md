@@ -219,6 +219,10 @@ Get 20 rooms.
 
 Get your favorites rooms.
 
+### addFavorite ( roomId:string [, callback:fn ] )
+
+Add a room to your favorite.
+
 ### roomRegister ( roomId:string [, callback:fn] )
 
 Register in a room.
