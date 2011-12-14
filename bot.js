@@ -37,7 +37,7 @@ var Bot = function () {
       this.roomId     = null;
    }
    this.debug         = false;
-   this.callback      = null;
+   this.callback      = function () {};
    this.currentDjId   = null;
    this.currentSongId = null;
    this.lastHeartbeat = new Date();
@@ -280,6 +280,11 @@ Bot.prototype.roomNow = function (callback) {
 Bot.prototype.listRooms = function (skip, callback) {
    skip = skip !== undefined ? skip : 0;
    var rq = { api: 'room.list_rooms', skip: skip };
+   this._send(rq, callback);
+};
+
+Bot.prototype.getFavorites = function (callback) {
+   var rq = { api: 'room.get_favorites' };
    this._send(rq, callback);
 };
 

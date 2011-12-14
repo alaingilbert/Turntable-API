@@ -215,6 +215,10 @@ Get the turntable server time.
 
 Get 20 rooms.
 
+### getFavorites ( callback:fn )
+
+Get your favorites rooms.
+
 ### roomRegister ( roomId:string [, callback:fn] )
 
 Register in a room.
