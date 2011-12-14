@@ -293,6 +293,11 @@ Bot.prototype.addFavorite = function (roomId, callback) {
    this._send(rq, callback);
 };
 
+Bot.prototype.remFavorite = function (roomId, callback) {
+   var rq = { api: 'room.rem_favorite', roomid: roomId };
+   this._send(rq, callback);
+};
+
 Bot.prototype.roomRegister = function (roomId, callback) {
    var self = this;
    var infos = this.getHashedAddr(roomId);

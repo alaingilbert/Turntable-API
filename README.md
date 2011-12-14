@@ -223,6 +223,10 @@ Get your favorites rooms.
 
 Add a room to your favorite.
 
+### remFavorite ( roomId:string [, callback:fn ] )
+
+Remove a room from your favorite.
+
 ### roomRegister ( roomId:string [, callback:fn] )
 
 Register in a room.
