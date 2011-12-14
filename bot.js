@@ -421,6 +421,11 @@ Bot.prototype.userInfo = function (callback) {
    this._send(rq, callback);
 };
 
+Bot.prototype.getFanOf = function (callback) {
+   var rq = { api: 'user.get_fan_of' };
+   this._send(rq, callback);
+};
+
 Bot.prototype.getProfile = function () {
    var rq       = { api: 'user.get_profile' };
    var callback = null;

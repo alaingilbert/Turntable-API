@@ -279,6 +279,10 @@ Authenticate the user.
 
 Get the current user informations.
 
+### getFanOf ( callback:fn )
+
+Get the list of who you became fan.
+
 ### getProfile ( [[userId:string, ]callback:fn] )
 
 Get a user profile.
