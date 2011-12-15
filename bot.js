@@ -343,6 +343,9 @@ Bot.prototype.bootUser = function (userId, reason, callback) {
    this._send(rq, callback);
 };
 
+Bot.prototype.boot = function () {
+   this.bootUser.apply(this, arguments);
+};
 
 Bot.prototype.addModerator = function (userId, callback) {
    var rq = { api: 'room.add_moderator', roomid: this.roomId, target_userid: userId };
@@ -380,6 +383,10 @@ Bot.prototype.remDj = function () {
 Bot.prototype.stopSong = function (callback) {
    var rq = { api: 'room.stop_song', roomid: this.roomId };
    this._send(rq, callback);
+};
+
+Bot.prototype.skip = function () {
+   this.stopSong.apply(this, arguments);
 };
 
 Bot.prototype.snag = function (callback) {

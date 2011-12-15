@@ -247,6 +247,10 @@ Broadcast a message on the chat.
 
 Boot a user.
 
+### boot ( userId:string, reason:string [, callback:fn] )
+
+Alias of `bootUser()`.
+
 ### addModerator ( userId:string [, callback:fn] )
 
 Add a moderator.
@@ -266,6 +270,10 @@ Remove a Dj.
 ### stopSong ( [callback:fn] )
 
 Skip the current song.
+
+### skip ( [callback:fn] )
+
+Alias of `stopSong()`.
 
 ### vote ( val:enum('up', 'down') [, callback:fn] )
 
