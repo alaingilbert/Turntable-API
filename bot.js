@@ -46,6 +46,7 @@ var Bot = function () {
    this._msgId        = 0;
    this._cmds         = [];
    this._isConnected  = false;
+   this.fanOf         = [];
    this.CHATSERVER_ADDRS = [["chat2.turntable.fm", 80], ["chat3.turntable.fm", 80]];
 
    var infos = this.getHashedAddr(this.roomId ? this.roomId : Math.random().toString());
@@ -117,7 +118,10 @@ Bot.prototype.onMessage = function (msg) {
    if (msg.data == '~m~10~m~no_session') {
       self.userAuthenticate(function () {
          if (!self._isConnected) {
-            self.emit('ready');
+            self.getFanOf(function (data) {
+               self.fanOf = data.fanof;
+               self.emit('ready');
+            });
          }
          self.callback();
          self._isConnected = true;
@@ -306,20 +310,11 @@ Bot.prototype.stalk = function () {
       break;
    }
 
-   self.becomeFan(userId, function (becomeFanData) {
-
-      if (!becomeFanData.success) {
-         if (becomeFanData.err != 'User is already a fan') {
-            return callback(becomeFanData);
-         }
-      }
-
+   function getGraph() {
       self.directoryGraph(function (directoryGraphData) {
-
          if (!directoryGraphData.success) {
             return callback(directoryGraphData);
          }
-
          for (var i=0; i<directoryGraphData.rooms.length; i++) {
             var room  = directoryGraphData.rooms[i][0];
             var users = directoryGraphData.rooms[i][1];
@@ -334,10 +329,22 @@ Bot.prototype.stalk = function () {
                }
             }
          }
-
          return callback({ err: 'userId not found.', success: false });
       });
-   });
+   }
+
+   if (self.fanOf.indexOf(userId) != -1) {
+      getGraph();
+   } else {
+      self.becomeFan(userId, function (becomeFanData) {
+         if (!becomeFanData.success) {
+            if (becomeFanData.err != 'User is already a fan') {
+               return callback(becomeFanData);
+            }
+         }
+         getGraph();
+      });
+   }
 };
 
 Bot.prototype.getFavorites = function (callback) {
