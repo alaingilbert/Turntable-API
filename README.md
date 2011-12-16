@@ -215,6 +215,18 @@ Get the turntable server time.
 
 Get 20 rooms.
 
+### directoryGraph ( callback:fn )
+
+Get the location of your friends/idols.
+
+### stalk ( userId:string [, allInformations=false:bool ], callback:fn )
+
+Get the location of a user.
+
+#### Warning
+
+This function will make the bot becoming fan of the user.
+
 ### getFavorites ( callback:fn )
 
 Get your favorites rooms.
