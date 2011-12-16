@@ -283,6 +283,63 @@ Bot.prototype.listRooms = function (skip, callback) {
    this._send(rq, callback);
 };
 
+Bot.prototype.directoryGraph = function (callback) {
+   var rq = { api: 'room.directory_graph' };
+   this._send(rq, callback);
+};
+
+Bot.prototype.stalk = function () {
+   var self     = this
+     , userId   = ''
+     , allInfos = false
+     , callback = function () {};
+
+   switch (arguments.length) {
+   case 2:
+      userId   = arguments[0];
+      callback = arguments[1];
+      break;
+   case 3:
+      userId   = arguments[0];
+      allInfos = arguments[1];
+      callback = arguments[2];
+      break;
+   }
+
+   self.becomeFan(userId, function (becomeFanData) {
+
+      if (!becomeFanData.success) {
+         if (becomeFanData.err != 'User is already a fan') {
+            return callback(becomeFanData);
+         }
+      }
+
+      self.directoryGraph(function (directoryGraphData) {
+
+         if (!directoryGraphData.success) {
+            return callback(directoryGraphData);
+         }
+
+         for (var i=0; i<directoryGraphData.rooms.length; i++) {
+            var room  = directoryGraphData.rooms[i][0];
+            var users = directoryGraphData.rooms[i][1];
+            for (var j=0; j<users.length; j++) {
+               var user = users[j];
+               if (user.userid == userId) {
+                  if (allInfos) {
+                     return callback({ roomId: room.roomid, room: room, user: user, success: true });
+                  } else {
+                     return callback({ roomId: room.roomid, success: true });
+                  }
+               }
+            }
+         }
+
+         return callback({ err: 'userId not found.', success: false });
+      });
+   });
+};
+
 Bot.prototype.getFavorites = function (callback) {
    var rq = { api: 'room.get_favorites' };
    this._send(rq, callback);
