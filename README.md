@@ -221,7 +221,7 @@ Get the location of your friends/idols.
 
 ### stalk ( userId:string [, allInformations=false:bool ], callback:fn )
 
-Get the location of a user.
+Get the location of a user. If `allInformations` is `true`, you'll also receive the informations about the room and the user.
 
 #### Warning
 
