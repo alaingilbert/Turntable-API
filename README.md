@@ -112,6 +112,9 @@ bot.debug = true;
 
 That will print on the terminal all the data that you get and all the data that you send.
 
+# Hosting
+
+[https://no.de/](https://no.de/) : Free hosting for nodejs projects.
 
 # Documentation
 
