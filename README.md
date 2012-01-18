@@ -332,7 +332,7 @@ Modify your profile. Any missing properties from the 'profile' object will be re
 bot.modifyProfile({ website:'http://ttdashboard.com/', about:'My bot.' }, callback);
 ```
 
-### modifyLaptop ( laptop:enum('linux', 'mac', 'pc', 'chrome' , 'iphone') [, callback:fn] )
+### modifyLaptop ( laptop:enum('linux', 'mac', 'pc', 'chrome' , 'iphone' , 'sopa') [, callback:fn] )
 
 Modify your laptop.
 
