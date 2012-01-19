@@ -475,11 +475,18 @@ Bot.prototype.snag = function (callback) {
 };
 
 Bot.prototype.vote = function (val, callback) {
-   var vh = crypto.createHash("sha1").update(this.roomId + val + this.currentSongId).digest('hex');
-   var th = crypto.createHash("sha1").update(Math.random().toString()).digest('hex');
-   var ph = crypto.createHash("sha1").update(Math.random().toString()).digest('hex');
-   var rq = { api: 'room.vote', roomid: this.roomId, val: val, vh: vh, th: th, ph: ph };
+   var val      = arguments[0] || 'up'
+     , callback = arguments[1] || null
+     , vh       = crypto.createHash("sha1").update(this.roomId + val + this.currentSongId).digest('hex')
+     , th       = crypto.createHash("sha1").update(Math.random().toString()).digest('hex')
+     , ph       = crypto.createHash("sha1").update(Math.random().toString()).digest('hex')
+     , rq       = { api: 'room.vote', roomid: this.roomId, val: val, vh: vh, th: th, ph: ph };
    this._send(rq, callback);
+};
+
+Bot.prototype.bop = function () {
+   arguments[0] = 'up';
+   this.vote.apply(this, arguments);
 };
 
 Bot.prototype.userAuthenticate = function (callback) {

@@ -294,6 +294,10 @@ Alias of `stopSong()`.
 
 Vote for the current song.
 
+### bop ( )
+
+Alias of `vote('up')`.
+
 ### userAuthenticate ( [callback:fn] )
 
 Authenticate the user.
