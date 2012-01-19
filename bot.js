@@ -526,6 +526,7 @@ Bot.prototype.modifyProfile = function (profile, callback) {
 };
 
 Bot.prototype.modifyLaptop = function (laptop, callback) {
+   laptop = laptop || 'linux';
    var rq = { api: 'user.modify', laptop: laptop };
    this._send(rq, callback);
 };
