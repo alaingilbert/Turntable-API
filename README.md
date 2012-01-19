@@ -112,6 +112,9 @@ bot.debug = true;
 
 That will print on the terminal all the data that you get and all the data that you send.
 
+# Hosting
+
+[https://no.de/](https://no.de/) : Free hosting for nodejs projects.
 
 # Documentation
 
@@ -329,7 +332,7 @@ Modify your profile. Any missing properties from the 'profile' object will be re
 bot.modifyProfile({ website:'http://ttdashboard.com/', about:'My bot.' }, callback);
 ```
 
-### modifyLaptop ( laptop:enum('linux', 'mac', 'pc', 'chrome') [, callback:fn] )
+### modifyLaptop ( laptop:enum('linux', 'mac', 'pc', 'chrome' , 'iphone') [, callback:fn] )
 
 Modify your laptop.
 

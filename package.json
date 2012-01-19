@@ -9,6 +9,9 @@
     "url": "git://github.com/alaingilbert/Turntable-API.git"
   },
   "main": "index.js",
+  "scripts": {
+    "start": "./examples/chat_bot.js"
+  },
   "engines": {
     "node": ">= v0.4.0"
   },
