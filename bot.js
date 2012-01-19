@@ -37,6 +37,7 @@ var Bot = function () {
       this.roomId     = null;
    }
    this.debug         = false;
+   this.stdout        = 'stdout';
    this.callback      = function () {};
    this.currentDjId   = null;
    this.currentSongId = null;
@@ -113,7 +114,10 @@ Bot.prototype.onMessage = function (msg) {
       return;
    }
 
-   if (this.debug) { console.log('> '+data); }
+   if (this.debug) {
+      if (this.stdout == 'stderr') { console.error('> ' + data); }
+      else                         { console.log('> ' + data);   }
+   }
 
    if (msg.data == '~m~10~m~no_session') {
       self.userAuthenticate(function () {
@@ -253,7 +257,11 @@ Bot.prototype._send = function (rq, callback) {
 
    var msg = JSON.stringify(rq);
 
-   if (this.debug) { console.log('< '+msg); }
+   if (this.debug) {
+      if (this.stdout == 'stderr') { console.error('> ' + data); }
+      else                         { console.log('> ' + data);   }
+   }
+
    this.ws.send('~m~'+msg.length+'~m~'+msg);
    this._cmds.push([this._msgId, rq, callback]);
    this._msgId++;
