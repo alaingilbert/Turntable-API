@@ -55,7 +55,7 @@ repl.start('> ').context.bot = bot;
 // ...
 ```
 
-REPL allows you to dynamically call the bot functions and modify his variables during his execution.
+[REPL](http://nodejs.org/docs/v0.6.0/api/repl.html) allows you to dynamically call the bot functions and modify his variables during his execution.
 
 # Debugging
 
