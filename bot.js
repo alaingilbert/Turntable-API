@@ -103,17 +103,11 @@ Bot.prototype.tcpListen = function (port, address) {
 
 
 Bot.prototype.setTmpSong = function (data) {
-   var currentSong = data.room.metadata.current_song || null
-     , currentDj   = data.room.metadata.current_dj   || null;
+   delete data.room.metadata.songlog;
 
    this.tmpSong = { command : 'endsong',
-                    room : {
-                        metadata : {
-                           current_song : currentSong,
-                           current_dj   : currentDj
-                        },
-                     },
-                     success : true
+                    room : data.room,
+                    success : true
                   };
 };
 
