@@ -112,6 +112,8 @@ Triggered when a new message is send via the chat.
 
 Triggered at the end of the song. (Just before the newsong/nosong event)
 
+The data returned by this event contain informations about the song that have just ended.
+
 ### on('newsong', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/newsong.js)) { })
 
 Triggered when a new song start.
