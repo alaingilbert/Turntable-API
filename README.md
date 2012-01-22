@@ -25,67 +25,6 @@ bot.on('speak', function (data) {
 });
 ```
 
-### Http Server
-
-This bot create an http server and give his version number when we ask for "http://127.0.0.1:8080/version/" this page.
-
-```js
-var Bot = require('ttapi');
-var bot = new Bot(AUTH, USERID, ROOMID);
-bot.listen(8080, '127.0.0.1');
-
-var myScriptVersion = '0.0.0';
-
-bot.on('httpRequest', function (req, res) {
-   var method = req.method;
-   var url    = req.url;
-   switch (url) {
-      case '/version/':
-         if (method == 'GET') {
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end('{"version":"'+myScriptVersion+'"}');
-         } else {
-            res.writeHead(500);
-            res.end();
-         }
-         break;
-      default:
-         res.writeHead(500);
-         res.end();
-         break;
-   }
-});
-```
-
-### TCP Server
-
-This bot open a tcp server. That will allow you to easily communicate with the bot via a terminal.
-
-```js
-var Bot = require('ttapi');
-var bot = new Bot(AUTH, USERID, ROOMID);
-bot.tcpListen(8080, '127.0.0.1');
-
-var myScriptVersion = 'V0.0.0';
-
-bot.on('tcpConnect', function (socket) { });
-bot.on('tcpMessage', function (socket, msg) {
-   if (msg == 'version') {
-      socket.write('>> '+myScriptVersion+'\n');
-   }
-});
-bot.on('tcpEnd', function (socket) { });
-```
-
-You can communicate with the bot like this:
-
-    nc 127.0.0.1 8080
-
-And then type:
-
-    version
-
-
 ### Simple
 
 ```js
@@ -103,6 +42,20 @@ bot.on('speak',        function (data) { console.log('Someone has spoken', data)
 bot.on('update_votes', function (data) { console.log('Someone has voted',  data); });
 bot.on('registered',   function (data) { console.log('Someone registered', data); });
 ```
+
+### Dynamic bot
+
+```js
+var Bot  = require('ttapi')
+  , repl = require('repl');
+
+var bot = new Bot(AUTH, USERID, ROOMID);
+repl.start('> ').context.bot = bot;
+
+// ...
+```
+
+[REPL](http://nodejs.org/docs/v0.6.0/api/repl.html) allows you to dynamically call the bot functions and modify his variables during his execution.
 
 # Debugging
 
