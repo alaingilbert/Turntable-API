@@ -218,6 +218,9 @@ Bot.prototype.onMessage = function (msg) {
          self.emit('newsong', json);
          break;
       case 'update_votes':
+         self.tmpSong.room.metadata.upvotes = json.room.metadata.upvotes;
+         self.tmpSong.room.metadata.downvotes = json.room.metadata.downvotes;
+         self.tmpSong.room.metadata.listeners = json.room.metadata.listeners;
          self.emit('update_votes', json);
          break;
       case 'booted_user':
