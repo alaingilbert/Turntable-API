@@ -102,6 +102,22 @@ Bot.prototype.tcpListen = function (port, address) {
 };
 
 
+Bot.prototype.setTmpSong = function (data) {
+   var currentSong = data.room.metadata.current_song || null
+     , currentDj   = data.room.metadata.current_dj   || null;
+
+   this.tmpSong = { command : 'endsong',
+                    room : {
+                        metadata : {
+                           current_song : currentSong,
+                           current_dj   : currentDj
+                        },
+                     },
+                     success : true
+                  };
+};
+
+
 Bot.prototype.onMessage = function (msg) {
    var self = this;
    var data = msg.data;
@@ -160,6 +176,7 @@ Bot.prototype.onMessage = function (msg) {
                if (json.success === true) {
                   self.roomId = rq.roomid;
                   self.roomInfo(function (data) {
+                     self.setTmpSong(data);
                      self.emit('roomChanged', data);
                   });
                   clb = null;
@@ -194,15 +211,16 @@ Bot.prototype.onMessage = function (msg) {
       case 'nosong':
          self.currentDjId   = null;
          self.currentSongId = null;
-         self.emit('endsong');
+         self.emit('endsong', self.tmpSong);
          self.emit('nosong', json);
          break;
       case 'newsong':
          if (self.currentSongId) {
-            self.emit('endsong');
+            self.emit('endsong', self.tmpSong);
          }
          self.currentDjId   = json.room.metadata.current_dj;
          self.currentSongId = json.room.metadata.current_song._id;
+         self.setTmpSong(json);
          self.emit('newsong', json);
          break;
       case 'update_votes':

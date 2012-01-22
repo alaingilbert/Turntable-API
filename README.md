@@ -155,7 +155,7 @@ Triggered when a user leave the room.
 
 Triggered when a new message is send via the chat.
 
-### on('endsong', function () { })
+### on('endsong', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/endsong.js)) { })
 
 Triggered at the end of the song. (Just before the newsong/nosong event)
 
