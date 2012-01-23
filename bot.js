@@ -171,8 +171,10 @@ Bot.prototype.onMessage = function (msg) {
                      self.setTmpSong(data);
                      self.emit('roomChanged', data);
                   });
-                  clb = null;
+               } else {
+                  self.emit('roomChanged', json);
                }
+               clb = null;
                break;
             case 'room.deregister':
                if (json.success === true) {
