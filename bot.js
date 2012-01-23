@@ -103,8 +103,6 @@ Bot.prototype.tcpListen = function (port, address) {
 
 
 Bot.prototype.setTmpSong = function (data) {
-   delete data.room.metadata.songlog;
-
    this.tmpSong = { command : 'endsong',
                     room : data.room,
                     success : true
