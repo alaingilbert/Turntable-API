@@ -3,7 +3,7 @@
   "name": "ttapi",
   "description": "A turntable.fm API",
   "keywords": ["turntable.fm", "turntable", "stickybits", "realtime"],
-  "version": "1.1.5",
+  "version": "1.1.6",
   "repository": {
     "type": "git",
     "url": "git://github.com/alaingilbert/Turntable-API.git"
