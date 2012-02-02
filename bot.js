@@ -275,8 +275,8 @@ Bot.prototype._send = function (rq, callback) {
    var msg = JSON.stringify(rq);
 
    if (this.debug) {
-      if (this.stdout == 'stderr') { console.error('> ' + data); }
-      else                         { console.log('> ' + data);   }
+      if (this.stdout == 'stderr') { console.error('> ' + msg); }
+      else                         { console.log('> ' + msg);   }
    }
 
    this.ws.send('~m~'+msg.length+'~m~'+msg);
