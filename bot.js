@@ -28,27 +28,27 @@ var WebSocket   = require('./websocket').WebSocket
   , querystring = require('querystring');
 
 var Bot = function () {
-   var self           = this;
-   this.auth          = arguments[0];
-   this.userId        = arguments[1];
+   var self              = this;
+   this.auth             = arguments[0];
+   this.userId           = arguments[1];
    if (arguments.length == 3) {
-      this.roomId     = arguments[2];
+      this.roomId        = arguments[2];
    } else {
-      this.roomId     = null;
+      this.roomId        = null;
    }
-   this.debug         = false;
-   this.stdout        = 'stdout';
-   this.callback      = function () {};
-   this.currentDjId   = null;
-   this.currentSongId = null;
-   this.lastHeartbeat = new Date();
-   this.lastActivity  = new Date();
-   this.clientId      = new Date().getTime() + '-0.59633534294921572';
-   this._msgId        = 0;
-   this._cmds         = [];
-   this._isConnected  = false;
-   this.fanOf         = [];
-   this.chatStatus    = 'available';
+   this.debug            = false;
+   this.stdout           = 'stdout';
+   this.callback         = function () {};
+   this.currentDjId      = null;
+   this.currentSongId    = null;
+   this.lastHeartbeat    = new Date();
+   this.lastActivity     = new Date();
+   this.clientId         = new Date().getTime() + '-0.59633534294921572';
+   this._msgId           = 0;
+   this._cmds            = [];
+   this._isConnected     = false;
+   this.fanOf            = [];
+   this.currentStatus    = 'available';
    this.CHATSERVER_ADDRS = [["chat2.turntable.fm", 80], ["chat3.turntable.fm", 80]];
 
    var infos = this.getHashedAddr(this.roomId ? this.roomId : Math.random().toString());
@@ -63,10 +63,6 @@ var Bot = function () {
          self._send(rq, null);
       };
    }
-   // This keeps us online chat and stuff
-   this.presenceTimer = setInterval(function() {
-      self.presenceUpdate();
-   }, 10000);
 };
 
 Bot.prototype.__proto__ = events.prototype;
@@ -123,7 +119,7 @@ Bot.prototype.onMessage = function (msg) {
    if (data.match(heartbeat_rgx)) {
       self._heartbeat(data.match(heartbeat_rgx)[1]);
       self.lastHeartbeat = new Date();
-      self.presenceUpdate(); // Tells TTfm that we're still online and updates status
+      self.updatePresence();
       return;
    }
 
@@ -137,6 +133,7 @@ Bot.prototype.onMessage = function (msg) {
          if (!self._isConnected) {
             self.getFanOf(function (data) {
                self.fanOf = data.fanof;
+               self.updatePresence();
                self.emit('ready');
             });
          }
@@ -310,13 +307,12 @@ Bot.prototype.close = function () {
 };
 
 Bot.prototype.roomNow = function (callback) {
-   //var rq = { api: 'room.now' };
-   //this._send(rq, callback);
-   this.presenceUpdate(callback);
+   var rq = { api: 'room.now' };
+   this._send(rq, callback);
 };
 
-Bot.prototype.presenceUpdate = function (callback) {
-   var rq = { api: 'presence.update', status: this.chatStatus };
+Bot.prototype.updatePresence = function (callback) {
+   var rq = { api: 'presence.update', status: this.currentStatus };
    this._send(rq, callback);
 };
 
@@ -737,8 +733,8 @@ Bot.prototype.playlistReorder = function () {
 };
 
 Bot.prototype.setChatStatus = function(st, callback) {
-   this.presenceStatus = st;
-   this.chatStatus(callback);
+   this.currentStatus = st;
+   callback();
 };
 
 exports.Bot = Bot;
