@@ -446,6 +446,11 @@ Bot.prototype.pm = function (msg, userid, callback) {
    this._send(rq, callback);
 };
 
+Bot.prototype.pmHistory = function (userid, callback) {
+   var rq = { api: 'pm.history', receiverid: userid };
+   this._send(rq, callback);
+};
+
 Bot.prototype.bootUser = function (userId, reason, callback) {
    var rq = { api: 'room.boot_user', roomid: this.roomId, target_userid: userId, reason: reason };
    this._send(rq, callback);
