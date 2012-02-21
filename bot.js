@@ -48,6 +48,7 @@ var Bot = function () {
    this._cmds         = [];
    this._isConnected  = false;
    this.fanOf         = [];
+   this.chatStatus    = 'available';
    this.CHATSERVER_ADDRS = [["chat2.turntable.fm", 80], ["chat3.turntable.fm", 80]];
 
    var infos = this.getHashedAddr(this.roomId ? this.roomId : Math.random().toString());
@@ -62,6 +63,10 @@ var Bot = function () {
          self._send(rq, null);
       };
    }
+   // This keeps us online chat and stuff
+   this.presenceTimer = setInterval(function() {
+      self.presenceUpdate();
+   }, 10000);
 };
 
 Bot.prototype.__proto__ = events.prototype;
@@ -118,7 +123,7 @@ Bot.prototype.onMessage = function (msg) {
    if (data.match(heartbeat_rgx)) {
       self._heartbeat(data.match(heartbeat_rgx)[1]);
       self.lastHeartbeat = new Date();
-      self.roomNow(); // TODO: see if it's really usefull
+      self.presenceUpdate(); // Tells TTfm that we're still online and updates status
       return;
    }
 
@@ -201,6 +206,9 @@ Bot.prototype.onMessage = function (msg) {
          break;
       case 'speak':
          self.emit('speak', json);
+         break;
+      case 'pmmed':
+         self.emit('pmmed', json);
          break;
       case 'nosong':
          self.currentDjId   = null;
@@ -302,7 +310,13 @@ Bot.prototype.close = function () {
 };
 
 Bot.prototype.roomNow = function (callback) {
-   var rq = { api: 'room.now' };
+   //var rq = { api: 'room.now' };
+   //this._send(rq, callback);
+   this.presenceUpdate(callback);
+};
+
+Bot.prototype.presenceUpdate = function (callback) {
+   var rq = { api: 'presence.update', status: this.chatStatus };
    this._send(rq, callback);
 };
 
@@ -424,6 +438,16 @@ Bot.prototype.roomInfo = function () {
 
 Bot.prototype.speak = function (msg, callback) {
    var rq = { api: 'room.speak', roomid: this.roomId, text: msg.toString() };
+   this._send(rq, callback);
+};
+
+Bot.prototype.pm = function (msg, userid, callback) {
+   var rq = { api: 'pm.send', receiverid: userid, text: msg.toString() };
+   this._send(rq, callback);
+};
+
+Bot.prototype.pmHistory = function (userid, callback) {
+   var rq = { api: 'pm.history', receiverid: userid };
    this._send(rq, callback);
 };
 
@@ -710,6 +734,11 @@ Bot.prototype.playlistReorder = function () {
    }
    var rq = { api: 'playlist.reorder', playlist_name: playlistName, index_from: indexFrom, index_to: indexTo };
    this._send(rq, callback);
+};
+
+Bot.prototype.setChatStatus = function(st, callback) {
+   this.presenceStatus = st;
+   this.chatStatus(callback);
 };
 
 exports.Bot = Bot;
