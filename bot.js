@@ -202,6 +202,9 @@ Bot.prototype.onMessage = function (msg) {
       case 'speak':
          self.emit('speak', json);
          break;
+      case 'pmmed':
+         self.emit('pmmed', json);
+         break;
       case 'nosong':
          self.currentDjId   = null;
          self.currentSongId = null;
@@ -424,6 +427,11 @@ Bot.prototype.roomInfo = function () {
 
 Bot.prototype.speak = function (msg, callback) {
    var rq = { api: 'room.speak', roomid: this.roomId, text: msg.toString() };
+   this._send(rq, callback);
+};
+
+Bot.prototype.pm = function (msg, userid, callback) {
+   var rq = { api: 'pm.send', receiverid: userid, text: msg.toString() };
    this._send(rq, callback);
 };
 
