@@ -246,6 +246,9 @@ Bot.prototype.onMessage = function (msg) {
       case 'snagged':
          self.emit('snagged', json);
          break;
+       case 'pmmed':
+         self.emit('pmmed', json);
+         break;
       default:
          if (json['command']) {
             //console.log('Command: ', json);
@@ -424,6 +427,16 @@ Bot.prototype.roomInfo = function () {
 
 Bot.prototype.speak = function (msg, callback) {
    var rq = { api: 'room.speak', roomid: this.roomId, text: msg.toString() };
+   this._send(rq, callback);
+};
+
+Bot.prototype.pm = function (userid, msg, callback) {
+   var rq = { api: 'pm.send', receiverid: userid, text: msg.toString() };
+   this._send(rq, callback);
+};
+
+Bot.prototype.pmHistory = function (userid, callback) {
+   var rq = { api: 'pm.history', receiverid: userid };
    this._send(rq, callback);
 };
 
