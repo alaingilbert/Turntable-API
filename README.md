@@ -154,6 +154,10 @@ Triggered when a user loose his moderator title.
 
 Triggered when a user queues the currently playing song.
 
+### on('pmmed', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/pmmed.js)) { })
+
+Triggered when the bot receive a private message.
+
 
 ## Actions
 
@@ -318,6 +322,14 @@ Snag the song.
 #### Warning
 
 This function will not add the song into the queue.
+
+### pm (msg:string, receiverId:string, [ callback:fn ] )
+
+Send a private message.
+
+### pmHistory ( [ receiverId:string, callback:fn ] )
+
+Get the private conversation history.
 
 ### playlistAll ( [ playlistName:string, ] callback:fn )
 
