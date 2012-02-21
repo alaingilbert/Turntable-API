@@ -732,9 +732,12 @@ Bot.prototype.playlistReorder = function () {
    this._send(rq, callback);
 };
 
-Bot.prototype.setChatStatus = function(st, callback) {
+Bot.prototype.setStatus = function(st, callback) {
    this.currentStatus = st;
-   callback();
+   this.updatePresence();
+   if (callback) {
+      callback({ success: true });
+   }
 };
 
 exports.Bot = Bot;

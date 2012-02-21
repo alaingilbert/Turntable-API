@@ -327,9 +327,13 @@ This function will not add the song into the queue.
 
 Send a private message.
 
-### pmHistory ( [ receiverId:string, callback:fn ] )
+### pmHistory ( receiverId:string, callback:fn )
 
 Get the private conversation history.
+
+### setStatus ( status:enum('available', 'unavailable', 'away') [, callback:fn ] )
+
+Set your current status.
 
 ### playlistAll ( [ playlistName:string, ] callback:fn )
 
