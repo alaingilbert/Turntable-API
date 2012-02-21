@@ -134,6 +134,7 @@ Bot.prototype.onMessage = function (msg) {
             self.getFanOf(function (data) {
                self.fanOf = data.fanof;
                self.updatePresence();
+               setInterval(function () { self.updatePresence(); }, 10000); // TODO: I don't like setInterval !
                self.emit('ready');
             });
          }
