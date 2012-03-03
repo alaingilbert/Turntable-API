@@ -30,7 +30,6 @@ class Bot:
       host, port = self.getHashedAddr(self.roomId if self.roomId else str(random.random()))
       url = 'ws://%s:%s/socket.io/websocket' % (host, port)
 
-      #websocket.enableTrace(True)
       self.ws = websocket.WebSocketApp(url, on_message=self.on_message)
       if self.roomId:
          def clb():
@@ -114,8 +113,8 @@ class Bot:
       elif obj.get('command') == 'newsong':
          if self.currentSongId:
             self.emit('endsong', self.tmpSong)
-         self.currentDjId = obj['room']['metadata']['current_dj']
-         self.currentDjId = obj['room']['metadata']['current_song']['_id']
+         self.currentDjId   = obj['room']['metadata']['current_dj']
+         self.currentSongId = obj['room']['metadata']['current_song']['_id']
          self.setTmpSong(obj)
          self.emit('newsong', obj)
       elif obj.get('command') == 'update_votes':
@@ -185,7 +184,7 @@ class Bot:
 
    def listRooms(self, skip=None, callback=None):
       skip = skip if skip else 0
-      var rq = { 'api': 'room.list_rooms', 'skip': skip }
+      rq = { 'api': 'room.list_rooms', 'skip': skip }
       self._send(rq, callback)
 
 
@@ -240,56 +239,97 @@ class Bot:
       self._send(rq, callback)
 
 
-   def pm(self):
-      pass
+   def pm(self, msg, userid, callback=None):
+      rq = { 'api': 'pm.send', 'receiverid': userid, 'text': str(msg) }
+      self._send(rq, callback)
 
 
    def pmHistory(self):
       pass
 
 
-   def bootUser(self):
-      pass
+   def bootUser(self, userId, reason='', callback=None):
+      rq = { 'api': 'room.boot_user', 'roomid': self.roomId, 'target_userid': userId, 'reason': reason }
+      self._send(rq, callback)
 
 
-   def boot(self):
-      pass
+   def boot(self, userId, reason='', callback=None):
+      self.bootUser(userId, reason, callback)
 
 
-   def addModerator(self):
-      pass
+   def addModerator(self, userId, callback=None):
+      rq = { 'api': 'room.add_moderator', 'roomid': self.roomId, 'target_userid': userId }
+      self._send(rq, callback)
 
 
-   def remModerator(self):
-      pass
+   def remModerator(self, userId, callback=None):
+      rq = { 'api': 'room.rem_moderator', 'roomid': self.roomId, 'target_userid': userId }
+      self._send(rq, callback)
 
 
-   def addDj(self):
-      pass
+   def addDj(self, callback=None):
+      rq = { 'api': 'room.add_dj', 'roomid': self.roomId }
+      self._send(rq, callback)
 
 
-   def remDj(self):
-      pass
+   def remDj(self, *args):
+      djId = None
+      callback = None
+      if len(args) == 1:
+         if callable(args[0]):
+            djId = None
+            callback = args[0]
+         elif isinstance(args[0], str):
+            djId = args[0]
+            callback = None
+      elif len(args) == 2:
+         djId = args[0]
+         callback = args[1]
+      rq = { 'api': 'room.rem_dj', 'roomid': self.roomId }
+      if djId: rq['djid'] = djId
+      self._send(rq, callback)
 
 
-   def stopSong(self):
-      pass
+   def stopSong(self, callback=None):
+      rq = { 'api': 'room.stop_song', 'roomid': self.roomId }
+      self._send(rq, callback)
 
 
    def skip(self):
-      pass
+      self.stopSong()
 
 
-   def snag(self):
-      pass
+   def snag(self, callback=None):
+      sh = hashlib.sha1(str(random.random())).hexdigest()
+      fh = hashlib.sha1(str(random.random())).hexdigest()
+
+      i  = [ self.userId, self.currentDjId, self.currentSongId, self.roomId, 'queue', 'board', 'false', sh ]
+      vh = hashlib.sha1('/'.join(i)).hexdigest()
+
+      rq = { 'api'      : 'snag.add'
+           , 'djid'     : self.currentDjId
+           , 'songid'   : self.currentSongId
+           , 'roomid'   : self.roomId
+           , 'site'     : 'queue'
+           , 'location' : 'board'
+           , 'in_queue' : 'false'
+           , 'vh'       : vh
+           , 'sh'       : sh
+           , 'fh'       : fh
+           }
+      self._send(rq, callback)
 
 
-   def vote(self):
-      pass
+   def vote(self, val='up', callback=None):
+      vh = hashlib.sha1(self.roomId + val + self.currentSongId).hexdigest()
+      th = hashlib.sha1(str(random.random())).hexdigest()
+      ph = hashlib.sha1(str(random.random())).hexdigest()
+      rq = { 'api': 'room.vote', 'roomid': self.roomId, 'val': val, 'vh': vh, 'th': th, 'ph': ph }
+      self._send(rq, callback)
 
 
    def bop(self):
-      pass
+      self.vote('up')
 
 
    def userAuthenticate(self, callback):
@@ -355,10 +395,10 @@ class Bot:
       if callback: callback({ 'success': True })
 
 
-   def emit(self, signal, *args):
+   def emit(self, signal, data=None):
       callbacks = self.signals.get(signal) or []
       for clb in callbacks:
-         clb(args)
+         clb(data)
 
 
    def on(self, signal, callback):
