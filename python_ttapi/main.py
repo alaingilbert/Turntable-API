@@ -16,6 +16,9 @@ def speak(data):
          bot.snag()
       elif data['text'] == '/bop':
          bot.bop()
+      elif data['text'] == '/playlist':
+         def clb(data): print data
+         bot.playlistAll(clb)
 
 def pmmed(data):
    print data

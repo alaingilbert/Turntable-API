@@ -373,20 +373,109 @@ class Bot:
       pass
 
 
-   def playlistAll(self):
-      pass
+   def playlistAll(self, *args):
+      playlistName = 'default'
+      callback = None
+      if len(args) == 1:
+         if isinstance(args[0], str): playlistName = args[0]
+         if callable(args[0]):        callback     = args[0]
+      elif len(args) == 2:
+         playlistName = args[0]
+         callback     = args[1]
+      rq = { 'api': 'playlist.all', 'playlist_name': playlistName }
+      self._send(rq, callback)
 
 
-   def playlistAdd(self):
-      pass
+   def playlistAdd(self, *args):
+      playlistName = 'default'
+      songId       = None
+      index        = 0
+      callback     = None
+      if len(args) == 1:
+         songId = args[0]
+      elif len(args) == 2:
+         if isinstance(args[0], str) and isinstance(args[1], str):
+            playlistName = args[0]
+            songId       = args[1]
+         elif isinstance(args[0], str) and callable(args[1]):
+            songId   = args[0]
+            callback = args[1]
+         elif isinstance(args[0], str) and isinstance(args[1], int):
+            songId = args[0]
+            index  = args[1]
+         elif isinstance(args[0], bool) and isinstance(args[1], str):
+            songId = args[1]
+      elif len(args) == 3:
+         if isinstance(args[0], str) and isinstance(args[1], str) and isinstance(args[2], int):
+            playlistName = args[0]
+            songId       = args[1]
+            index        = args[2]
+         elif isinstance(args[0], str) and isinstance(args[1], str) and callable(args[2]):
+            playlistName = args[0]
+            songId       = args[1]
+            callback     = args[2]
+         elif isinstance(args[0], str) and isinstance(args[1], int) and callable(args[2]):
+            songId   = args[0]
+            index    = args[1]
+            callback = args[2]
+         elif isinstance(args[0], bool) and isinstance(args[1], str) and callable(args[2]):
+            songId   = args[1]
+            callback = args[2]
+      elif len(args) == 4:
+         playlistName = args[0]
+         songId       = args[1]
+         index        = args[2]
+         callback     = args[3]
+      rq = { 'api': 'playlist.add', 'playlist_name': playlistName, 'song_dict': { 'fileid': songId }, 'index': index }
+      self._send(rq, callback)
 
 
-   def playlistRemove(self):
-      pass
+   def playlistRemove(self, *args):
+      playlistName = 'default'
+      index        = 0
+      callback     = None
+
+      if len(args) == 1:
+         index = args[0]
+      elif len(args) == 2:
+         if isinstance(args[0], str) and isinstance(args[1], int):
+            playlistName = args[0]
+            index        = args[1]
+         elif isinstance(args[0], int) and callable(args[1]):
+            index    = args[0]
+            callback = args[1]
+      elif len(args) == 3:
+         playlistName = args[0]
+         index        = args[1]
+         callback     = args[2]
+      rq = { 'api': 'playlist.remove', 'playlist_name': playlistName, 'index': index }
+      self._send(rq, callback)
 
 
-   def playlistReorder(self):
-      pass
+   def playlistReorder(self, *args):
+      playlistName = 'default'
+      indexFrom    = 0
+      indexTo      = 0
+      callback     = None
+      if len(args) == 2:
+         indexFrom = args[0]
+         indexTo   = args[1]
+      elif len(args) == 3:
+         if isinstance(args[0], str) and isinstance(args[1], int) and isinstance(args[2], int):
+            playlistName = args[0]
+            indexFrom    = args[1]
+            indexTo      = args[2]
+         elif isinstance(args[0], int) and isinstance(args[1], int) and callable(args[2]):
+            indexFrom = args[0]
+            indexTo   = args[1]
+            callback  = args[2]
+      elif len(args) == 4:
+         playlistName = args[0]
+         indexFrom    = args[1]
+         indexTo      = args[2]
+         callback     = args[3]
+      rq = { 'api': 'playlist.reorder', 'playlist_name': playlistName, 'index_from': indexFrom, 'index_to': indexTo }
+      self._send(rq, callback)
 
 
    def setStatus(self, st, callback=None):
