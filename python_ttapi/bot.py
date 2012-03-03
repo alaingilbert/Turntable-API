@@ -27,7 +27,7 @@ class Bot:
       self.CHATSERVER_ADDRS = [("chat2.turntable.fm", 80), ("chat3.turntable.fm", 80)]
       self.signals = {}
 
-      host, port = self.get_hashed_addr(self.roomId if self.roomId else str(random.random()))
+      host, port = self.getHashedAddr(self.roomId if self.roomId else str(random.random()))
       url = 'ws://%s:%s/socket.io/websocket' % (host, port)
 
       #websocket.enableTrace(True)
@@ -50,6 +50,10 @@ class Bot:
          self.last_heartbeat = time.time()
          self.updatePresence(None)
          return
+
+      if self.debug:
+         if self.stdout == 'stderr': print '> %s' % msg
+         else:                       print '> %s' % msg
 
       if msg == '~m~10~m~no_session':
          def auth_clb(obj):
@@ -100,6 +104,40 @@ class Bot:
          self.emit('deregistered', obj)
       elif obj.get('command') == 'speak':
          self.emit('speak', obj)
+      elif obj.get('command') == 'pmmed':
+         self.emit('pmmed', obj)
+      elif obj.get('command') == 'nosong':
+         self.currentDjId   = None
+         self.currentSongId = None
+         self.emit('endsong', self.tmpSong)
+         self.emit('nosong', obj)
+      elif obj.get('command') == 'newsong':
+         if self.currentSongId:
+            self.emit('endsong', self.tmpSong)
+         self.currentDjId = obj['room']['metadata']['current_dj']
+         self.currentDjId = obj['room']['metadata']['current_song']['_id']
+         self.setTmpSong(obj)
+         self.emit('newsong', obj)
+      elif obj.get('command') == 'update_votes':
+         if self.tmpSong:
+            self.tmpSong['room']['metadata']['upvotes']   = obj['room']['metadata']['upvotes']
+            self.tmpSong['room']['metadata']['downvotes'] = obj['room']['metadata']['downvotes']
+            self.tmpSong['room']['metadata']['listeners'] = obj['room']['metadata']['listeners']
+         self.emit('update_votes', obj)
+      elif obj.get('command') == 'booted_user':
+         self.emit('booted_user', obj)
+      elif obj.get('command') == 'update_user':
+         self.emit('update_user', obj)
+      elif obj.get('command') == 'add_dj':
+         self.emit('add_dj', obj)
+      elif obj.get('command') == 'rem_dj':
+         self.emit('rem_dj', obj)
+      elif obj.get('command') == 'new_moderator':
+         self.emit('new_moderator', obj)
+      elif obj.get('command') == 'rem_moderator':
+         self.emit('rem_moderator', obj)
+      elif obj.get('command') == 'snagged':
+         self.emit('snagged', obj)
 
 
    def _heartbeat(self, msg):
@@ -124,25 +162,63 @@ class Bot:
       self._msgId += 1
 
 
-   def userAuthenticate(self, callback):
-      rq = { 'api': 'user.authenticate' }
-      self._send(rq, callback)
-
-
-   def hash_mod(self, a, b):
+   def hashMod(self, a, b):
       d = hashlib.sha1(a).hexdigest()
       c = 0
       for e in d: c += ord(e)
       return c % b
 
 
-   def get_hashed_addr(self, a):
-      return self.CHATSERVER_ADDRS[self.hash_mod(a, len(self.CHATSERVER_ADDRS))]
+   def getHashedAddr(self, a):
+      return self.CHATSERVER_ADDRS[self.hashMod(a, len(self.CHATSERVER_ADDRS))]
+
+
+   def roomNow(self, callback=None):
+      rq = { 'api': 'room.now' }
+      self._send(rq, callback)
 
 
    def updatePresence(self, callback):
       rq = { 'api': 'presence.update', 'status': self.currentStatus }
       self._send(rq, callback)
+
+
+   def listRooms(self, skip=None, callback=None):
+      skip = skip if skip else 0
+      var rq = { 'api': 'room.list_rooms', 'skip': skip }
+      self._send(rq, callback)
+
+
+   def directoryGraph(self, callback=None):
+      rq = { 'api': 'room.directory_graph' }
+      self._send(rq, callback)
+
+
+   def stalk(self, *args):
+      pass
+
+
+   def getFavorites(self, callback=None):
+      rq = { 'api': 'room.get_favorites' }
+      self._send(rq, callback)
+
+
+   def addFavorite(self, roomId, callback=None):
+      rq = { 'api': 'room.add_favorite', 'roomid': roomId }
+      self._send(rq, callback)
+
+
+   def remFavorite(self, roomId, callback=None):
+      rq = { 'api': 'room.rem_favorite', 'roomid': roomId }
+      self._send(rq, callback)
+
+
+   def roomRegister(self):
+      pass
+
+
+   def roomDeregister(self):
+      pass
 
 
    def roomInfo(self, *args):
@@ -162,6 +238,121 @@ class Bot:
    def speak(self, msg, callback=None):
       rq = { 'api': 'room.speak', 'roomid': self.roomId, 'text': str(msg) }
       self._send(rq, callback)
+
+
+   def pm(self):
+      pass
+
+
+   def pmHistory(self):
+      pass
+
+
+   def bootUser(self):
+      pass
+
+
+   def boot(self):
+      pass
+
+
+   def addModerator(self):
+      pass
+
+
+   def remModerator(self):
+      pass
+
+
+   def addDj(self):
+      pass
+
+
+   def remDj(self):
+      pass
+
+
+   def stopSong(self):
+      pass
+
+
+   def skip(self):
+      pass
+
+
+   def snag(self):
+      pass
+
+
+   def vote(self):
+      pass
+
+
+   def bop(self):
+      pass
+
+
+   def userAuthenticate(self, callback):
+      rq = { 'api': 'user.authenticate' }
+      self._send(rq, callback)
+
+
+   def userInfo(self):
+      pass
+
+
+   def getFanOf(self):
+      pass
+
+
+   def getProfile(self):
+      pass
+
+
+   def modifyProfile(self):
+      pass
+
+
+   def modifyLaptop(self):
+      pass
+
+
+   def modifyName(self):
+      pass
+
+
+   def setAvatar(self):
+      pass
+
+
+   def becomeFan(self):
+      pass
+
+
+   def removeFan(self):
+      pass
+
+
+   def playlistAll(self):
+      pass
+
+
+   def playlistAdd(self):
+      pass
+
+
+   def playlistRemove(self):
+      pass
+
+
+   def playlistReorder(self):
+      pass
+
+
+   def setStatus(self, st, callback=None):
+      self.currentStatus = st
+      self.updatePresence()
+      if callback: callback({ 'success': True })
 
 
    def emit(self, signal, *args):

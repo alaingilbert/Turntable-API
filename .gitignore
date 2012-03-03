@@ -1,4 +1,4 @@
 .DS_Store
 *.swp
-*.default
+*.pyc
 python_ttapi/settings.py

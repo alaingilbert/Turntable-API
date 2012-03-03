@@ -1,13 +1,13 @@
 from bot import Bot
 from settings import AUTH, USERID, ROOMID
 
-if __name__ == "__main__":
-   bot = Bot(AUTH, USERID, ROOMID)
+bot = Bot(AUTH, USERID, ROOMID)
+bot.debug = True
 
-   def speak(data):
-      if data[0]['userid'] == '4deadb0f4fe7d013dc0555f1':
-         bot.speak('Repeating my master --> %s' % data[0]['text'])
+def speak(data):
+   if data[0]['userid'] == '4deadb0f4fe7d013dc0555f1':
+      bot.speak('Repeating my master --> %s' % data[0]['text'])
 
-   bot.on('speak', speak)
+bot.on('speak', speak)
 
-   bot.start()
+bot.start()
