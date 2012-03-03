@@ -1,3 +1,4 @@
 examples/
 turntable_data/
+python_ttapi/
 *.default
