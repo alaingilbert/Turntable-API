@@ -14,3 +14,5 @@ bot = Bot(AUTH, USERID, ROOMID)
 def autobop(data): bot.bop()
 
 bot.on('newsong', autobop)
+
+bot.start()

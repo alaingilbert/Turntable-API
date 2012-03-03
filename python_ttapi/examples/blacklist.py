@@ -22,3 +22,5 @@ def registered(data):
 
 
 bot.on('registered', registered)
+
+bot.start()

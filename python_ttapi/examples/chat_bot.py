@@ -16,3 +16,5 @@ def speak(data):
 
 
 bot.on('speak', speak)
+
+bot.start()

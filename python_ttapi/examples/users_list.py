@@ -31,3 +31,5 @@ def deregistered(data):
 bot.on('roomChanged',  roomChanged)
 bot.on('registered',   registered)
 bot.on('deregistered', deregistered)
+
+bot.start()
