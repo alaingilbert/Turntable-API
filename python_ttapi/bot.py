@@ -22,7 +22,7 @@ class Bot:
       self._msgId           = 0
       self._cmds            = []
       self._isConnected     = False
-      self.fanOf            = []
+      self.fanOf            = set()
       self.currentStatus    = 'available'
       self.CHATSERVER_ADDRS = [("chat2.turntable.fm", 80), ("chat3.turntable.fm", 80)]
       self.signals = {}
@@ -57,8 +57,12 @@ class Bot:
       if msg == '~m~10~m~no_session':
          def auth_clb(obj):
             if not self._isConnected:
-               self.updatePresence(None)
-               self.emit('ready')
+               def fanof(data):
+                  self.fanOf |= set(data['fanof'])
+                  self.updatePresence()
+                  # TODO: setInterval ????
+                  self.emit('ready')
+               self.getFanOf(fanof)
             self.callback()
             self._isConnected = True
          self.userAuthenticate(auth_clb)
@@ -177,7 +181,7 @@ class Bot:
       self._send(rq, callback)
 
 
-   def updatePresence(self, callback):
+   def updatePresence(self, callback=None):
       rq = { 'api': 'presence.update', 'status': self.currentStatus }
       self._send(rq, callback)
 
@@ -194,7 +198,40 @@ class Bot:
 
 
    def stalk(self, *args):
-      pass
+      userId = ''
+      allInfos = False
+      callback = None
+
+      if len(args) == 2:
+         userId = args[0]
+         callback = args[1]
+      elif len(args) == 3:
+         userId = args[0]
+         allInfos = args[1]
+         callback = args[2]
+
+      def getGraph():
+         def directory(data):
+            if not data.get('success'):
+               return callback(data)
+            for room, users in data.get('rooms'):
+               for user in users:
+                  if user.get('userid') == userId:
+                     if allInfos:
+                        return callback({ 'roomId': room.get('roomid'), 'room': room, 'user': user, 'success': True })
+                     else:
+                        return callback({ 'roomId': room.get('roomid'), 'success': True })
+         self.directoryGraph(directory)
+
+      if userId in self.fanOf:
+         getGraph()
+      else:
+         def fan(data):
+            if not data.get('success'):
+               if data.get('err') != 'User is already a fan':
+                  return callback(data)
+            getGraph()
+         self.becomeFan(userId, fan)
 
 
    def getFavorites(self, callback=None):
@@ -216,8 +253,9 @@ class Bot:
       pass
 
 
-   def roomDeregister(self):
-      pass
+   def roomDeregister(self, callback=None):
+      rq = { 'api': 'room.deregister', 'roomid': self.roomId }
+      self._send(rq, callback)
 
 
    def roomInfo(self, *args):
@@ -244,8 +282,9 @@ class Bot:
       self._send(rq, callback)
 
 
-   def pmHistory(self):
-      pass
+   def pmHistory(self, userid, callback=None):
+      rq = { 'api': 'pm.history', 'receiverid': userid }
+      self._send(rq, callback)
 
 
    def bootUser(self, userId, reason='', callback=None):
@@ -337,40 +376,65 @@ class Bot:
       self._send(rq, callback)
 
 
-   def userInfo(self):
-      pass
+   def userInfo(self, callback=None):
+      rq = { 'api': 'user.info' }
+      self._send(rq, callback)
 
 
-   def getFanOf(self):
-      pass
+   def getFanOf(self, callback=None):
+      rq = { 'api': 'user.get_fan_of' }
+      self._send(rq, callback)
 
 
-   def getProfile(self):
-      pass
+   def getProfile(self, *args):
+      rq       = { 'api': 'user.get_profile' }
+      callback = None
+      if len(args) == 1:
+         if callable(args[0]):
+            callback = args[0]
+         elif isinstance(args[0], str):
+            rq['userid'] = args[0]
+      elif len(args) == 2:
+         rq['userid'] = args[0]
+         callback     = args[1]
+      self._send(rq, callback)
 
 
-   def modifyProfile(self):
-      pass
+   def modifyProfile(self, profile, callback):
+      rq = { 'api': 'user.modify_profile' }
+      if profile.get('name'):       rq['name']       = profile['name']
+      if profile.get('twitter'):    rq['twitter']    = profile['twitter']
+      if profile.get('facebook'):   rq['facebook']   = profile['facebook']
+      if profile.get('website'):    rq['website']    = profile['website']
+      if profile.get('about'):      rq['about']      = profile['about']
+      if profile.get('topartists'): rq['topartists'] = profile['topartists']
+      if profile.get('hangout'):    rq['hangout']    = profile['hangout']
+      self._send(rq, callback)
 
 
-   def modifyLaptop(self):
-      pass
+   def modifyLaptop(self, laptop='linux', callback=None):
+      rq = { 'api': 'user.modify', 'laptop': laptop }
+      self._send(rq, callback)
 
 
-   def modifyName(self):
-      pass
+   def modifyName(self, name, callback=None):
+      rq = { 'api': 'user.modify', 'name': name }
+      self._send(rq, callback)
 
 
-   def setAvatar(self):
-      pass
+   def setAvatar(self, avatarId, callback=None):
+      rq = { 'api': 'user.set_avatar', 'avatarid': avatarId }
+      self._send(rq, callback)
 
 
-   def becomeFan(self):
-      pass
+   def becomeFan(self, userId):
+      rq = { 'api': 'user.become_fan', 'djid': userId }
+      self._send(rq, callback)
 
 
-   def removeFan(self):
-      pass
+   def removeFan(self, userId):
+      rq = { 'api': 'user.remove_fan', 'djid': userId }
+      self._send(rq, callback)
 
 
    def playlistAll(self, *args):
