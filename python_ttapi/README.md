@@ -25,15 +25,18 @@ bot.start()
 from bot import Bot
 bot = Bot(AUTH, USERID, ROOMID)
 
+# Define callbacks
 def roomChanged(data): print 'The bot has changed room.', data
 def speak(data):       print 'Someone has spoken.',       data
 def updateVotes(data): print 'Someone has voted.',        data
 def registered(data):  print 'Someone registered.',       data
 
-bot.on('roomChanged',  roomChanged )
-bot.on('speak',        speak       )
-bot.on('update_votes', updateVotes )
-bot.on('registered',   registered  )
+# Bind listeners
+bot.on('roomChanged',  roomChanged)
+bot.on('speak',        speak      )
+bot.on('update_votes', updateVotes)
+bot.on('registered',   registered )
 
+# Start the bot
 bot.start()
 ```
