@@ -1,11 +1,39 @@
-```js
+## Examples
+
+### Chat bot
+
+This bot respond to anybody who write "/hello" on the chat.
+
+```py
+from bot import Bot
 bot = Bot(AUTH, USERID, ROOMID)
 
 def speak(data):
-   if data[0]['userid'] == '4deadb0f4fe7d013dc0555f1':
-      bot.speak('Repeating my master --> %s' % data[0]['text'])
+   name = data['name']
+   text = data['text']
+   if text == '/hello':
+      bot.speak('Hey! How are you %s ?' % name)
 
 bot.on('speak', speak)
+
+bot.start()
+```
+
+### Simple
+
+```py
+from bot import Bot
+bot = Bot(AUTH, USERID, ROOMID)
+
+def roomChanged(data): print 'The bot has changed room.', data
+def speak(data):       print 'Someone has spoken.',       data
+def updateVotes(data): print 'Someone has voted.',        data
+def registered(data):  print 'Someone registered.',       data
+
+bot.on('roomChanged',  roomChanged )
+bot.on('speak',        speak       )
+bot.on('update_votes', updateVotes )
+bot.on('registered',   registered  )
 
 bot.start()
 ```
