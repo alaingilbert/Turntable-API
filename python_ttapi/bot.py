@@ -86,10 +86,10 @@ class Bot:
                   self.roomId = rq['roomid']
                   def info_clb(data):
                      self.setTmpSong(data)
-                     self.emit('roomChanged')
+                     self.emit('roomChanged', data)
                   self.roomInfo(info_clb)
                else:
-                  self.emit('roomChanged')
+                  self.emit('roomChanged', obj)
                self.clb = None
 
             elif rq['api'] == 'room.deregister':
