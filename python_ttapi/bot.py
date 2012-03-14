@@ -400,7 +400,7 @@ class Bot:
       self._send(rq, callback)
 
 
-   def modifyProfile(self, profile, callback):
+   def modifyProfile(self, profile, callback=None):
       rq = { 'api': 'user.modify_profile' }
       if profile.get('name'):       rq['name']       = profile['name']
       if profile.get('twitter'):    rq['twitter']    = profile['twitter']
