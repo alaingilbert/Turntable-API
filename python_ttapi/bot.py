@@ -367,8 +367,8 @@ class Bot:
       self._send(rq, callback)
 
 
-   def bop(self):
-      self.vote('up')
+   def bop(self, callback=None):
+      self.vote('up', callback)
 
 
    def userAuthenticate(self, callback):
