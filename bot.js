@@ -538,8 +538,9 @@ Bot.prototype.vote = function (val, callback) {
 };
 
 Bot.prototype.bop = function () {
-   arguments[0] = 'up';
-   this.vote.apply(this, arguments);
+   var args = Array.prototype.slice.call(arguments);
+   args.unshift('up');
+   this.vote.apply(this, args);
 };
 
 Bot.prototype.userAuthenticate = function (callback) {
