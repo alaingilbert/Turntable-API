@@ -408,6 +408,7 @@ Bot.prototype.roomRegister = function (roomId, callback) {
    var self = this;
    var infos = this.getHashedAddr(roomId);
    var url = 'ws://'+infos[0]+':'+infos[1]+'/socket.io/websocket';
+   this.ws.onclose = function () {};
    this.ws.close();
    this.callback = function () {
       var rq = { api: 'room.register', roomid: roomId };
