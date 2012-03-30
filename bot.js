@@ -56,6 +56,7 @@ var Bot = function () {
 
    this.ws = new WebSocket(url);
    this.ws.onmessage = function (msg) { self.onMessage(msg); };
+   this.ws.onclose = function () { self.onClose(); };
    if (this.roomId) {
       // TODO: Should not be here... see the other todo (in roomRegister)
       this.callback = function () {
@@ -108,6 +109,11 @@ Bot.prototype.setTmpSong = function (data) {
                     room : data.room,
                     success : true
                   };
+};
+
+
+Bot.prototype.onClose = function () {
+   console.log('THIS IS WEIRD AND SHOULD NOT APPEAR.');
 };
 
 
@@ -410,6 +416,7 @@ Bot.prototype.roomRegister = function (roomId, callback) {
    // TODO: This should not be here at all...
    this.ws = new WebSocket(url);
    this.ws.onmessage = function (msg) { self.onMessage(msg); };
+   this.ws.onclose = function () { self.onClose(); };
 };
 
 Bot.prototype.roomDeregister = function (callback) {
