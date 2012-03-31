@@ -4,7 +4,9 @@ import hashlib
 import random
 import re
 import json
+import logging
 
+logger = logging.getLogger("turntable-api")
 
 class Bot:
    def __init__(self, auth, user_id, room_id):
@@ -12,7 +14,6 @@ class Bot:
       self.userId           = user_id
       self.roomId           = room_id
       self.debug            = False
-      self.stdout           = 'stdout'
       self.callback         = None
       self.currentDjId      = None
       self.currentSongId    = None
@@ -26,6 +27,8 @@ class Bot:
       self.currentStatus    = 'available'
       self.CHATSERVER_ADDRS = [("chat2.turntable.fm", 80), ("chat3.turntable.fm", 80)]
       self.signals = {}
+
+
 
       host, port = self.getHashedAddr(self.roomId if self.roomId else str(random.random()))
       url = 'ws://%s:%s/socket.io/websocket' % (host, port)
@@ -51,8 +54,7 @@ class Bot:
          return
 
       if self.debug:
-         if self.stdout == 'stderr': print '> %s' % msg
-         else:                       print '> %s' % msg
+         logger.debug(msg);
 
       if msg == '~m~10~m~no_session':
          def auth_clb(obj):
@@ -157,8 +159,7 @@ class Bot:
       msg = json.dumps(rq)
 
       if self.debug:
-         if self.stdout == 'stderr': print '< %s' % msg
-         else:                       print '< %s' % msg
+         logger.debug(msg);
 
       self.ws.send('~m~%s~m~%s' % (len(msg), msg))
       self._cmds.append([self._msgId, rq, callback])
