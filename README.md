@@ -11,7 +11,7 @@ Find your `AUTH`, `USERID` and `ROOMID` informations with [that bookmarklet](htt
 
 ### Chat bot
 
-This bot respond to anybody who write "/hello" on the chat.
+This bot responds to anybody who writes "/hello" in the chat.
 
 ```js
 var Bot = require('ttapi');
@@ -78,45 +78,45 @@ That will print on the terminal all the data that you get and all the data that 
 
 ### on('tcpConnect', function (socket) { })
 
-Triggered when a socket open a connection.
+Triggered when a socket opens a connection.
 
 ### on('tcpMessage', function (socket, msg) { })
 
-Triggered when the bot receive a tcp message.
+Triggered when the bot receives a tcp message.
 
 ### on('tcpEnd', function (socket) { })
 
-Triggered when a socket close its connection.
+Triggered when a socket closes its connection.
 
 ### on('httpRequest', function (request, response) { })
 
-Triggered when the bot receive an http request.
+Triggered when the bot receives an http request.
 
 ### on('roomChanged', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/room_infos.js)) { })
 
-Triggered when the bot enter in a room.
+Triggered when the bot enters a room.
 
 ### on('registered', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/registered.js)) { })
 
-Triggered when a user enter the room.
+Triggered when a user enters the room.
 
 ### on('deregistered', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/deregistered.js)) { })
 
-Triggered when a user leave the room.
+Triggered when a user leaves the room.
 
 ### on('speak', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/speak.js)) { })
 
-Triggered when a new message is send via the chat.
+Triggered when a new message is sent via the chat.
 
 ### on('endsong', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/endsong.js)) { })
 
 Triggered at the end of the song. (Just before the newsong/nosong event)
 
-The data returned by this event contain informations about the song that have just ended.
+The data returned by this event contains information about the song that has just ended.
 
 ### on('newsong', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/newsong.js)) { })
 
-Triggered when a new song start.
+Triggered when a new song starts.
 
 ### on('nosong', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/nosong.js)) { })
 
@@ -124,7 +124,7 @@ Triggered when there is no song.
 
 ### on('update_votes', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/update_votes.js)) { })
 
-Triggered when a user vote.
+Triggered when a user votes.
 
 ### on('booted_user', function (data) { })
 
@@ -132,23 +132,23 @@ Triggered when a user is booted.
 
 ### on('update_user', function (data) { })
 
-Triggered when a user change his name/infos.
+Triggered when a user changes his name/info.
 
 ### on('add_dj', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/add_dj.js)) { })
 
-Triggered when a user take a dj spot.
+Triggered when a user takes a dj spot.
 
 ### on('rem_dj', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/rem_dj.js)) { })
 
-Triggered when a user leave a dj spot.
+Triggered when a user leaves a dj spot.
 
 ### on('new_moderator', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/new_moderator.js)) { })
 
-Triggered when a user is granted to moderator title.
+Triggered when a user is promoted to moderator.
 
 ### on('rem_moderator', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/rem_moderator.js)) { })
 
-Triggered when a user loose his moderator title.
+Triggered when a user loses his moderator title.
 
 ### on('snagged', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/snagged.js)) { })
 
@@ -156,7 +156,7 @@ Triggered when a user queues the currently playing song.
 
 ### on('pmmed', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/pmmed.js)) { })
 
-Triggered when the bot receive a private message.
+Triggered when the bot receives a private message.
 
 
 ## Actions
@@ -167,7 +167,7 @@ Start a tcp server.
 
 ### listen ( port, address )
 
-Start a http server.
+Start an http server.
 
 ### roomNow ( [callback:fn] )
 
@@ -183,23 +183,23 @@ Get the location of your friends/idols.
 
 ### stalk ( userId:string [, allInformations=false:bool ], callback:fn )
 
-Get the location of a user. If `allInformations` is `true`, you'll also receive the informations about the room and the user.
+Get the location of a user. If `allInformations` is `true`, you'll also receive the information about the room and the user.
 
 #### Warning
 
-This function will make the bot becoming fan of the user.
+This function will make the bot become a fan of the user.
 
 ### getFavorites ( callback:fn )
 
-Get your favorites rooms.
+Get your favorite rooms.
 
 ### addFavorite ( roomId:string [, callback:fn ] )
 
-Add a room to your favorite.
+Add a room to your favorite rooms.
 
 ### remFavorite ( roomId:string [, callback:fn ] )
 
-Remove a room from your favorite.
+Remove a room from your favorite rooms.
 
 ### roomRegister ( roomId:string [, callback:fn] )
 
@@ -211,11 +211,11 @@ Deregister from the current room.
 
 ### roomInfo ( [[extended=true:bool, ]callback:fn] )
 
-Get the current room informations. Do not include song log if 'extended' is false.
+Get the current room information. Do not include song log if 'extended' is false.
 
 ### speak ( msg:string [, callback:fn] )
 
-Broadcast a message on the chat.
+Broadcast a message in the chat.
 
 ### bootUser ( userId:string, reason:string [, callback:fn] )
 
@@ -263,15 +263,15 @@ Authenticate the user.
 
 ### userInfo ( [callback:fn] )
 
-Get the current user informations.
+Get the current user's information.
 
 ### getFanOf ( callback:fn )
 
-Get the list of who you became fan.
+Get the list of who you've become a fan of.
 
 ### getProfile ( [[userId:string, ]callback:fn] )
 
-Get a user profile.
+Get a user's profile.
 
 ### modifyProfile ( profile:obj [, callback:fn] )
 
@@ -337,7 +337,7 @@ Set your current status.
 
 ### playlistAll ( [ playlistName:string, ] callback:fn )
 
-Get all informations about a playlist.
+Get all information about a playlist.
 
 #### Arguments
 
@@ -353,7 +353,7 @@ bot.playlistAll(playlistName, callback);
 
 ### playlistAdd ( [ playlistName:string, ] songId:string [, index:int [, callback:fn]] )
 
-Add a song on a playlist.
+Add a song to a playlist.
 
 #### Arguments
 
