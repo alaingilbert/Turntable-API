@@ -28,7 +28,7 @@ import hashlib
 import logging
 
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 class WebSocketException(Exception):
     pass
