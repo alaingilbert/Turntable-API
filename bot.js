@@ -113,7 +113,7 @@ Bot.prototype.setTmpSong = function (data) {
 
 
 Bot.prototype.onClose = function () {
-   console.log('THIS IS WEIRD AND SHOULD NOT APPEAR.');
+   //console.log('THIS IS WEIRD AND SHOULD NOT APPEAR.');
 };
 
 
