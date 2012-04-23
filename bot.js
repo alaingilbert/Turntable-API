@@ -49,25 +49,30 @@ var Bot = function () {
    this._isConnected     = false;
    this.fanOf            = [];
    this.currentStatus    = 'available';
-   this.CHATSERVER_ADDRS = [["chat2.turntable.fm", 80], ["chat3.turntable.fm", 80]];
 
-   var infos = this.getHashedAddr(this.roomId ? this.roomId : Math.random().toString());
-   var url = 'ws://'+infos[0]+':'+infos[1]+'/socket.io/websocket';
-
-   this.ws = new WebSocket(url);
-   this.ws.onmessage = function (msg) { self.onMessage(msg); };
-   this.ws.onclose = function () { self.onClose(); };
-   if (this.roomId) {
-      // TODO: Should not be here... see the other todo (in roomRegister)
-      this.callback = function () {
-         var rq = { api: 'room.register', roomid: self.roomId };
-         self._send(rq, null);
-      };
-   }
+   this.connect(this.roomId);
 };
 
 Bot.prototype.__proto__ = events.prototype;
 
+Bot.prototype.connect = function (roomId) {
+   if (!/^[0-9a-f]{24}$/.test(roomId)) {
+      throw new Error('Invalid roomId: cannot connect to "' + roomId + '"');
+   }
+   this.which_server(roomId, function (server) {
+      var self = this,
+          url  = 'ws://'+server[0]+':'+server[1]+'/socket.io/websocket';
+      this.ws = new WebSocket(url);
+      this.ws.onmessage = function (msg) { self.onMessage(msg); };
+      this.ws.onclose = function () { self.onClose(); };
+      if (this.roomId) {
+         this.callback = function () {
+            var rq = { api: 'room.register', roomid: self.roomId };
+            self._send(rq, null);
+         };
+      }
+   });
+};
 
 Bot.prototype.listen = function (port, address) {
    var self = this;
@@ -296,17 +301,22 @@ Bot.prototype._send = function (rq, callback) {
    this._msgId++;
 }
 
-Bot.prototype.hashMod = function (a, b) {
-   var d = crypto.createHash("sha1").update(a).digest('hex');
-   var c = 0;
-   for (var i=0; i<d.length; i++) {
-      c += d.charCodeAt(i);
-   }
-   return c % b;
-};
-
-Bot.prototype.getHashedAddr = function (a) {
-   return this.CHATSERVER_ADDRS[this.hashMod(a, this.CHATSERVER_ADDRS.length)];
+Bot.prototype.which_server = function (roomid, callback) {
+   var self = this;
+   http.get({ host: 'turntable.fm', port: 80, path: '/api/room.which_chatserver?roomid=' + roomid }, function (res) {
+      var dataStr = '';
+      res.on('data', function (chunk) {
+         dataStr += chunk.toString();
+      });
+      res.on('end', function () {
+         if (dataStr.substr(1, 4) === 'true') {
+            callback.call(self, eval(dataStr)[1].chatserver);
+         } else if (self.debug) {
+            if (this.stdout == 'stderr') { console.error('Failed to determine which server to use: ' + dataStr); }
+            else                         { console.log('Failed to determine which server to use: ' + dataStr);   }
+         }
+      });
+   });
 },
 
 Bot.prototype.close = function () {
@@ -406,18 +416,13 @@ Bot.prototype.remFavorite = function (roomId, callback) {
 
 Bot.prototype.roomRegister = function (roomId, callback) {
    var self = this;
-   var infos = this.getHashedAddr(roomId);
-   var url = 'ws://'+infos[0]+':'+infos[1]+'/socket.io/websocket';
    this.ws.onclose = function () {};
    this.ws.close();
    this.callback = function () {
       var rq = { api: 'room.register', roomid: roomId };
       self._send(rq, callback);
    };
-   // TODO: This should not be here at all...
-   this.ws = new WebSocket(url);
-   this.ws.onmessage = function (msg) { self.onMessage(msg); };
-   this.ws.onclose = function () { self.onClose(); };
+   this.connect(roomId);
 };
 
 Bot.prototype.roomDeregister = function (callback) {
