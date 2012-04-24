@@ -50,7 +50,13 @@ var Bot = function () {
    this.fanOf            = [];
    this.currentStatus    = 'available';
 
-   this.connect(this.roomId);
+   if (this.roomId) {
+      this.callback = function () {
+         var rq = { api: 'room.register', roomid: self.roomId };
+         self._send(rq, null);
+      };
+   }
+   this.connect(this.roomId ? this.roomId : crypto.createHash("sha1").update(Math.random().toString()).digest('hex').substr(0, 24));
 };
 
 Bot.prototype.__proto__ = events.prototype;
@@ -65,12 +71,6 @@ Bot.prototype.connect = function (roomId) {
       this.ws = new WebSocket(url);
       this.ws.onmessage = function (msg) { self.onMessage(msg); };
       this.ws.onclose = function () { self.onClose(); };
-      if (this.roomId) {
-         this.callback = function () {
-            var rq = { api: 'room.register', roomid: self.roomId };
-            self._send(rq, null);
-         };
-      }
    });
 };
 
@@ -416,8 +416,10 @@ Bot.prototype.remFavorite = function (roomId, callback) {
 
 Bot.prototype.roomRegister = function (roomId, callback) {
    var self = this;
-   this.ws.onclose = function () {};
-   this.ws.close();
+   if (this.ws) {
+      this.ws.onclose = function () {};
+      this.ws.close();
+   }
    this.callback = function () {
       var rq = { api: 'room.register', roomid: roomId };
       self._send(rq, callback);
