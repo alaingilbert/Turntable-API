@@ -1,4 +1,7 @@
+# -*- Coding: utf-8 -*-
+
 import websocket
+import urllib2
 import time
 import hashlib
 import random
@@ -25,20 +28,24 @@ class Bot:
       self._isConnected     = False
       self.fanOf            = set()
       self.currentStatus    = 'available'
-      self.CHATSERVER_ADDRS = [("chat2.turntable.fm", 80), ("chat3.turntable.fm", 80)]
       self.signals = {}
 
+      self.connect(self.roomId)
 
 
-      host, port = self.getHashedAddr(self.roomId if self.roomId else str(random.random()))
-      url = 'ws://%s:%s/socket.io/websocket' % (host, port)
+   def connect(self, roomId):
+      def clb(host, port):
+         url = 'ws://%s:%s/socket.io/websocket' % (host, port)
+         # TODO: Check the encoding...
+         url = url.decode('iso-8859-1').encode('utf8')
+         self.ws = websocket.WebSocketApp(url, on_message=self.on_message)
+         if self.roomId:
+            def clb1():
+               rq = { 'api': 'room.register', 'roomid': self.roomId }
+               self._send(rq, None)
+            self.callback = clb1
 
-      self.ws = websocket.WebSocketApp(url, on_message=self.on_message)
-      if self.roomId:
-         def clb():
-            rq = { 'api': 'room.register', 'roomid': self.roomId }
-            self._send(rq, None)
-         self.callback = clb
+      self.whichServer(roomId, clb)
 
 
    def setTmpSong(self, data):
@@ -166,15 +173,14 @@ class Bot:
       self._msgId += 1
 
 
-   def hashMod(self, a, b):
-      d = hashlib.sha1(a).hexdigest()
-      c = 0
-      for e in d: c += ord(e)
-      return c % b
-
-
-   def getHashedAddr(self, a):
-      return self.CHATSERVER_ADDRS[self.hashMod(a, len(self.CHATSERVER_ADDRS))]
+   def whichServer(self, roomId, callback):
+      dataStr = urllib2.urlopen('http://turntable.fm:80/api/room.which_chatserver?roomid=%s' % roomId).read()
+      data = json.loads(dataStr)
+      if data[0]:
+         callback(data[1]['chatserver'][0], data[1]['chatserver'][1])
+      else:
+         if self.debug:
+            logger.debug(msg);
 
 
    def roomNow(self, callback=None):
