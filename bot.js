@@ -65,9 +65,9 @@ Bot.prototype.connect = function (roomId) {
    if (!/^[0-9a-f]{24}$/.test(roomId)) {
       throw new Error('Invalid roomId: cannot connect to "' + roomId + '"');
    }
-   this.which_server(roomId, function (server) {
+   this.which_server(roomId, function (host, port) {
       var self = this,
-          url  = 'ws://'+server[0]+':'+server[1]+'/socket.io/websocket';
+          url  = 'ws://' + host + ':' + port + '/socket.io/websocket';
       this.ws = new WebSocket(url);
       this.ws.onmessage = function (msg) { self.onMessage(msg); };
       this.ws.onclose = function () { self.onClose(); };
@@ -309,8 +309,9 @@ Bot.prototype.which_server = function (roomid, callback) {
          dataStr += chunk.toString();
       });
       res.on('end', function () {
-         if (dataStr.substr(1, 4) === 'true') {
-            callback.call(self, eval(dataStr)[1].chatserver);
+         var data = JSON.parse(dataStr);
+         if (data[0]) {
+            callback.call(self, data[1].chatserver[0], data[1].chatserver[1]);
          } else if (self.debug) {
             if (this.stdout == 'stderr') { console.error('Failed to determine which server to use: ' + dataStr); }
             else                         { console.log('Failed to determine which server to use: ' + dataStr);   }
