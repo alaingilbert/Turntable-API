@@ -99,7 +99,7 @@ class Bot:
                   self.roomInfo(info_clb)
                else:
                   self.emit('roomChanged', obj)
-               self.clb = None
+               clb = None
 
             elif rq['api'] == 'room.deregister':
                if obj['success']:
