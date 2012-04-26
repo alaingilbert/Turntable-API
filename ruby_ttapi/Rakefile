@@ -15,7 +15,7 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "ttapi"
-  gem.homepage = "http://github.com/alaingilbert/Turntable-API"
+  gem.homepage = "http://github.com/alaingilbert/Turntable-API/tree/master/ruby_ttapi"
   gem.license = "MIT"
   gem.summary = %Q{Turntable-API}
   gem.description = %Q{A simple ruby wrapper for the turntable API}

@@ -1,19 +1,32 @@
-= ttapi
+# Turntable API
 
-Description goes here.
+A simple ruby wrapper for the turntable API
 
-== Contributing to ttapi
- 
-* Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
-* Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it.
-* Fork the project.
-* Start a feature/bugfix branch.
-* Commit and push until you are happy with your contribution.
-* Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
-* Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
+## Installation
+    gem install ttapi
 
-== Copyright
+Find your `AUTH`, `USERID` and `ROOMID` informations with [that bookmarklet](http://alaingilbert.github.com/Turntable-API/bookmarklet.html). 
 
-Copyright (c) 2012 alaingilbert. See LICENSE.txt for
-further details.
+## Examples
 
+### Chat bot
+
+This bot responds to anybody who writes "/hello" in the chat.
+
+```rb
+require "ttapi"
+$b = Bot.new(AUTH, USERID, ROOMID)
+
+def speak(data)
+   name = data["name"]
+   text = data["text"]
+
+   if /\/hello/.match(text)
+      $b.speak("Hello %s" % name)
+   end
+end
+
+$b.on("speak", method(:speak))
+
+$b.start
+```

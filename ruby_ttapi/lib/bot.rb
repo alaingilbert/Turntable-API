@@ -9,22 +9,22 @@ class Bot
    attr_accessor :debug, :speak
 
    def initialize(auth, userId, roomId)
-      @auth   = auth
-      @userId = userId
-      @roomId = roomId
-      @debug  = false
-      @callback = nil
-      @currentDjId = nil
+      @auth          = auth
+      @userId        = userId
+      @roomId        = roomId
+      @debug         = false
+      @callback      = nil
+      @currentDjId   = nil
       @currentSongId = nil
       @lastHeartbeat = Time.now
-      @lastActivity = Time.now
-      @clientId = '%s-0.59633534294921572' % Time.now.to_i
-      @_msgId = 0
-      @_cmds = []
-      @_isConnected = false
-      @fanOf = Set.new
+      @lastActivity  = Time.now
+      @clientId      = '%s-0.59633534294921572' % Time.now.to_i
+      @_msgId        = 0
+      @_cmds         = []
+      @_isConnected  = false
+      @fanOf         = Set.new
       @currentStatus = "available"
-      @signals = {}
+      @signals       = {}
 
       connect(@roomId)
    end
