@@ -47,3 +47,6 @@ pkg
 
 # For rubinius:
 #*.rbc
+*.lock
+*.gemspec
+LICENSE.txt

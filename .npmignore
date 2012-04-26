@@ -1,4 +1,5 @@
 examples/
 turntable_data/
 python_ttapi/
+ruby_ttapi/
 *.default
