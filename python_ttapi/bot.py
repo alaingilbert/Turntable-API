@@ -434,12 +434,12 @@ class Bot:
       self._send(rq, callback)
 
 
-   def becomeFan(self, userId):
+   def becomeFan(self, userId, callback=None):
       rq = { 'api': 'user.become_fan', 'djid': userId }
       self._send(rq, callback)
 
 
-   def removeFan(self, userId):
+   def removeFan(self, userId, callback=None):
       rq = { 'api': 'user.remove_fan', 'djid': userId }
       self._send(rq, callback)
 
