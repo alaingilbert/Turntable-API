@@ -5,7 +5,7 @@
 This bot respond to anybody who write "/hello" on the chat.
 
 ```py
-from bot import Bot
+from ttapi import Bot
 bot = Bot(AUTH, USERID, ROOMID)
 
 def speak(data):
@@ -22,7 +22,7 @@ bot.start()
 ### Simple
 
 ```py
-from bot import Bot
+from ttapi import Bot
 bot = Bot(AUTH, USERID, ROOMID)
 
 # Define callbacks

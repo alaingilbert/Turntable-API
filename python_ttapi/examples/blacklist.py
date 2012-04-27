@@ -2,7 +2,7 @@
 # Auto boot people on a blacklist.
 #
 
-from bot import Bot
+from ttapi import Bot
 
 AUTH   = 'auth+live+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx'

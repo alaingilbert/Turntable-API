@@ -4,7 +4,7 @@
 # For more information, visit http://faq.turntable.fm/customer/portal/articles/258935
 #
 
-from bot import Bot
+from ttapi import Bot
 
 AUTH   = 'auth+live+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx'

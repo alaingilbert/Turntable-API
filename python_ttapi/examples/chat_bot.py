@@ -1,4 +1,4 @@
-from bot import Bot
+from ttapi import Bot
 import re
 
 AUTH   = 'auth+live+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
