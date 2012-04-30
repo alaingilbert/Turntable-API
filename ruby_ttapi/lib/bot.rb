@@ -208,7 +208,7 @@ class Bot
 
 
    def updatePresence(callback=nil)
-      rq = { "api": "presence.update", "status": @currentStatus }
+      rq = { "api" => "presence.update", "status" => @currentStatus }
       _send(rq, callback)
    end
 
