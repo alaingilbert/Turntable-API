@@ -5,7 +5,7 @@ A simple nodejs wrapper for the turntable API
 ## Installation
     npm install ttapi
 
-Find your `AUTH`, `USERID` and `ROOMID` informations with [that bookmarklet](http://alaingilbert.github.com/Turntable-API/bookmarklet.html). 
+Find your `AUTH`, `USERID` and `ROOMID` informations with [this bookmarklet](http://alaingilbert.github.com/Turntable-API/bookmarklet.html). 
 
 ## Examples
 
@@ -25,7 +25,9 @@ bot.on('speak', function (data) {
 });
 ```
 
-### Simple
+### Logger
+
+This bot logs the room activity in the console.
 
 ```js
 var Bot    = require('ttapi');
@@ -45,6 +47,8 @@ bot.on('registered',   function (data) { console.log('Someone registered', data)
 
 ### Dynamic bot
 
+[REPL](http://nodejs.org/docs/v0.6.0/api/repl.html) allows you to dynamically call the bot functions and modify his variables during his execution.
+
 ```js
 var Bot  = require('ttapi')
   , repl = require('repl');
@@ -54,8 +58,6 @@ repl.start('> ').context.bot = bot;
 
 // ...
 ```
-
-[REPL](http://nodejs.org/docs/v0.6.0/api/repl.html) allows you to dynamically call the bot functions and modify his variables during his execution.
 
 # Debugging
 
@@ -67,7 +69,10 @@ That will print on the terminal all the data that you get and all the data that 
 
 # Hosting
 
-[https://no.de/](https://no.de/) : Free hosting for nodejs projects.
+[https://no.de/](https://no.de/) : Free (250mb memory/500mb storage) hosting for nodejs projects with SSH root access.
+[http://www.nodejitsu.com/](http://www.nodejitsu.com/) : Free (scalable memory/storage not to be abused) hosting for nodejs projects.
+[https://openshift.redhat.com/](https://openshift.redhat.com/) : Free (1.5gb memory/3gb storage) PaaS service that supports nodejs.
+
 
 # Documentation
 
@@ -128,11 +133,11 @@ Triggered when a user votes.
 
 ### on('booted_user', function (data) { })
 
-Triggered when a user is booted.
+Triggered when a user gets booted.
 
 ### on('update_user', function (data) { })
 
-Triggered when a user changes his name/info.
+Triggered when a user updates their name/profile.
 
 ### on('add_dj', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/add_dj.js)) { })
 
@@ -144,7 +149,7 @@ Triggered when a user leaves a dj spot.
 
 ### on('new_moderator', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/new_moderator.js)) { })
 
-Triggered when a user is promoted to moderator.
+Triggered when a user is promoted to a moderator.
 
 ### on('rem_moderator', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/rem_moderator.js)) { })
 
