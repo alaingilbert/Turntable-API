@@ -69,9 +69,9 @@ That will print on the terminal all the data that you get and all the data that 
 
 # Hosting
 
-[https://no.de/](https://no.de/) : Free (250mb memory/500mb storage) hosting for nodejs projects with SSH root access.
-[http://www.nodejitsu.com/](http://www.nodejitsu.com/) : Free (scalable memory/storage not to be abused) hosting for nodejs projects.
-[https://openshift.redhat.com/](https://openshift.redhat.com/) : Free (1.5gb memory/3gb storage) PaaS service that supports nodejs.
+* [https://no.de/](https://no.de/) : Free (250mb memory/500mb storage) hosting for nodejs projects with SSH root access.
+* [http://www.nodejitsu.com/](http://www.nodejitsu.com/) : Free (scalable memory/storage not to be abused) hosting for nodejs projects.
+* [https://openshift.redhat.com/](https://openshift.redhat.com/) : Free (1.5gb memory/3gb storage) PaaS service that supports nodejs.
 
 
 # Documentation
