@@ -49,6 +49,7 @@ var Bot = function () {
    this._isConnected     = false;
    this.fanOf            = [];
    this.currentStatus    = 'available';
+   this.currentSearches  = [];
 
    if (this.roomId) {
       this.callback = function () {
@@ -164,6 +165,8 @@ Bot.prototype.onMessage = function (msg) {
       var id  = self._cmds[i][0];
       var rq  = self._cmds[i][1];
       var clb = self._cmds[i][2];
+      var is_search = false;
+
       if (id == json.msgid) {
          switch (rq.api) {
             case 'room.info':
@@ -195,9 +198,15 @@ Bot.prototype.onMessage = function (msg) {
                   self.roomId = null;
                }
                break;
+            case 'file.search':
+                if (json.success === true) {
+                    is_search = true;
+                    this.currentSearches.push({query: rq.query, callback: clb});
+                }
+                break;
          }
 
-         if (clb) {
+         if (!is_search && clb) {
             clb(json);
          }
 
@@ -262,6 +271,16 @@ Bot.prototype.onMessage = function (msg) {
          break;
       case 'snagged':
          self.emit('snagged', json);
+         break;
+      case 'search_complete':
+         var query = json['query'];
+         for (var i = 0; i < this.currentSearches.length; i++) {
+            if ((this.currentSearches[i].query == query) && this.currentSearches[i].callback) {
+               this.currentSearches[i].callback(json);
+               this.currentSearches.splice(i, 1);
+               break;
+            }
+         }
          break;
       default:
          if (json['command']) {
@@ -756,6 +775,11 @@ Bot.prototype.setStatus = function(st, callback) {
    if (callback) {
       callback({ success: true });
    }
+};
+
+Bot.prototype.searchSong = function (q, callback) {
+   var rq = { api: 'file.search', query: q };
+   this._send(rq, callback);
 };
 
 exports.Bot = Bot;
