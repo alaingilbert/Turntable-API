@@ -5,7 +5,7 @@ A simple nodejs wrapper for the turntable API
 ## Installation
     npm install ttapi
 
-Find your `AUTH`, `USERID` and `ROOMID` informations with [this bookmarklet](http://alaingilbert.github.com/Turntable-API/bookmarklet.html). 
+Find your `AUTH`, `USERID` and `ROOMID` informations with [this bookmarklet](http://alaingilbert.github.com/Turntable-API/bookmarklet.html).
 
 ## Examples
 
@@ -418,4 +418,19 @@ bot.playlistReorder(indexFrom, indexTo);
 bot.playlistReorder(indexFrom, indexTo, callback);
 bot.playlistReorder(playlistName, indexFrom, indexTo);
 bot.playlistReorder(playlistName, indexFrom, indexTo, callback);
+```
+
+### searchSong ( query:string, callback:fn )
+
+Search for songs.
+
+#### Arguments
+
+* `query`
+* `callback`
+
+#### Examples
+
+```js
+bot.searchSong(query, callback);
 ```
