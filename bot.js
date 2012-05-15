@@ -586,9 +586,14 @@ Bot.prototype.getFanOf = function (callback) {
    this._send(rq, callback);
 };
 
+Bot.prototype.getFans = function (callback) {
+   var rq = { api: 'user.get_fans' };
+   this._send(rqc callback);
+};
+
 Bot.prototype.getUserId = function(name, callback) {
-    var rq = { api: 'user.get_id', name: name.toString() };
-    this._send(rq, callback);
+   var rq = { api: 'user.get_id', name: name.toString() };
+   this._send(rq, callback);
 };
 
 Bot.prototype.getProfile = function () {
