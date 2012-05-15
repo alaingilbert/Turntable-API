@@ -394,7 +394,7 @@ class Bot:
 
 
    def getUserId(self, name, callback=None):
-      rq = { 'api': 'user.get_id' }
+      rq = { 'api': 'user.get_id', 'name': str(name) }
       self._send(rq, callback)
 
 
