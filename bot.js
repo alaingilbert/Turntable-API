@@ -586,6 +586,11 @@ Bot.prototype.getFanOf = function (callback) {
    this._send(rq, callback);
 };
 
+Bot.prototype.getUserId = function(name, callback) {
+    var rq = { api: 'user.get_id', name: name };
+    this._send(rq, callback);
+};
+
 Bot.prototype.getProfile = function () {
    var rq       = { api: 'user.get_profile' };
    var callback = null;
@@ -780,6 +785,16 @@ Bot.prototype.setStatus = function(st, callback) {
 Bot.prototype.searchSong = function (q, callback) {
    var rq = { api: 'file.search', query: q };
    this._send(rq, callback);
+};
+
+Bot.prototype.getStickers = function(callback) {
+    var rq = { api: 'sticker.get' };
+    this._send(rq, callback);
+};
+
+Bot.prototype.getStickerPlacements = function(userid, callback) {
+    var rq = { api: 'sticker.get_placements', userid: userid};
+    this._send(rq, callback);
 };
 
 exports.Bot = Bot;

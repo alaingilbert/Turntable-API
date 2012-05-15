@@ -364,6 +364,20 @@ class Bot
       _send(rq, callback)
    end
 
+   def getUserId(username, callback=nil)
+      rq = { "api" => "user.get_id", "name" => username }
+      _send(rq, callback)
+   end
+
+   def getStickers(callback=nil)
+      rq = { "api" => "sticker.get" }
+      _send(rq, callback)
+   end
+
+   def getStickerPlacements(userid, callback=nil)
+      rq = { "api" => "sticker.get_placements", userid: userid }
+      _send(rq, callback)
+   end
 
    # TODO
    def getProfile
