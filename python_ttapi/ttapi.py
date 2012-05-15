@@ -393,6 +393,11 @@ class Bot:
       self._send(rq, callback)
 
 
+   def getUserId(self, name, callback=None):
+      rq = { 'api': 'user.get_id' }
+      self._send(rq, callback)
+
+
    def getProfile(self, *args):
       rq       = { 'api': 'user.get_profile' }
       callback = None
@@ -546,6 +551,16 @@ class Bot:
          indexTo      = args[2]
          callback     = args[3]
       rq = { 'api': 'playlist.reorder', 'playlist_name': playlistName, 'index_from': indexFrom, 'index_to': indexTo }
+      self._send(rq, callback)
+
+
+   def getStickers(self, callback=None):
+      rq = { 'api': 'sticker.get' }
+      self._send(rq, callback)
+
+
+   def getStickerPlacements(self, userid, callback=None):
+      rq = { 'api': 'sticker.get_placements', 'userid': userid }
       self._send(rq, callback)
 
 
