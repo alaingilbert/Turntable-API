@@ -393,6 +393,11 @@ class Bot:
       self._send(rq, callback)
 
 
+   def getFans(self, callback=None):
+      rq = { 'api': 'user.get_fans' }
+      self._send(rq, callback)
+
+
    def getUserId(self, name, callback=None):
       rq = { 'api': 'user.get_id', 'name': str(name) }
       self._send(rq, callback)

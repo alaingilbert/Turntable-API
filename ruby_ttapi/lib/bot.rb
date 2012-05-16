@@ -358,11 +358,14 @@ class Bot
       _send(rq, callback)
    end
 
-
    def getFanOf(callback=nil)
       rq = { "api" => "user.get_fan_of" }
       _send(rq, callback)
    end
+
+   def getFans(callback=nil)
+      rq = { "api" => "user.get_fans" }
+      _send(rq, callback)
 
    def getUserId(username, callback=nil)
       rq = { "api" => "user.get_id", "name" => username }
