@@ -491,6 +491,7 @@ class WebSocketApp(object):
                     break
                 self._run_with_no_err(self.on_message, data)
         except Exception, e:
+            raise e
             self._run_with_no_err(self.on_error, e)
         finally:
             self.sock.close()
@@ -499,13 +500,7 @@ class WebSocketApp(object):
 
     def _run_with_no_err(self, callback, *args):
         if callback:
-            try:
-                callback(self, *args)
-            except Exception, e:
-                #print e
-                #raise e
-                if logger.isEnabledFor(logging.DEBUG):
-                    logger.error(e)
+            callback(self, *args)
 
 
 if __name__ == "__main__":
