@@ -274,6 +274,29 @@ Get the current user's information.
 
 Get the list of who you've become a fan of.
 
+### getFans ( callback:fn )
+
+Returns an array of everyone who is a fan of yours.
+
+#### example
+
+```js
+bot.getFans(function (data) { console.log(data); });
+// { msgid: 7, fans: [ '4e69c14e4fe7d00e7303cd6d', ... ], success: true }
+```
+
+### getUserId ( name:string, callback:fn )
+
+Get a user's id by his name.
+
+#### Example
+
+```js
+bot.getUserId('@alain_gilbert', function (data) { console.log(data); });
+// { msgid: 12, userid: '4deadb0f4fe7d013dc0555f1', success: true }
+
+```
+
 ### getProfile ( [[userId:string, ]callback:fn] )
 
 Get a user's profile.
@@ -433,4 +456,26 @@ Search for songs.
 
 ```js
 bot.searchSong(query, callback);
+```
+
+### getStickers ( callback:fn )
+
+Get all stickers informations.
+
+#### Example
+
+```js
+bot.getStickers(function (data) { console.log(data); });
+// https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/getstickers.js
+```
+
+### getStickerPlacements ( userid:string, callback:fn )
+
+Get the informations about a user stickers.
+
+#### Example
+
+```js
+bot.getStickerPlacements('4e0889d4a3f7517d1100af78', function (data) { console.log(data); });
+// https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/getstickerplacements.js
 ```
