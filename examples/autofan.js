@@ -1,3 +1,7 @@
+/**
+ * Automatically fan a user when he or she enters the room.
+ */
+
 var Bot    = require('../index');
 var AUTH   = 'auth+live+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
 var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
@@ -5,13 +9,8 @@ var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
 
 var bot = new Bot(AUTH, USERID, ROOMID);
 
-bot.on('speak', function (data) {
-   // Get the data
-   var name = data.name;
-   var text = data.text;
-
-   // Respond to "/hello" command
-   if (text.match(/^\/hello$/)) {
-      bot.speak('Hey! How are you @'+name+'?');
-   }
+bot.on('registered', function (data) {
+var name = data.user[0].name;
+var command = data.command; 
+	 bot.becomeFan(data.user[0].userid);
 });
