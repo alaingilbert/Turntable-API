@@ -471,7 +471,7 @@ bot.getStickers(function (data) { console.log(data); });
 
 ### getStickerPlacements ( userid:string, callback:fn )
 
-Get the informations about a user stickers.
+Get the information about a user stickers.
 
 #### Example
 
