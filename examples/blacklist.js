@@ -1,5 +1,5 @@
 /**
- * Auto boot people on a blacklist.
+ * Auto boot people that are on a blacklist.
  */
 
 var Bot    = require('../index');

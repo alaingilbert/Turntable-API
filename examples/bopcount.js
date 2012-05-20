@@ -1,6 +1,6 @@
 /**
- * Automatically vote up on a song when 2 people say "bop"
- * It's not against the turntable.fm policy to do so.
+ * Automatically vote up on a song when 2 people say "bop"!
+ * It's not against the turntable.fm policy to do so...
  * Reccomended for rooms with more people in it!
  */
 

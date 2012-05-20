@@ -1,5 +1,5 @@
 /**
- * On/Off bot switch with basic variables in nodejs
+ * On/Off bot switch with basic variables in nodejs.
  */
 
 var Bot    = require('../index');

@@ -1,6 +1,6 @@
 /**
- * Automatically vote up on a song with "bop"
- * It's not against the turntable.fm policy to do so.
+ * Automatically vote up on a song with "bop"!
+ * It's not against the turntable.fm policy to do so...
  * Reccomended for rooms with less people in it!
  */
 

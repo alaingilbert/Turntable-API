@@ -1,5 +1,5 @@
 /**
- * Moderator commands 
+ * Moderator commands.
  */
 
 var Bot    = require('../index');

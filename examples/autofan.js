@@ -1,5 +1,5 @@
 /**
- * Automatically fan a user when he or she enters the room
+ * Automatically fan a user when he or she enters the room.
  */
 
 var Bot    = require('../index');
