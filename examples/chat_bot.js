@@ -12,6 +12,6 @@ bot.on('speak', function (data) {
 
    // Respond to "/hello" command
    if (text.match(/^\/hello$/)) {
-      bot.speak('Hey! How are you @'+name+' ?');
+      bot.speak('Hey! How are you @'+name+'?');
    }
 });
