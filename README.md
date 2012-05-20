@@ -20,7 +20,7 @@ var bot = new Bot(AUTH, USERID, ROOMID);
 bot.on('speak', function (data) {
    // Respond to "/hello" command
    if (data.text.match(/^\/hello$/)) {
-      bot.speak('Hey! How are you '+data.name+' ?');
+      bot.speak('Hey! How are you @'+data.name+' ?');
    }
 });
 ```
