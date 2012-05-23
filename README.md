@@ -1,11 +1,11 @@
 #Turntable API
 
-A simple nodejs wrapper for the turntable API
+A simple nodejs wrapper for the turntable API.
+You'll need to find your `AUTH`, `USERID` and `ROOMID` information with [this bookmarklet](http://alaingilbert.github.com/Turntable-API/bookmarklet.html).
 
 ## Installation
     npm install ttapi
-
-Find your `AUTH`, `USERID` and `ROOMID` informations with [this bookmarklet](http://alaingilbert.github.com/Turntable-API/bookmarklet.html).
+If you are having problems with npm (like with Windows nodejs or portable versions), just clone the repo and edit the templates in the 'examples' folder!
 
 ## Examples
 
@@ -20,7 +20,7 @@ var bot = new Bot(AUTH, USERID, ROOMID);
 bot.on('speak', function (data) {
    // Respond to "/hello" command
    if (data.text.match(/^\/hello$/)) {
-      bot.speak('Hey! How are you '+data.name+' ?');
+      bot.speak('Hey! How are you @'+data.name+' ?');
    }
 });
 ```
@@ -471,7 +471,7 @@ bot.getStickers(function (data) { console.log(data); });
 
 ### getStickerPlacements ( userid:string, callback:fn )
 
-Get the informations about a user stickers.
+Get the information about a user stickers.
 
 #### Example
 
