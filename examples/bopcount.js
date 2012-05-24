@@ -15,19 +15,19 @@ bopcount = 0;
 
 bot.on('speak', function (data) {
    var text = data.text;
-   
+
    // Any command with "bop" in it will work (ex: "bop","bop i beg you!!!","lolbopbaby", etc.)
    if (text.match(/bop/)) {
       bopcount += 1;
    }
-   
+
    // And when the bopcount reaches two...
    if (bopcount == 2) {
       bot.vote('up');
-   }  
+   }
 });
 
 // Reset bopcount per new song
 bot.on('newsong', function (data) {
-	bopcount = 0;
+   bopcount = 0;
 });
