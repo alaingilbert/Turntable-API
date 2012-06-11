@@ -337,13 +337,18 @@ class Bot
    end
 
 
-   # TODO
-   def vote
+   def vote(direction = "up", callback = nil)
+    vh  = Digest::SHA1.hexdigest(@roomId + direction + @currentSongId)
+    th  = Digest::SHA1.hexdigest(Random.rand.to_s)
+    ph  = Digest::SHA1.hexdigest(Random.rand.to_s)
+    rq  = { "api" => 'room.vote', "roomid" => @roomId, "val" => direction, "vh" => vh, "th" => th, "ph" => ph }
+    puts rq
+    _send(rq, callback)
    end
 
 
-   # TODO
    def bop
+     vote
    end
 
 
