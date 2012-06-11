@@ -48,7 +48,7 @@ class Bot
 
 
    def setTmpSong(data)
-      tmpSong = { "command" => "endsong", "room" => data["room"], "success" => true }
+      @tmpSong = { "command" => "endsong", "room" => data["room"], "success" => true }
    end
 
 
