@@ -73,7 +73,7 @@ class Bot:
                def fanof(data):
                   self.fanOf |= set(data['fanof'])
                   self.updatePresence()
-                  updatePresTmr() #Start the updatePresence timer
+                  self.updatePresTmr() #Start the updatePresence timer
                   self.emit('ready')
                self.getFanOf(fanof)
             self.callback()
