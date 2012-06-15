@@ -8,6 +8,7 @@ import random
 import re
 import json
 import logging
+import threading
 
 logger = logging.getLogger("turntable-api")
 
@@ -50,7 +51,10 @@ class Bot:
 
    def setTmpSong(self, data):
       self.tmpSong = { 'command': 'endsong', 'room': data.get('room'), 'success': True }
-
+      
+   def updatePresTmr(self):
+      threading.Timer(10, self.updatePresTmr).start() #Repeating updatePresence every 10s like in the NodeJS version
+      self.updatePresence()
 
    def on_message(self, ws, msg):
       heartbeat_rgx = '~m~[0-9]+~m~(~h~[0-9]+)'
@@ -69,7 +73,7 @@ class Bot:
                def fanof(data):
                   self.fanOf |= set(data['fanof'])
                   self.updatePresence()
-                  # TODO: setInterval ????
+                  self.updatePresTmr() #Start the updatePresence timer
                   self.emit('ready')
                self.getFanOf(fanof)
             self.callback()
