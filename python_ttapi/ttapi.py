@@ -53,7 +53,7 @@ class Bot:
       self.tmpSong = { 'command': 'endsong', 'room': data.get('room'), 'success': True }
       
    def updatePresTmr(self):
-      threading.Timer(10, updatePresTmr).start() #Repeating updatePresence every 10s like in the NodeJS version
+      threading.Timer(10, self.updatePresTmr).start() #Repeating updatePresence every 10s like in the NodeJS version
       self.updatePresence()
 
    def on_message(self, ws, msg):
