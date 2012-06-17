@@ -328,7 +328,12 @@ Bot.prototype.which_server = function (roomid, callback) {
          dataStr += chunk.toString();
       });
       res.on('end', function () {
-         var data = JSON.parse(dataStr);
+         var data;
+         try {
+            data = JSON.parse(dataStr);
+         } catch (e) {
+            data = [];
+         }
          if (data[0]) {
             callback.call(self, data[1].chatserver[0], data[1].chatserver[1]);
          } else if (self.debug) {
