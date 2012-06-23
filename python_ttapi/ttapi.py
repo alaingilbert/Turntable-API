@@ -353,7 +353,7 @@ class Bot:
       sh = hashlib.sha1(str(random.random())).hexdigest()
       fh = hashlib.sha1(str(random.random())).hexdigest()
 
-      i  = [ self.userId, self.currentDjId, self.currentSongId, self.roomId, 'queue', 'board', 'false', sh ]
+      i  = [ self.userId, self.currentDjId, self.currentSongId, self.roomId, 'queue', 'board', 'false', 'false', sh ]
       vh = hashlib.sha1('/'.join(i)).hexdigest()
 
       rq = { 'api'      : 'snag.add'
@@ -363,6 +363,7 @@ class Bot:
            , 'site'     : 'queue'
            , 'location' : 'board'
            , 'in_queue' : 'false'
+           , 'blocked'  : 'false'
            , 'vh'       : vh
            , 'sh'       : sh
            , 'fh'       : fh
