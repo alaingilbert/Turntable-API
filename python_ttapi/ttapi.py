@@ -329,7 +329,7 @@ class Bot:
          if callable(args[0]):
             djId = None
             callback = args[0]
-         elif isinstance(args[0], str):
+         elif isinstance(args[0], basestring):
             djId = args[0]
             callback = None
       elif len(args) == 2:
@@ -414,7 +414,7 @@ class Bot:
       if len(args) == 1:
          if callable(args[0]):
             callback = args[0]
-         elif isinstance(args[0], str):
+         elif isinstance(args[0], basestring):
             rq['userid'] = args[0]
       elif len(args) == 2:
          rq['userid'] = args[0]
@@ -463,7 +463,7 @@ class Bot:
       playlistName = 'default'
       callback = None
       if len(args) == 1:
-         if isinstance(args[0], str): playlistName = args[0]
+         if isinstance(args[0], basestring): playlistName = args[0]
          if callable(args[0]):        callback     = args[0]
       elif len(args) == 2:
          playlistName = args[0]
@@ -480,31 +480,31 @@ class Bot:
       if len(args) == 1:
          songId = args[0]
       elif len(args) == 2:
-         if isinstance(args[0], str) and isinstance(args[1], str):
+         if isinstance(args[0], basestring) and isinstance(args[1], basestring):
             playlistName = args[0]
             songId       = args[1]
-         elif isinstance(args[0], str) and callable(args[1]):
+         elif isinstance(args[0], basestring) and callable(args[1]):
             songId   = args[0]
             callback = args[1]
-         elif isinstance(args[0], str) and isinstance(args[1], int):
+         elif isinstance(args[0], basestring) and isinstance(args[1], int):
             songId = args[0]
             index  = args[1]
-         elif isinstance(args[0], bool) and isinstance(args[1], str):
+         elif isinstance(args[0], bool) and isinstance(args[1], basestring):
             songId = args[1]
       elif len(args) == 3:
-         if isinstance(args[0], str) and isinstance(args[1], str) and isinstance(args[2], int):
+         if isinstance(args[0], basestring) and isinstance(args[1], basestring) and isinstance(args[2], int):
             playlistName = args[0]
             songId       = args[1]
             index        = args[2]
-         elif isinstance(args[0], str) and isinstance(args[1], str) and callable(args[2]):
+         elif isinstance(args[0], basestring) and isinstance(args[1], basestring) and callable(args[2]):
             playlistName = args[0]
             songId       = args[1]
             callback     = args[2]
-         elif isinstance(args[0], str) and isinstance(args[1], int) and callable(args[2]):
+         elif isinstance(args[0], basestring) and isinstance(args[1], int) and callable(args[2]):
             songId   = args[0]
             index    = args[1]
             callback = args[2]
-         elif isinstance(args[0], bool) and isinstance(args[1], str) and callable(args[2]):
+         elif isinstance(args[0], bool) and isinstance(args[1], basestring) and callable(args[2]):
             songId   = args[1]
             callback = args[2]
       elif len(args) == 4:
@@ -524,7 +524,7 @@ class Bot:
       if len(args) == 1:
          index = args[0]
       elif len(args) == 2:
-         if isinstance(args[0], str) and isinstance(args[1], int):
+         if isinstance(args[0], basestring) and isinstance(args[1], int):
             playlistName = args[0]
             index        = args[1]
          elif isinstance(args[0], int) and callable(args[1]):
@@ -547,7 +547,7 @@ class Bot:
          indexFrom = args[0]
          indexTo   = args[1]
       elif len(args) == 3:
-         if isinstance(args[0], str) and isinstance(args[1], int) and isinstance(args[2], int):
+         if isinstance(args[0], basestring) and isinstance(args[1], int) and isinstance(args[2], int):
             playlistName = args[0]
             indexFrom    = args[1]
             indexTo      = args[2]
