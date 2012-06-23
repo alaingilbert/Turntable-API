@@ -538,7 +538,7 @@ Bot.prototype.snag = function (callback) {
    var sh = crypto.createHash("sha1").update(Math.random().toString()).digest('hex');
    var fh = crypto.createHash("sha1").update(Math.random().toString()).digest('hex');
 
-   var i  = [ this.userId, this.currentDjId, this.currentSongId, this.roomId, 'queue', 'board', 'false', sh ];
+   var i  = [ this.userId, this.currentDjId, this.currentSongId, this.roomId, 'queue', 'board', 'false', 'false', sh ];
    var vh = crypto.createHash("sha1").update(i.join('/')).digest('hex');
 
    var rq = { api      : 'snag.add'
@@ -548,6 +548,7 @@ Bot.prototype.snag = function (callback) {
             , site     : 'queue'
             , location : 'board'
             , in_queue : 'false'
+            , blocked  : 'false'
             , vh       : vh
             , sh       : sh
             , fh       : fh
