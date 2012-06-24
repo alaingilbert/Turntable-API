@@ -38,7 +38,7 @@ var urllib = require('url');
 
 var reg = /^v0.([0-9]+)/i.exec(process.version);
 var oldVersion = reg ? +reg[1] <= 4 : false;
-var sys = oldVersion ? require('sys') : require('util');
+var sys = oldVersion ? require('util') : require('util');
 
 var FRAME_NO = 0;
 var FRAME_LO = 1;
