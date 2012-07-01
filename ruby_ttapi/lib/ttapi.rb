@@ -1,4 +1,4 @@
-require "websocket"
+require_relative "./websocket"
 require "set"
 require "uri"
 require "net/http"
@@ -316,8 +316,9 @@ class Bot
    end
 
 
-   # TODO
-   def remDj(*args)
+   def remDj(userId, callback=nil)
+      rq = { "api" => "room.rem_dj", "roomid" => @roomId, "djid" => userId}
+      _send(rq, callback)
    end
 
 
