@@ -71,7 +71,10 @@ class Bot
                def fanof(data)
                   @fanOf |= Set.new(data["fanof"])
                   updatePresence()
-                  # TODO: setInterval ????
+                  Thread.new do
+                     updatePresence()
+                     sleep 1000
+                  end
                   emit("ready")
                end
                getFanOf(method(:fanof))
