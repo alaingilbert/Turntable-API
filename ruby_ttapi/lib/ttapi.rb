@@ -333,8 +333,25 @@ class Bot
    end
 
 
-   # TODO
    def snag(callback=nil)
+      sh = Digest::SHA1.hexdigest(Random.rand.to_s)
+      fh = Digest::SHA1.hexdigest(Random.rand.to_s)
+      i = [@userid, @currentDjId, @currentSongId, @roomId, 'queue', 'board', false, false, sh]
+      vh = Digest::SHA1.hexdigest(i.join('/'))
+      rq = {
+         "api"      => 'snag.add',
+         "djid"     => @currentDjId,
+         "songid"   => @currentSongId,
+         "roomid"   => @roomId,
+         "site"     => 'queue',
+         "location" => 'board',
+         "in_queue" => false,
+         "blocked"  => false,
+         "vh"       => vh,
+         "sh"       => sh,
+         "fh"       => fh
+      }
+      _send(rq, callback)
    end
 
 
@@ -389,13 +406,25 @@ class Bot
       _send(rq, callback)
    end
 
-   # TODO
-   def getProfile
+   def getProfile(callback=nil)
+      rq = { "api" => 'user.get_profile'}
+      _send(rq, callback)
    end
 
-
-   # TODO
-   def modifyProfile
+   # Modify a user's profile
+   # 
+   # @param profile [Hash] The profile changes to apply
+   # @options profile [Hash] "name" User's name
+   # @options profile [Hash] "twitter" User's twitter account
+   # @options profile [Hash] "facebook" User's facebook account
+   # @options profile [Hash] "website" User's homepage
+   # @options profile [Hash] "about" User's about field
+   # @options profile [Hash] "topartists" User's top artists
+   # @options profile [Hash] "hangout" Room in which user usually hangs out in
+   def modifyProfile(profile, callback)
+      rq = {"api" => 'user.modify_profile'}
+      rq.merge! profile
+      _send(rq, callback)
    end
 
 
@@ -428,24 +457,27 @@ class Bot
       _send(rq, callback)
    end
 
-
    # TODO
-   def playlistAll
+   def playlistAll(callback=nil)
+
    end
 
 
    # TODO
-   def playlistAdd
+   def playlistAdd(callback=nil)
+
    end
 
 
    # TODO
-   def playlistRemove
+   def playlistRemove(callback=nil)
+
    end
 
 
    # TODO
-   def playlistReorder
+   def playlistReorder(callback=nil)
+
    end
 
 
