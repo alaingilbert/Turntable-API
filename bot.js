@@ -803,15 +803,4 @@ Bot.prototype.getStickerPlacements = function(userid, callback) {
     this._send(rq, callback);
 };
 
-Bot.prototype.placeStickers = function (placements, callback) {
-   	var rq = {
-   	    api: 'sticker.place',
-   	    placements: placements,
-   	    is_dj: true,
-   	    roomid: this.roomId
-   	};
-   	this._send(rq, callback);
-}
-
-
 exports.Bot = Bot;
