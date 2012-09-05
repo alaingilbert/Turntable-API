@@ -270,6 +270,10 @@ Authenticate the user.
 
 Get the current user's information.
 
+### userAvailableAvatars ( callback:fn )
+
+Get all available avatars.
+
 ### getFanOf ( callback:fn )
 
 Get the list of who you've become a fan of.

@@ -587,6 +587,11 @@ Bot.prototype.userInfo = function (callback) {
    this._send(rq, callback);
 };
 
+Bot.prototype.userAvailableAvatars = function (callback) {
+   var rq = { api: 'user.available_avatars' };
+   this._send(rq, callback);
+};
+
 Bot.prototype.getFanOf = function (callback) {
    var rq = { api: 'user.get_fan_of' };
    this._send(rq, callback);
