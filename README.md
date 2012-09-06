@@ -274,6 +274,10 @@ Get the current user's information.
 
 Get all available avatars.
 
+### getAvatarIds ( callback:fn )
+
+Get the avatar ids that the bot can currently use.
+
 ### getFanOf ( callback:fn )
 
 Get the list of who you've become a fan of.
