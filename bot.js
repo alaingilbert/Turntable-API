@@ -941,14 +941,14 @@ Bot.prototype.searchSong = function (q, callback) {
 
 
 Bot.prototype.getStickers = function(callback) {
-   var rq = { api: 'sticker.get' };
-   this._send(rq, callback);
+  var rq = { api: 'sticker.get' };
+  this._send(rq, callback);
 };
 
 
 Bot.prototype.getStickerPlacements = function(userid, callback) {
-   var rq = { api: 'sticker.get_placements', userid: userid};
-   this._send(rq, callback);
+  var rq = { api: 'sticker.get_placements', userid: userid};
+  this._send(rq, callback);
 };
 
 
