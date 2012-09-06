@@ -42,8 +42,8 @@ var Bot = function () {
   this.callback        = function () {};
   this.currentDjId     = null;
   this.currentSongId   = null;
-  this.lastHeartbeat   = new Date();
-  this.lastActivity    = new Date();
+  this.lastHeartbeat   = Date.now();
+  this.lastActivity    = Date.now();
   this.clientId        = Date.now() + '-0.59633534294921572';
   this._msgId          = 0;
   this._cmds           = [];
@@ -133,7 +133,7 @@ Bot.prototype.onMessage = function (msg) {
   var heartbeat_rgx = /~m~[0-9]+~m~(~h~[0-9]+)/;
   if (data.match(heartbeat_rgx)) {
     this._heartbeat(data.match(heartbeat_rgx)[1]);
-    this.lastHeartbeat = new Date();
+    this.lastHeartbeat = Date.now();
     this.updatePresence();
     return;
   }
@@ -160,7 +160,7 @@ Bot.prototype.onMessage = function (msg) {
     return;
   }
 
-  this.lastActivity = new Date();
+  this.lastActivity = Date.now();
 
   var len_rgx = /~m~([0-9]+)~m~/;
   var len = data.match(len_rgx)[1];
