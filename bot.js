@@ -592,6 +592,32 @@ Bot.prototype.userAvailableAvatars = function (callback) {
    this._send(rq, callback);
 };
 
+Bot.prototype.getAvatarIds = function(callback) {
+   var self = this;
+   self.userInfo(function(userInfos) {
+      var points = userInfos.points || -1;
+      var acl = userInfos.acl || 0;
+      self.userAvailableAvatars(function(avatars) {
+         var res = [];
+         for (var i = 0; i < avatars.avatars.length; i++) {
+            var avatar = avatars.avatars[i];
+            if (points >= avatar.min) {
+               if (avatar.acl && acl < avatar.acl) {
+                  continue;
+               }
+               for (var j = 0; j < avatar.avatarids.length; j++) {
+                  var id = avatar.avatarids[j];
+                  if (res.indexOf(id) === -1) {
+                     res.push(id);
+                  }
+               }
+            }
+         }
+         callback({ ids: res, success: true });
+      });
+   });
+};
+
 Bot.prototype.getFanOf = function (callback) {
    var rq = { api: 'user.get_fan_of' };
    this._send(rq, callback);
