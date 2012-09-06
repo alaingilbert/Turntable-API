@@ -2,4 +2,5 @@ examples/
 turntable_data/
 python_ttapi/
 ruby_ttapi/
+node_modules/
 *.default
