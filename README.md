@@ -18,10 +18,10 @@ var Bot = require('ttapi');
 var bot = new Bot(AUTH, USERID, ROOMID);
 
 bot.on('speak', function (data) {
-   // Respond to "/hello" command
-   if (data.text.match(/^\/hello$/)) {
-      bot.speak('Hey! How are you @'+data.name+' ?');
-   }
+  // Respond to "/hello" command
+  if (data.text.match(/^\/hello$/)) {
+    bot.speak('Hey! How are you @'+data.name+' ?');
+  }
 });
 ```
 

@@ -12,10 +12,10 @@ var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
 var bot = new Bot(AUTH, USERID, ROOMID);
 
 bot.on('speak', function (data) {
-   var text = data.text;
+  var text = data.text;
 
-   // Any command with "bop" in it will work (ex: "bop","bop i beg you!!!","lolbopbaby", etc.)
-   if (text.match(/bop/)) {
-      bot.vote('up');
-   }
+  // Any command with "bop" in it will work (ex: "bop","bop i beg you!!!","lolbopbaby", etc.)
+  if (text.match(/bop/)) {
+    bot.vote('up');
+  }
 });

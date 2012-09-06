@@ -9,7 +9,7 @@ bot.tcpListen(8080, '127.0.0.1');
 var myScriptVersion = 'V0.0.0';
 
 bot.on('tcpMessage', function (socket, msg) {
-   if (msg == 'version') {
-      socket.write('>> '+myScriptVersion+'\n');
-   }
+  if (msg == 'version') {
+    socket.write('>> '+myScriptVersion+'\n');
+  }
 });

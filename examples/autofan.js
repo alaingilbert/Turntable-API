@@ -12,5 +12,5 @@ var bot = new Bot(AUTH, USERID, ROOMID);
 bot.on('registered', function (data) {
 var name = data.user[0].name;
 var command = data.command; 
-    bot.becomeFan(data.user[0].userid);
+   bot.becomeFan(data.user[0].userid);
 });

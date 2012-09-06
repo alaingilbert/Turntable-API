@@ -14,54 +14,54 @@ var usersList = { };
 
 // Add everyone in the users list.
 bot.on('roomChanged',  function (data) {
-   usersList = { };
-   for (var i=0; i<data.users.length; i++) {
-      var user = data.users[i];
-      user.lastActivity = new Date();
-      usersList[user.userid] = user;
-   }
+  usersList = { };
+  for (var i=0; i<data.users.length; i++) {
+    var user = data.users[i];
+    user.lastActivity = Date.now();
+    usersList[user.userid] = user;
+  }
 });
 
 // Someone enter the room, add him.
 bot.on('registered',   function (data) {
-   var user = data.user[0];
-   user.lastActivity = new Date();
-   usersList[user.userid] = user;
+  var user = data.user[0];
+  user.lastActivity = Date.now();
+  usersList[user.userid] = user;
 });
 
 // Someone left, remove him from the users list.
 bot.on('deregistered', function (data) {
-   delete usersList[data.user[0].userid];
+  delete usersList[data.user[0].userid];
 });
 
 // Someone talk, update his timestamp.
 bot.on('speak', function (data) {
-   usersList[data.userid].lastActivity = new Date();
+  usersList[data.userid].lastActivity = Date.now();
 });
 
 // Someone vote, update his timestamp.
 bot.on('update_votes', function (data) {
-   var votelog = data.room.metadata.votelog;
-   for (var i=0; i<votelog.length; i++) {
-      var userid = votelog[i][0];
-      usersList[userid].lastActivity = new Date();
-   }
+  var votelog = data.room.metadata.votelog;
+  for (var i=0; i<votelog.length; i++) {
+    var userid = votelog[i][0];
+    usersList[userid].lastActivity = Date.now();
+  }
 });
 
 // Someone step up, update his timestamp.
 bot.on('add_dj', function (data) {
-   var user = data.user[0];
-   usersList[user.userid].lastActivity = new Date();
+  var user = data.user[0];
+  usersList[user.userid].lastActivity = Date.now();
 });
 
 // Someone step down, update his timestamp.
 bot.on('rem_dj', function (data) {
-   var user = data.user[0];
-   usersList[user.userid].lastActivity = new Date();
+  var user = data.user[0];
+  usersList[user.userid].lastActivity = Date.now();
 });
 
 // Someone add the surrent song to his playlist.
 bot.on('snagged', function (data) {
-   var userid = data.userid;
-   usersList[userid].lastActivity = new Date();
+  var userid = data.userid;
+  usersList[userid].lastActivity = Date.now();
 });
