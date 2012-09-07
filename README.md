@@ -359,7 +359,7 @@ Snag the song.
 
 This function will not add the song into the queue.
 
-### pm (msg:string, receiverId:string, [ callback:fn ] )
+### pm (msg:string, receiverId:string [, callback:fn] )
 
 Send a private message.
 
@@ -487,7 +487,7 @@ Get the information about a user stickers.
 bot.getStickerPlacements('4e0889d4a3f7517d1100af78', function (data) { console.log(data); });
 // https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/getstickerplacements.js
 ```
-### placeStickers ( placements:object, callback:fn )
+### placeStickers ( placements:object [, callback:fn] )
 
 Sets a users stickers.  The placements object is formatted the same as the placements object retrieved 
 in the getStickerPlacements callback.
@@ -495,13 +495,11 @@ in the getStickerPlacements callback.
 #### Example
 
 ```js
-var placements = 
-	[{ 
-		top: 126,
-		angle: 301.325931577,
-		sticker_id: '4f86fe84e77989117e000008',
-		left: 78 
-	}
-];
-bot.placeStickers(placements, function (data) { console.log(data); });
+var placements = [{
+  top: 126,
+  angle: -23.325931577,
+  sticker_id: '4f86fe84e77989117e000008',
+  left: 78
+}];
+bot.placeStickers(placements);
 ```

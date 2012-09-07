@@ -947,7 +947,16 @@ Bot.prototype.getStickers = function(callback) {
 
 
 Bot.prototype.getStickerPlacements = function(userid, callback) {
-  var rq = { api: 'sticker.get_placements', userid: userid};
+  var rq = { api: 'sticker.get_placements', userid: userid };
+  this._send(rq, callback);
+};
+
+
+Bot.prototype.placeStickers = function (placements, callback) {
+  var rq = { api: 'sticker.place',
+             placements: placements,
+             is_dj: true,
+             roomid: this.roomId };
   this._send(rq, callback);
 };
 
