@@ -487,7 +487,7 @@ Get the information about a user stickers.
 bot.getStickerPlacements('4e0889d4a3f7517d1100af78', function (data) { console.log(data); });
 // https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/getstickerplacements.js
 ```
-### placeStickers ( placements:object [, callback:fn] )
+### placeStickers ( placements:array.&lt;object&gt; [, callback:fn] )
 
 Sets a users stickers.  The placements object is formatted the same as the placements object retrieved 
 in the getStickerPlacements callback.
