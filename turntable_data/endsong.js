@@ -36,7 +36,7 @@
             }
          },
          "current_dj": "4deadb0f4fe7d013dc0555f1",
-         "votelog": []
+         "votelog": [['50661f0390001b4', 'up' ],[ '4df0cbe44fe7d2', 'up']]
       }
    },
    "success": true
