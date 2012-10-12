@@ -131,7 +131,9 @@ Triggered when there is no song.
 
 Triggered when a user votes.
 
-NOTE: If when a person awesomes, their userid is in the returned data. If they only lame, their userid is NOT listed. If first they awesome, then lame, their userid is listed.
+#### Note
+
+The userid is shown only if the user vote up, or changed his mind and then vote down.
 
 ### on('booted_user', function (data) { })
 
