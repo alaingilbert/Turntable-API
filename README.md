@@ -131,7 +131,7 @@ Triggered when there is no song.
 
 Triggered when a user votes.
 
-#### Note
+###### Note
 
 The userid is shown only if the user vote up, or changed his mind and then vote down.
 
@@ -194,7 +194,7 @@ Get the location of your friends/idols.
 
 Get the location of a user. If `allInformations` is `true`, you'll also receive the information about the room and the user.
 
-#### Warning
+###### Warning
 
 This function will make the bot become a fan of the user.
 
@@ -290,7 +290,7 @@ Get the list of who you've become a fan of.
 
 Returns an array of everyone who is a fan of yours.
 
-#### example
+##### example
 
 ```js
 bot.getFans(function (data) { console.log(data); });
@@ -301,7 +301,7 @@ bot.getFans(function (data) { console.log(data); });
 
 Get a user's id by his name.
 
-#### Example
+##### Example
 
 ```js
 bot.getUserId('@alain_gilbert', function (data) { console.log(data); });
@@ -317,7 +317,7 @@ Get a user's profile.
 
 Modify your profile. Any missing properties from the 'profile' object will be replaced with the current values.
 
-#### Arguments
+##### Arguments
 
 * `profile`:obj (required)
   * `name`:string (optional)
@@ -329,7 +329,7 @@ Modify your profile. Any missing properties from the 'profile' object will be re
   * `hangout`:string (optional)
 * `callback`:fn (optional)
 
-#### Examples
+##### Examples
 
 ```js
 bot.modifyProfile({ website:'http://ttdashboard.com/', about:'My bot.' }, callback);
@@ -359,7 +359,7 @@ Unfan someone.
 
 Snag the song.
 
-#### Warning
+###### Warning
 
 This function will not add the song into the queue.
 
@@ -379,12 +379,12 @@ Set your current status.
 
 Get all information about a playlist.
 
-#### Arguments
+##### Arguments
 
 * `playlistName` (optional) default: `default`
 * `callback` (required)
 
-#### Examples
+##### Examples
 
 ```js
 bot.playlistAll(callback);
@@ -402,7 +402,7 @@ Add a song to a playlist.
 * `index` (optional) default: `0`
 * `callback` (optional)
 
-#### Examples
+##### Examples
 
 ```js
 bot.playlistAdd(songId);
@@ -420,13 +420,13 @@ bot.playlistAdd(false, songId);           // Backward compatibility
 
 Remove a song on a playlist.
 
-#### Arguments
+##### Arguments
 
 * `playlistName` (optional) default: `default`
 * `index` (optional) default: `0`
 * `callback` (optional)
 
-#### Examples
+##### Examples
 ```js
 bot.playlistRemove();
 bot.playlistRemove(index);
@@ -439,14 +439,14 @@ bot.playlistRemove(playlistName, index, callback);
 
 Reorder a playlist. Take the song at index `indexFrom` and move it to index `indexTo`.
 
-#### Arguments
+##### Arguments
 
 * `playlistName` (optional) default: `default`
 * `indexFrom` (required) default: `0`
 * `indexTo` (required) default: `0`
 * `callback` (optional)
 
-#### Examples
+##### Examples
 
 ```js
 bot.playlistReorder(indexFrom, indexTo);
@@ -459,12 +459,12 @@ bot.playlistReorder(playlistName, indexFrom, indexTo, callback);
 
 Search for songs.
 
-#### Arguments
+##### Arguments
 
 * `query`
 * `callback`
 
-#### Examples
+##### Examples
 
 ```js
 bot.searchSong(query, callback);
@@ -474,7 +474,7 @@ bot.searchSong(query, callback);
 
 Get all stickers informations.
 
-#### Example
+##### Example
 
 ```js
 bot.getStickers(function (data) { console.log(data); });
@@ -485,7 +485,7 @@ bot.getStickers(function (data) { console.log(data); });
 
 Get the information about a user stickers.
 
-#### Example
+##### Example
 
 ```js
 bot.getStickerPlacements('4e0889d4a3f7517d1100af78', function (data) { console.log(data); });
@@ -496,7 +496,7 @@ bot.getStickerPlacements('4e0889d4a3f7517d1100af78', function (data) { console.l
 Sets a users stickers.  The placements object is formatted the same as the placements object retrieved 
 in the getStickerPlacements callback.
 
-#### Example
+##### Example
 
 ```js
 var placements = [{
