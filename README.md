@@ -361,7 +361,7 @@ Snag the song.
 
 ###### Warning
 
-This function will not add the song into the queue.
+This function will not add the song into the queue, only trigger the heart animation. Use this with a callback to `.playlistAdd`, or the latter method alone to queue a song;
 
 ### pm (msg:string, receiverId:string [, callback:fn] )
 
