@@ -1,3 +1,16 @@
+## Installation
+
+### Using pip
+
+    pip install ttapi
+
+### Via source
+
+Obtain the source by downloading from the web or cloning with git. In the
+directory containing setup.py run:
+
+    python setup.py install
+
 ## Examples
 
 ### Chat bot

@@ -10,9 +10,13 @@ import json
 import logging
 import threading
 
+__version__ = '0.1dev'
+
 logger = logging.getLogger("turntable-api")
 
-class Bot:
+class Bot(object):
+   HEARTBEAT_RE = re.compile('~m~[0-9]+~m~(~h~[0-9]+)')
+
    def __init__(self, auth, user_id, room_id):
       self.auth             = auth
       self.userId           = user_id
@@ -22,8 +26,8 @@ class Bot:
       self.currentDjId      = None
       self.currentSongId    = None
       self.lastHeartbeat    = time.time()
-      self.lastActivity     = time.time()
-      self.clientId         = '%s-0.59633534294921572' % time.time()
+      self.lastActivity     = self.lastHeartbeat
+      self.clientId         = '%s-0.59633534294921572' % self.lastHeartbeat
       self._msgId           = 0
       self._cmds            = []
       self._isConnected     = False
@@ -53,26 +57,28 @@ class Bot:
       self.tmpSong = { 'command': 'endsong', 'room': data.get('room'), 'success': True }
       
    def updatePresTmr(self):
-      threading.Timer(10, self.updatePresTmr).start() #Repeating updatePresence every 10s like in the NodeJS version
+      if not self.ws.sock:  # The websocket has been shutdown
+         return
       self.updatePresence()
+      threading.Timer(10, self.updatePresTmr).start() #Repeating updatePresence every 10s like in the NodeJS version
+
 
    def on_message(self, ws, msg):
-      heartbeat_rgx = '~m~[0-9]+~m~(~h~[0-9]+)'
-      if re.match(heartbeat_rgx, msg):
-         self._heartbeat(re.match(heartbeat_rgx, msg).group(1))
+      match = self.HEARTBEAT_RE.match(msg)
+      if match:
+         self._heartbeat(match.group(1))
          self.last_heartbeat = time.time()
-         self.updatePresence(None)
+         self.updatePresence()
          return
 
       if self.debug:
-         logger.debug(msg);
+         logger.debug(msg)
 
       if msg == '~m~10~m~no_session':
          def auth_clb(obj):
             if not self._isConnected:
                def fanof(data):
                   self.fanOf |= set(data['fanof'])
-                  self.updatePresence()
                   self.updatePresTmr() #Start the updatePresence timer
                   self.emit('ready')
                self.getFanOf(fanof)
@@ -82,8 +88,6 @@ class Bot:
          return
 
       self.lastActivity = time.time()
-      len_rgx = '~m~([0-9]+)~m~'
-      len = re.match(len_rgx, msg).group(1)
       obj = json.loads(msg[msg.index('{'):])
       for id, rq, clb in self._cmds:
          if id == obj.get('msgid'):
@@ -170,7 +174,7 @@ class Bot:
       msg = json.dumps(rq)
 
       if self.debug:
-         logger.debug(msg);
+         logger.debug(msg)
 
       self.ws.send('~m~%s~m~%s' % (len(msg), msg))
       self._cmds.append([self._msgId, rq, callback])
@@ -184,7 +188,7 @@ class Bot:
          callback(data[1]['chatserver'][0], data[1]['chatserver'][1])
       else:
          if self.debug:
-            logger.debug(msg);
+            logger.debug(data)
 
 
    def roomNow(self, callback=None):
@@ -593,4 +597,7 @@ class Bot:
 
 
    def start(self):
-      self.ws.run_forever()
+      try:
+         self.ws.run_forever()
+      except KeyboardInterrupt:
+         print('Interrupt received. Waiting for threads to exit.')
