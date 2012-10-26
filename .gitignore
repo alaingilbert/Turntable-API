@@ -3,3 +3,7 @@
 *.pyc
 settings.py
 node_modules/
+*.egg-info/
+_build/
+build/
+dist/
