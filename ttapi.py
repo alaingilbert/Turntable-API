@@ -17,40 +17,51 @@ logger = logging.getLogger("turntable-api")
 class Bot(object):
    HEARTBEAT_RE = re.compile('~m~[0-9]+~m~(~h~[0-9]+)')
 
-   def __init__(self, auth, user_id, room_id):
+   def __init__(self, auth, user_id, room_id=None):
       self.auth             = auth
       self.userId           = user_id
-      self.roomId           = room_id
+      self.roomId           = None
+      self.roomChatServer   = None
       self.debug            = False
       self.callback         = None
       self.currentDjId      = None
       self.currentSongId    = None
-      self.lastHeartbeat    = time.time()
-      self.lastActivity     = self.lastHeartbeat
-      self.clientId         = '%s-0.59633534294921572' % self.lastHeartbeat
+      self.lastActivity     = time.time()
+      self.clientId         = '%s-0.59633534294921572' % self.lastActivity
       self._msgId           = 0
       self._cmds            = []
       self._isConnected     = False
       self.fanOf            = set()
       self.currentStatus    = 'available'
       self.signals = {}
+      self.ws = None
 
-      self.connect(self.roomId)
+      if room_id:
+         self.connect(room_id)
 
 
    def connect(self, roomId):
-      def clb(host, port):
-         url = 'ws://%s:%s/socket.io/websocket' % (host, port)
-         # TODO: Check the encoding...
-         url = url.decode('iso-8859-1').encode('utf8')
-         self.ws = websocket.WebSocketApp(url, on_message=self.on_message)
-         if self.roomId:
-            def clb1():
-               rq = { 'api': 'room.register', 'roomid': self.roomId }
-               self._send(rq, None)
-            self.callback = clb1
+      def clb():
+         rq = { 'api': 'room.register', 'roomid': roomId }
+         self._send(rq, None)
 
-      self.whichServer(roomId, clb)
+      chat_server = self.whichServer(roomId)
+      if not chat_server:
+         return False
+      self.roomChatServer = chat_server
+      url = 'ws://%s:%s/socket.io/websocket' % tuple(self.roomChatServer)
+
+      # Disconnect from existing chat server if necessary
+      if self.ws and url != self.ws.url:
+         self.ws.close()
+         self._isConnected = False
+
+      if not self._isConnected:  # Connect if necessary
+         self.ws = websocket.WebSocketApp(url, on_message=self.on_message)
+         self.callback = clb
+      else:  # Directly register for the room
+         clb()
+      return True
 
 
    def setTmpSong(self, data):
@@ -67,7 +78,6 @@ class Bot(object):
       match = self.HEARTBEAT_RE.match(msg)
       if match:
          self._heartbeat(match.group(1))
-         self.last_heartbeat = time.time()
          self.updatePresence()
          return
 
@@ -112,6 +122,7 @@ class Bot(object):
             elif rq['api'] == 'room.deregister':
                if obj['success']:
                   self.roomId = None
+                  self.roomChatServer = None
 
             if clb: clb(obj)
 
@@ -181,14 +192,15 @@ class Bot(object):
       self._msgId += 1
 
 
-   def whichServer(self, roomId, callback):
+   def whichServer(self, roomId):
       dataStr = urllib2.urlopen('http://turntable.fm:80/api/room.which_chatserver?roomid=%s' % roomId).read()
       data = json.loads(dataStr)
       if data[0]:
-         callback(data[1]['chatserver'][0], data[1]['chatserver'][1])
+         return data[1]['chatserver']
       else:
          if self.debug:
             logger.debug(data)
+      return False
 
 
    def roomNow(self, callback=None):
@@ -264,8 +276,8 @@ class Bot(object):
       self._send(rq, callback)
 
 
-   def roomRegister(self):
-      pass
+   def roomRegister(self, roomId):
+      self.connect(roomId)
 
 
    def roomDeregister(self, callback=None):
@@ -598,6 +610,7 @@ class Bot(object):
 
    def start(self):
       try:
-         self.ws.run_forever()
+         while self.ws:
+            self.ws.run_forever()
       except KeyboardInterrupt:
          print('Interrupt received. Waiting for threads to exit.')
