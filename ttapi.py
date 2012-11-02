@@ -177,7 +177,6 @@ class Bot(object):
 
    def _heartbeat(self, msg):
       self.ws.send('~m~%s~m~%s' % (len(msg), msg))
-      self._msgId += 1
 
 
    def _send(self, rq, callback=None):
