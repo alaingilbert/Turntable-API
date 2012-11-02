@@ -8,7 +8,6 @@ import random
 import re
 import json
 import logging
-import threading
 
 __version__ = '0.1dev'
 
@@ -16,6 +15,7 @@ logger = logging.getLogger("turntable-api")
 
 class Bot(object):
    HEARTBEAT_RE = re.compile('~m~[0-9]+~m~(~h~[0-9]+)')
+   HEARTBEAT_INTERVAL = 10
 
    def __init__(self, auth, user_id, room_id=None):
       self.auth             = auth
@@ -27,6 +27,7 @@ class Bot(object):
       self.currentDjId      = None
       self.currentSongId    = None
       self.lastActivity     = time.time()
+      self.lastHeartbeat    = self.lastActivity
       self.clientId         = '%s-0.59633534294921572' % self.lastActivity
       self._msgId           = 0
       self._cmds            = []
@@ -66,13 +67,6 @@ class Bot(object):
 
    def setTmpSong(self, data):
       self.tmpSong = { 'command': 'endsong', 'room': data.get('room'), 'success': True }
-      
-   def updatePresTmr(self):
-      if not self.ws.sock:  # The websocket has been shutdown
-         return
-      self.updatePresence()
-      threading.Timer(10, self.updatePresTmr).start() #Repeating updatePresence every 10s like in the NodeJS version
-
 
    def on_message(self, ws, msg):
       match = self.HEARTBEAT_RE.match(msg)
@@ -89,7 +83,7 @@ class Bot(object):
             if not self._isConnected:
                def fanof(data):
                   self.fanOf |= set(data['fanof'])
-                  self.updatePresTmr() #Start the updatePresence timer
+                  self.updatePresence(force=True)
                   self.emit('ready')
                self.getFanOf(fanof)
             self.callback()
@@ -97,7 +91,11 @@ class Bot(object):
          self.userAuthenticate(auth_clb)
          return
 
-      self.lastActivity = time.time()
+      # Always attempt to update our presence
+      now = time.time()
+      self.updatePresence(now=now)
+
+      self.lastActivity = now
       obj = json.loads(msg[msg.index('{'):])
       for id, rq, clb in self._cmds:
          if id == obj.get('msgid'):
@@ -208,7 +206,13 @@ class Bot(object):
       self._send(rq, callback)
 
 
-   def updatePresence(self, callback=None):
+   def updatePresence(self, callback=None, force=False, now=None):
+      if not now:
+         now = time.time()
+      # Only update if required
+      if not force and now < self.lastHeartbeat + self.HEARTBEAT_INTERVAL:
+         return
+      self.lastHeartbeat = now
       rq = { 'api': 'presence.update', 'status': self.currentStatus }
       self._send(rq, callback)
 
@@ -592,8 +596,7 @@ class Bot(object):
 
    def setStatus(self, st, callback=None):
       self.currentStatus = st
-      self.updatePresence()
-      if callback: callback({ 'success': True })
+      self.updatePresence(callback, force=True)
 
 
    def emit(self, signal, data=None):
@@ -613,4 +616,4 @@ class Bot(object):
          while self.ws:
             self.ws.run_forever()
       except KeyboardInterrupt:
-         print('Interrupt received. Waiting for threads to exit.')
+         print('Interrupt received.')
