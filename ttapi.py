@@ -9,7 +9,7 @@ import re
 import json
 import logging
 
-__version__ = '0.1dev'
+__version__ = '0.1'
 
 logger = logging.getLogger("turntable-api")
 
@@ -17,17 +17,23 @@ class Bot(object):
    HEARTBEAT_RE = re.compile('~m~[0-9]+~m~(~h~[0-9]+)')
    HEARTBEAT_INTERVAL = 10
 
-   def __init__(self, auth, user_id, room_id=None):
+   def __init__(self, auth, user_id, room_id=None, rate_limit=None):
+      """Create an instance of the Bot.
+
+         rate_limit, when set, should be a float of the time required between
+         requests."""
       self.auth             = auth
       self.userId           = user_id
       self.roomId           = None
       self.roomChatServer   = None
+      self.rateLimit        = rate_limit
       self.debug            = False
       self.callback         = None
       self.currentDjId      = None
       self.currentSongId    = None
       self.lastActivity     = time.time()
       self.lastHeartbeat    = self.lastActivity
+      self.lastSend         = self.lastActivity
       self.clientId         = '%s-0.59633534294921572' % self.lastActivity
       self._msgId           = 0
       self._cmds            = []
@@ -184,6 +190,16 @@ class Bot(object):
 
       if self.debug:
          logger.debug(msg)
+
+      # Perform rate limiting
+      if self.rateLimit:
+         now = time.time()
+         sleep_time = self.rateLimit - now + self.lastSend
+         if sleep_time > 0:
+            time.sleep(sleep_time)
+            self.lastSend = now + sleep_time
+         else:
+            self.lastSend = now
 
       self.ws.send('~m~%s~m~%s' % (len(msg), msg))
       self._cmds.append([self._msgId, rq, callback])
