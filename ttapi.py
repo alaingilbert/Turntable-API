@@ -40,6 +40,7 @@ class Bot(object):
         self._cmds = []
         self._isConnected = False
         self.fanOf = set()
+        self.tmpSong = None
         self.currentStatus = 'available'
         self.signals = {}
         self.ws = None
@@ -74,7 +75,7 @@ class Bot(object):
         self.tmpSong = {'command': 'endsong', 'room': data.get('room'),
                         'success': True}
 
-    def on_message(self, ws, msg):
+    def on_message(self, _, msg):
         match = self.HEARTBEAT_RE.match(msg)
         if match:
             self._heartbeat(match.group(1))
@@ -85,7 +86,7 @@ class Bot(object):
             logger.debug(msg)
 
         if msg == '~m~10~m~no_session':
-            def auth_clb(obj):
+            def auth_clb(_):
                 if not self._isConnected:
                     def fanof(data):
                         self.fanOf |= set(data['fanof'])
@@ -103,16 +104,17 @@ class Bot(object):
 
         self.lastActivity = now
         obj = json.loads(msg[msg.index('{'):])
-        for id, rq, clb in self._cmds:
-            if id == obj.get('msgid'):
+        for cmd_id, rq, clb in self._cmds:
+            if cmd_id == obj.get('msgid'):
                 if rq['api'] == 'room.info':
                     if obj['success']:
-                        currentDj = obj['room']['metadata']['current_dj']
+                        metadata = obj['room']['metadata']
+                        self.currentDjId = metadata['current_dj']
                         currentSong = obj['room']['metadata']['current_song']
-                        if currentDj:
-                            self.currentDj = currentDj
                         if currentSong:
                             self.currentSongId = currentSong.get('_id')
+                        else:
+                            self.currentSongId = None
 
                 elif rq['api'] == 'room.register':
                     if obj['success']:
@@ -134,7 +136,7 @@ class Bot(object):
                 if clb:
                     clb(obj)
 
-                self._cmds.remove([id, rq, clb])
+                self._cmds.remove([cmd_id, rq, clb])
                 break
 
         if obj.get('command') == 'registered':
