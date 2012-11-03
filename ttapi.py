@@ -148,49 +148,26 @@ class Bot(object):
                 self._cmds.remove([cmd_id, rq, clb])
                 break
 
-        if obj.get('command') == 'registered':
-            self.emit('registered', obj)
-        elif obj.get('command') == 'deregistered':
-            self.emit('deregistered', obj)
-        elif obj.get('command') == 'speak':
-            self.emit('speak', obj)
-        elif obj.get('command') == 'pmmed':
-            self.emit('pmmed', obj)
-        elif obj.get('command') == 'nosong':
+        command = obj.get('command')
+        # Handle special cases
+        if command == 'nosong':
             self.currentDjId = None
             self.currentSongId = None
             self.emit('endsong', self.tmpSong)
-            self.emit('nosong', obj)
-        elif obj.get('command') == 'newsong':
+        elif command == 'newsong':
             if self.currentSongId:
                 self.emit('endsong', self.tmpSong)
             self.currentDjId = obj['room']['metadata']['current_dj']
             self.currentSongId = obj['room']['metadata']['current_song']['_id']
             self.setTmpSong(obj)
-            self.emit('newsong', obj)
-        elif obj.get('command') == 'update_votes':
+        elif command == 'update_votes':
             if self.tmpSong:
                 to_update = self.tmpSong['room']['metadata']
                 to_update['upvotes'] = obj['room']['metadata']['upvotes']
                 to_update['downvotes'] = obj['room']['metadata']['downvotes']
                 to_update['listeners'] = obj['room']['metadata']['listeners']
-            self.emit('update_votes', obj)
-        elif obj.get('command') == 'booted_user':
-            self.emit('booted_user', obj)
-        elif obj.get('command') == 'update_user':
-            self.emit('update_user', obj)
-        elif obj.get('command') == 'add_dj':
-            self.emit('add_dj', obj)
-        elif obj.get('command') == 'rem_dj':
-            self.emit('rem_dj', obj)
-        elif obj.get('command') == 'new_moderator':
-            self.emit('new_moderator', obj)
-        elif obj.get('command') == 'rem_moderator':
-            self.emit('rem_moderator', obj)
-        elif obj.get('command') == 'snagged':
-            self.emit('snagged', obj)
-
-        # Send after processing messages
+        # Always trigger the callbacks for the command
+        self.emit(command, obj)
         self.emit('post_message', (msg, obj))
 
     def _heartbeat(self, msg):
