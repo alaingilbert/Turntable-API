@@ -301,7 +301,6 @@ Bot.prototype.onMessage = function (msg) {
 
 Bot.prototype._heartbeat = function (msg) {
   this.ws.send('~m~'+msg.length+'~m~'+msg);
-  this._msgId++;
 };
 
 
