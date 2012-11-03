@@ -76,34 +76,43 @@ class Bot(object):
                         'success': True}
 
     def on_message(self, _, msg):
-        match = self.HEARTBEAT_RE.match(msg)
-        if match:
-            self._heartbeat(match.group(1))
-            self.updatePresence()
-            return
+        # Make lastActivity store the time the most recent message was received
+        self.lastActivity = time.time()
 
         if self.debug:
             logger.debug(msg)
 
-        if msg == '~m~10~m~no_session':
+        try:
+            obj = json.loads(msg[msg.index('{'):])
+        except ValueError:  # Handles both index and json errors
+            obj = None
+
+        # 'pre_message' and 'post_message' callbacks are passed a touple
+        # containing the original message and the parsed json data (if any)
+        self.emit('pre_message', (msg, obj))
+
+        match = self.HEARTBEAT_RE.match(msg)
+        if match:
+            self._heartbeat(match.group(1))
+            self.updatePresence(now=self.lastActivity)
+            self.emit('post_message', (msg, obj))
+            return
+        elif msg == '~m~10~m~no_session':
             def auth_clb(_):
                 if not self._isConnected:
                     def fanof(data):
                         self.fanOf |= set(data['fanof'])
-                        self.updatePresence(force=True)
+                        self.updatePresence(force=True, now=self.lastActivity)
                         self.emit('ready')
                     self.getFanOf(fanof)
                 self.callback()
                 self._isConnected = True
             self.userAuthenticate(auth_clb)
+            self.emit('post_message', (msg, obj))
             return
 
         # Always attempt to update our presence
-        now = time.time()
-        self.updatePresence(now=now)
-
-        self.lastActivity = now
-        obj = json.loads(msg[msg.index('{'):])
+        self.updatePresence(now=self.lastActivity)
         for cmd_id, rq, clb in self._cmds:
             if cmd_id == obj.get('msgid'):
                 if rq['api'] == 'room.info':
@@ -139,49 +148,32 @@ class Bot(object):
                 self._cmds.remove([cmd_id, rq, clb])
                 break
 
-        if obj.get('command') == 'registered':
-            self.emit('registered', obj)
-        elif obj.get('command') == 'deregistered':
-            self.emit('deregistered', obj)
-        elif obj.get('command') == 'speak':
-            self.emit('speak', obj)
-        elif obj.get('command') == 'pmmed':
-            self.emit('pmmed', obj)
-        elif obj.get('command') == 'nosong':
+        command = obj.get('command')
+        # Handle special cases
+        if command == 'nosong':
             self.currentDjId = None
             self.currentSongId = None
             self.emit('endsong', self.tmpSong)
-            self.emit('nosong', obj)
-        elif obj.get('command') == 'newsong':
+        elif command == 'newsong':
             if self.currentSongId:
                 self.emit('endsong', self.tmpSong)
             self.currentDjId = obj['room']['metadata']['current_dj']
             self.currentSongId = obj['room']['metadata']['current_song']['_id']
             self.setTmpSong(obj)
-            self.emit('newsong', obj)
-        elif obj.get('command') == 'update_votes':
+        elif command == 'update_votes':
             if self.tmpSong:
                 to_update = self.tmpSong['room']['metadata']
                 to_update['upvotes'] = obj['room']['metadata']['upvotes']
                 to_update['downvotes'] = obj['room']['metadata']['downvotes']
                 to_update['listeners'] = obj['room']['metadata']['listeners']
-            self.emit('update_votes', obj)
-        elif obj.get('command') == 'booted_user':
-            self.emit('booted_user', obj)
-        elif obj.get('command') == 'update_user':
-            self.emit('update_user', obj)
-        elif obj.get('command') == 'add_dj':
-            self.emit('add_dj', obj)
-        elif obj.get('command') == 'rem_dj':
-            self.emit('rem_dj', obj)
-        elif obj.get('command') == 'new_moderator':
-            self.emit('new_moderator', obj)
-        elif obj.get('command') == 'rem_moderator':
-            self.emit('rem_moderator', obj)
-        elif obj.get('command') == 'snagged':
-            self.emit('snagged', obj)
+        # Always trigger the callbacks for the command
+        self.emit(command, obj)
+        self.emit('post_message', (msg, obj))
 
     def _heartbeat(self, msg):
+        if self.debug:
+            logger.debug(msg)
+
         self.ws.send('~m~%s~m~%s' % (len(msg), msg))
 
     def _send(self, rq, callback=None):
@@ -197,7 +189,7 @@ class Bot(object):
 
         # Perform rate limiting
         if self.rateLimit:
-            now = time.time()
+            now = time.time()  # We can't use lastActivity here
             sleep_time = self.rateLimit - now + self.lastSend
             if sleep_time > 0:
                 time.sleep(sleep_time)
@@ -301,8 +293,9 @@ class Bot(object):
         rq = {'api': 'room.deregister', 'roomid': self.roomId}
         self._send(rq, callback)
 
-    def roomInfo(self, *args):
-        rq = {'api': 'room.info', 'roomid': self.roomId}
+    def roomInfo(self, *args, **kwargs):
+        room_id = kwargs.get('room_id', self.roomId)
+        rq = {'api': 'room.info', 'roomid': room_id}
         callback = None
         if len(args) == 1:
             if callable(args[0]):
