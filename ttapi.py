@@ -293,8 +293,9 @@ class Bot(object):
         rq = {'api': 'room.deregister', 'roomid': self.roomId}
         self._send(rq, callback)
 
-    def roomInfo(self, *args):
-        rq = {'api': 'room.info', 'roomid': self.roomId}
+    def roomInfo(self, *args, **kwargs):
+        room_id = kwargs.get('room_id', self.roomId)
+        rq = {'api': 'room.info', 'roomid': room_id}
         callback = None
         if len(args) == 1:
             if callable(args[0]):
