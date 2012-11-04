@@ -1,0 +1,6 @@
+[
+    ["", ["pre_message", ["{\"command\": \"newsong\", \"room\": {\"metadata\": {\"current_song\": {\"_id\": 1}, \"current_dj\": 1}}}", {"command": "newsong", "room": {"metadata": {"current_song": {"_id": 1}, "current_dj": 1}}}]], {}],
+    ["", ["endsong", {"room": {"metadata": {"current_song": {"_id": 1}, "current_dj": 1}}}], {}],
+    ["", ["newsong", {"command": "newsong", "room": {"metadata": {"current_song": {"_id": 1}, "current_dj": 1}}}], {}],
+    ["", ["post_message", ["{\"command\": \"newsong\", \"room\": {\"metadata\": {\"current_song\": {\"_id\": 1}, \"current_dj\": 1}}}", {"command": "newsong", "room": {"metadata": {"current_song": {"_id": 1}, "current_dj": 1}}}]], {}]
+]

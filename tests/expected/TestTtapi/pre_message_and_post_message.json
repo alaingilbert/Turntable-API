@@ -1,0 +1,5 @@
+[
+    ["", ["pre_message", ["{\"command\":\"test\"}", {"command": "test"}]], {}],
+    ["", ["test", {"command": "test"}], {}],
+    ["", ["post_message", ["{\"command\":\"test\"}", {"command": "test"}]], {}]
+]
