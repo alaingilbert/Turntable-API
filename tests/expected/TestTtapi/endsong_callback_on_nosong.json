@@ -1,31 +1,6 @@
 [
-    [
-        "",
-        [
-            "pre_message",
-            [ "{\"command\":\"nosong\"}",
-              { "command": "nosong" }
-            ]
-        ],
-        {}
-    ],
-    [
-        "",
-        [ "endsong", null ],
-        {}
-    ],
-    [
-        "",
-        [ "nosong", { "command": "nosong" } ],
-        {}
-    ],
-    [
-        "",
-        [ "post_message",
-            [ "{\"command\":\"nosong\"}",
-              { "command": "nosong" }
-            ]
-        ],
-        {}
-    ]
+    [ "", [ "pre_message", [ "{\"command\":\"nosong\"}", { "command": "nosong" } ] ], {} ],
+    [ "", [ "endsong", null ], {} ],
+    [ "", [ "nosong", { "command": "nosong" } ], {} ],
+    [ "", [ "post_message", [ "{\"command\":\"nosong\"}", { "command": "nosong" } ] ], {} ]
 ]
