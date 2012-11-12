@@ -240,7 +240,7 @@ Add a moderator.
 
 ### remModerator ( userId:string [, callback:fn] )
 
-Remove a moderator.
+Remove a moderator. (Note the person does NOT have to be in the room to remove their moderator status.)
 
 ### addDj ( [callback:fn] )
 
