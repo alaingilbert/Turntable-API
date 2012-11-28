@@ -5,6 +5,8 @@ You'll need to find your `AUTH`, `USERID` and `ROOMID` information with [this bo
 
 Ttapi is also available in [Python](https://github.com/alaingilbert/Turntable-API/tree/python_ttapi) and [Ruby](https://github.com/alaingilbert/Turntable-API/tree/ruby_ttapi).
 
+See also [turntabler](https://github.com/obrie/turntabler) (Ruby) maintained by [obrie](https://github.com/obrie).
+
 ## Installation
     npm install ttapi
 If you are having problems with npm (like with Windows nodejs or portable versions), just clone the repo and edit the templates in the 'examples' folder!
