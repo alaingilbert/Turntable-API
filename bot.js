@@ -390,6 +390,40 @@ Bot.prototype.directoryGraph = function (callback) {
 };
 
 
+Bot.prototype.directoryRooms = function (options, callback) {
+  if(typeof(options) !== "object") {
+    callback = options;
+    options = {};
+  }
+
+  options.client = "web"
+
+  var query = [];
+  for(opt in options) {
+    query.push(opt+'='+encodeURIComponent(options[opt]));
+  }
+
+  var self = this;
+  var httpOptions = { host: 'turntable.fm', port: 80,
+                  path: '/api/room.directory_rooms?'+query.join("&") };
+  http.get(httpOptions, function (res) {
+    var dataStr = '';
+    res.on('data', function (chunk) {
+      dataStr += chunk.toString();
+    });
+    res.on('end', function () {
+      var data;
+      try {
+        data = JSON.parse(dataStr);
+      } catch (e) {
+        data = [];
+      }
+      callback.call(self, data);
+    });
+  });
+};
+
+
 Bot.prototype.stalk = function () {
   var self     = this
     , userId   = ''
