@@ -194,6 +194,16 @@ Get 20 rooms.
 
 Get the location of your friends/idols.
 
+### directoryRooms( options:obj callback:fn )
+
+Get a directory of rooms
+
+##### options
+
+* `limit` - The number of rooms to return
+* `section_aware`
+* `sort` - What to sort by
+
 ### stalk ( userId:string [, allInformations=false:bool ], callback:fn )
 
 Get the location of a user. If `allInformations` is `true`, you'll also receive the information about the room and the user.
