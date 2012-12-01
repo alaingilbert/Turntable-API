@@ -194,7 +194,7 @@ Get 20 rooms.
 
 Get the location of your friends/idols.
 
-### directoryRooms( options:obj callback:fn )
+### directoryRooms( options:obj, callback:fn )
 
 Get a directory of rooms
 

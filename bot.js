@@ -391,21 +391,21 @@ Bot.prototype.directoryGraph = function (callback) {
 
 
 Bot.prototype.directoryRooms = function (options, callback) {
-  if(typeof(options) !== "object") {
+  if (typeof options !== 'object') {
     callback = options;
     options = {};
   }
 
-  options.client = "web"
+  options.client = 'web';
 
   var query = [];
-  for(opt in options) {
-    query.push(opt+'='+encodeURIComponent(options[opt]));
+  for (opt in options) {
+    query.push(opt + '=' + encodeURIComponent(options[opt]));
   }
 
   var self = this;
   var httpOptions = { host: 'turntable.fm', port: 80,
-                  path: '/api/room.directory_rooms?'+query.join("&") };
+                      path: '/api/room.directory_rooms?' + query.join("&") };
   http.get(httpOptions, function (res) {
     var dataStr = '';
     res.on('data', function (chunk) {
