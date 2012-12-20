@@ -116,15 +116,15 @@ class Bot(object):
         for cmd_id, rq, clb in self._cmds:
             if cmd_id == obj.get('msgid'):
                 if rq['api'] == 'room.info':
-                    if obj['success']:
+                    if obj['success'] and obj['room']['roomid'] == self.roomId:
+                        # Update information about the room the bot is in
                         metadata = obj['room']['metadata']
                         self.currentDjId = metadata['current_dj']
-                        currentSong = obj['room']['metadata']['current_song']
+                        currentSong = metadata['current_song']
                         if currentSong:
                             self.currentSongId = currentSong.get('_id')
                         else:
                             self.currentSongId = None
-
                 elif rq['api'] == 'room.register':
                     if obj['success']:
                         self.roomId = rq['roomid']
