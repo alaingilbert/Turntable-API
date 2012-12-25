@@ -265,6 +265,10 @@ Bot.prototype.onMessage = function (msg) {
       this.emit('add_dj', json);
       break;
     case 'rem_dj':
+      if (json.modid) {
+        json['command'] = 'escort';
+        this.emit('escort', json);
+      }
       this.emit('rem_dj', json);
       break;
     case 'new_moderator':

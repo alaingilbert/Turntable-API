@@ -155,6 +155,10 @@ Triggered when a user takes a dj spot.
 
 Triggered when a user leaves a dj spot.
 
+### on('escort', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/escort.js)) { })
+
+Triggered when a user is escorted off the stage.
+
 ### on('new_moderator', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/new_moderator.js)) { })
 
 Triggered when a user is promoted to a moderator.
