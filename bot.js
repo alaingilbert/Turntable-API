@@ -381,16 +381,16 @@ Bot.prototype.updatePresence = function (callback) {
 };
 
 
-Bot.prototype.listRooms = function (skip, section_aware, callback) {
+Bot.prototype.listRooms = function (skip, sectionAware, callback) {
   skip = skip !== undefined ? skip : 0;
   // so we don't break code from previous revisions
-  if('function' === typeof section_aware && undefined === callback) {
-    callback = section_aware;
-    section_aware = false;
+  if (typeof sectionAware == 'function' && callback == undefined) {
+    callback = sectionAware;
+    sectionAware = false;
+  } else if (typeof sectionAware != 'boolean') {
+    sectionAware = false;
   }
-  else if('boolean' !== typeof section_aware)
-    section_aware = false;
-  var rq = { api: 'room.list_rooms', skip: skip, section_aware: section_aware };
+  var rq = { api: 'room.list_rooms', skip: skip, section_aware: sectionAware };
   this._send(rq, callback);
 };
 
