@@ -58,7 +58,7 @@ class Bot
                  .update(Math.random().toString())
                  .digest('hex').substr(0, 24)
 
-    @connect(@roomId or randomHash)
+    @connect(@roomId ? randomHash)
 
 
   log: (message) ->
@@ -246,7 +246,7 @@ class Bot
   _send: (rq, callback) ->
     rq.msgid    = @_msgId
     rq.clientid = @clientId
-    rq.userid   = rq.userid or @userId
+    rq.userid  ?= @userId
     rq.userauth = @auth
 
     msg = JSON.stringify(rq)
@@ -532,8 +532,8 @@ class Bot
 
 
   vote: (val, callback) ->
-    val      = arguments[0] or 'up'
-    callback = arguments[1] or null
+    val      = arguments[0] ? 'up'
+    callback = arguments[1] ? null
     vh       = crypto.createHash("sha1")
                      .update(@roomId + val + @currentSongId)
                      .digest('hex')
@@ -574,8 +574,8 @@ class Bot
 
   getAvatarIds: (callback) ->
     @userInfo (userInfos) ->
-      points = userInfos.points or -1
-      acl = userInfos.acl or 0
+      points = userInfos.points ? -1
+      acl = userInfos.acl ? 0
       @userAvailableAvatars (avatars) ->
         res = []
         for avatar in avatars.avatars
@@ -630,7 +630,7 @@ class Bot
 
 
   modifyLaptop: (laptop, callback) ->
-    laptop = laptop or 'linux'
+    laptop = laptop ? 'linux'
     rq = api: 'user.modify', laptop: laptop
     @_send rq, callback
 
