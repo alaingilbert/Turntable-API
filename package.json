@@ -9,7 +9,7 @@
     "type": "git",
     "url": "git://github.com/alaingilbert/Turntable-API.git"
   },
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "start": "./examples/chat_bot.js"
   },
