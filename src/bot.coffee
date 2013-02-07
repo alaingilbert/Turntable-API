@@ -72,38 +72,33 @@ class Bot
   connect: (roomId) ->
     if not /^[0-9a-f]{24}$/.test(roomId)
       throw new Error "Invalid roomId: cannot connect to '#{roomId}'"
-    @which_server roomId, (host, port) ->
+    @whichServer roomId, (host, port) ->
       url  = "ws://#{host}:#{port}/socket.io/websocket"
       @ws = new WebSocket(url)
       @ws.onmessage = @onMessage.bind(@)
       @ws.onclose = @onClose.bind(@)
 
 
-  listen: (port, address) ->
+  whichServer: (roomid, callback) ->
     self = @
-    http.createServer((req, res) ->
+    options =
+      host: 'turntable.fm'
+      port: 80
+      path: "/api/room.which_chatserver?roomid=#{roomid}"
+    http.get options, (res) ->
       dataStr = ''
-      req.on 'data', (chunk) ->
+      res.on 'data', (chunk) ->
         dataStr += chunk.toString()
-      req.on 'end', ->
-        data = querystring.parse(dataStr)
-        req._POST = data
-        self.emit('httpRequest', req, res)
-    ).listen(port, address)
-
-
-  tcpListen: (port, address) ->
-    self = @
-    net.createServer((socket) ->
-      socket.on 'connect', ->
-        self.emit('tcpConnect', socket)
-      socket.on 'data', (data) ->
-        msg = data.toString()
-        if msg[msg.length - 1] == '\n'
-          self.emit('tcpMessage', socket, msg.substr(0, msg.length-1))
-      socket.on 'end', ->
-        self.emit('tcpEnd', socket)
-    ).listen(port, address)
+      res.on 'end', ->
+        try
+          data = JSON.parse dataStr
+        catch err
+          data = []
+        if data[0]
+          [host, port] = data[1].chatserver
+          callback.call(self, host, port)
+        else
+          @log "Failed to determine which server to use: #{dataStr}"
 
 
   setTmpSong: (data) ->
@@ -263,29 +258,35 @@ class Bot
     @_msgId++
 
 
-  which_server: (roomid, callback) ->
-    self = @
-    options =
-      host: 'turntable.fm'
-      port: 80
-      path: "/api/room.which_chatserver?roomid=#{roomid}"
-    http.get options, (res) ->
-      dataStr = ''
-      res.on 'data', (chunk) ->
-        dataStr += chunk.toString()
-      res.on 'end', ->
-        try
-          data = JSON.parse dataStr
-        catch err
-          data = []
-        if data[0]
-          callback.call(self, data[1].chatserver[0], data[1].chatserver[1])
-        else
-          @log "Failed to determine which server to use: #{dataStr}"
-
-
   close: ->
     @ws.close()
+
+
+  listen: (port, address) ->
+    self = @
+    http.createServer((req, res) ->
+      dataStr = ''
+      req.on 'data', (chunk) ->
+        dataStr += chunk.toString()
+      req.on 'end', ->
+        data = querystring.parse(dataStr)
+        req._POST = data
+        self.emit('httpRequest', req, res)
+    ).listen(port, address)
+
+
+  tcpListen: (port, address) ->
+    self = @
+    net.createServer((socket) ->
+      socket.on 'connect', ->
+        self.emit('tcpConnect', socket)
+      socket.on 'data', (data) ->
+        msg = data.toString()
+        if msg[msg.length - 1] == '\n'
+          self.emit('tcpMessage', socket, msg.substr(0, msg.length-1))
+      socket.on 'end', ->
+        self.emit('tcpEnd', socket)
+    ).listen(port, address)
 
 
   roomNow: (callback) ->
@@ -618,13 +619,13 @@ class Bot
 
   modifyProfile: (profile, callback) ->
     rq = api: 'user.modify_profile'
-    if profile.name       then rq.name       = profile.name
-    if profile.twitter    then rq.twitter    = profile.twitter
-    if profile.facebook   then rq.facebook   = profile.facebook
-    if profile.website    then rq.website    = profile.website
-    if profile.about      then rq.about      = profile.about
-    if profile.topartists then rq.topartists = profile.topartists
-    if profile.hangout    then rq.hangout    = profile.hangout
+    rq.name       = profile.name if profile.name
+    rq.twitter    = profile.twitter if profile.twitter
+    rq.facebook   = profile.facebook if profile.facebook
+    rq.website    = profile.website if profile.website
+    rq.about      = profile.about if profile.about
+    rq.topartists = profile.topartists if profile.topartists
+    rq.hangout    = profile.hangout if profile.hangout
     @_send rq, callback
 
 
