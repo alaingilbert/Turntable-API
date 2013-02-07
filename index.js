@@ -1,1 +1,1 @@
-module.exports = require('./bot').Bot;
+module.exports = require('./bot-min').Bot;
