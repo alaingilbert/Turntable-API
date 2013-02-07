@@ -51,7 +51,7 @@ class Bot
 
     if @roomId
       @callback = ->
-        rq = { api: 'room.register', roomid: @roomId }
+        rq = api: 'room.register', roomid: @roomId
         @_send rq, null
 
     randomHash = crypto.createHash("sha1")
@@ -59,6 +59,14 @@ class Bot
                  .digest('hex').substr(0, 24)
 
     @connect(@roomId or randomHash)
+
+
+  log: (message) ->
+    if @debug
+      if @stdout == 'stderr'
+        console.error "> #{data}"
+      else
+        console.log "> #{data}"
 
 
   connect: (roomId) ->
@@ -119,11 +127,7 @@ class Bot
       @updatePresence()
       return
 
-    if @debug
-      if @stdout == 'stderr'
-        console.error "> #{data}"
-      else
-        console.log "> #{data}"
+    @log "> #{data}"
 
     if msg.data == '~m~10~m~no_session'
       @userAuthenticate ->
@@ -258,11 +262,7 @@ class Bot
 
     msg = JSON.stringify(rq)
 
-    if @debug
-      if @stdout == 'stderr'
-        console.error "< #{msg}"
-      else
-        console.log "< #{msg}"
+    @log "< #{msg}"
 
     @ws.send "~m~#{msg.length}~m~#{msg}"
     @_cmds.push [@_msgId, rq, callback]
@@ -286,11 +286,8 @@ class Bot
           data = []
         if data[0]
           callback.call(self, data[1].chatserver[0], data[1].chatserver[1])
-        else if @debug
-          if @stdout == 'stderr'
-            console.error "Failed to determine which server to use: #{dataStr}"
-          else
-            console.log "Failed to determine which server to use: #{dataStr}"
+        else
+          @log "Failed to determine which server to use: #{dataStr}"
 
 
   close: ->
@@ -298,12 +295,12 @@ class Bot
 
 
   roomNow: (callback) ->
-    rq = { api: 'room.now' }
+    rq = api: 'room.now'
     @_send rq, callback
 
 
   updatePresence: (callback) ->
-    rq = { api: 'presence.update', status: this.currentStatus }
+    rq = api: 'presence.update', status: this.currentStatus
     @_send rq, callback
 
 
@@ -315,12 +312,12 @@ class Bot
       sectionAware = false
     else if typeof sectionAware != 'boolean'
       sectionAware = false
-    rq = { api: 'room.list_rooms', skip: skip, section_aware: sectionAware }
+    rq = api: 'room.list_rooms', skip: skip, section_aware: sectionAware
     @_send rq, callback
 
 
   directoryGraph: (callback) ->
-    rq = { api: 'room.directory_graph' }
+    rq = api: 'room.directory_graph'
     @_send rq, callback
 
 
@@ -393,17 +390,17 @@ class Bot
 
 
   getFavorites: (callback) ->
-    rq = { api: 'room.get_favorites' }
+    rq = api: 'room.get_favorites'
     @_send rq, callback
 
 
   addFavorite: (roomId, callback) ->
-    rq = { api: 'room.add_favorite', roomid: roomId }
+    rq = api: 'room.add_favorite', roomid: roomId
     @_send rq, callback
 
 
   remFavorite: (roomId, callback) ->
-    rq = { api: 'room.rem_favorite', roomid: roomId }
+    rq = api: 'room.rem_favorite', roomid: roomId
     @_send(rq, callback)
 
 
@@ -412,18 +409,18 @@ class Bot
       @ws.onclose = ->
       @ws.close()
     @callback = ->
-      rq = { api: 'room.register', roomid: roomId }
+      rq = api: 'room.register', roomid: roomId
       @_send rq, callback
     @connect roomId
 
 
   roomDeregister: (callback) ->
-    rq = { api: 'room.deregister', roomid: @roomId }
+    rq = api: 'room.deregister', roomid: @roomId
     @_send rq, callback
 
 
   roomInfo: ->
-    rq = { api: 'room.info', roomid: @roomId }
+    rq = api: 'room.info', roomid: @roomId
     callback = null
     if arguments.length == 1
       if typeof arguments[0] == 'function'
