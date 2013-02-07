@@ -1,3 +1,4 @@
+.git*
 examples/
 turntable_data/
 python_ttapi/
