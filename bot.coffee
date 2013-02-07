@@ -64,9 +64,9 @@ class Bot
   log: (message) ->
     if @debug
       if @stdout == 'stderr'
-        console.error "> #{data}"
+        console.error message
       else
-        console.log "> #{data}"
+        console.log message
 
 
   connect: (roomId) ->
@@ -117,36 +117,45 @@ class Bot
     #console.log 'THIS IS WEIRD AND SHOULD NOT APPEAR.'
 
 
-  onMessage: (msg) ->
-    data = msg.data
-
+  isHeartbeat: (data) ->
     heartbeat_rgx = /~m~[0-9]+~m~(~h~[0-9]+)/
-    if data.match heartbeat_rgx
-      @_heartbeat data.match(heartbeat_rgx)[1]
-      @lastHeartbeat = Date.now()
-      @updatePresence()
-      return
+    data.match heartbeat_rgx
 
-    @log "> #{data}"
 
-    if msg.data == '~m~10~m~no_session'
-      @userAuthenticate ->
-        if not @_isConnected
-          @getFanOf (data) ->
-            @fanOf = data.fanof
-            @updatePresence()
-            # TODO: I don't like setInterval !
-            setInterval(@updatePresence.bind(@), 10000)
-            @emit 'ready'
-        @callback()
-        @_isConnected = true
-      return
+  isNoSession: (data) ->
+    data == '~m~10~m~no_session'
 
-    @lastActivity = Date.now()
 
+  treatHeartbeat: (packet) ->
+    heartbeat_rgx = /~m~[0-9]+~m~(~h~[0-9]+)/
+    @_heartbeat packet.match(heartbeat_rgx)[1]
+    @lastHeartbeat = Date.now()
+    @updatePresence()
+
+
+  treatNoSession: (packet) ->
+    @userAuthenticate ->
+      if not @_isConnected
+        @getFanOf (data) ->
+          @fanOf = data.fanof
+          @updatePresence()
+          # TODO: I don't like setInterval !
+          setInterval(@updatePresence.bind(@), 10000)
+          @emit 'ready'
+      @callback()
+      @_isConnected = true
+
+
+  extractPacketJson: (packet) ->
     len_rgx = /~m~([0-9]+)~m~/
-    len = data.match(len_rgx)[1]
-    json = JSON.parse(data.substr(data.indexOf('{'), len))
+    len = packet.match(len_rgx)[1]
+    try
+      return JSON.parse(packet.substr(packet.indexOf('{'), len))
+    catch err
+      return null
+
+
+  executeCallback: (json) ->
     index = 0
     while index < @_cmds.length
       [id, rq, clb] = @_cmds[index]
@@ -158,10 +167,8 @@ class Bot
             if json.success == true
               currentDj   = json.room.metadata.current_dj
               currentSong = json.room.metadata.current_song
-              if currentDj
-                @currentDjId = currentDj
-              if currentSong
-                @currentSongId = currentSong._id
+              @currentDjId = currentDj if currentDj
+              @currentSongId = currentSong._id if currentSong
           when 'room.register'
             if json.success == true
               @roomId = rq.roomid
@@ -182,55 +189,33 @@ class Bot
         if not is_search and clb
           clb.call @, json
 
-        @_cmds.splice(i, 1)
+        @_cmds.splice(index, 1)
         break
       else
         index++
 
-    switch json['command']
-      when 'registered'
-        @emit 'registered', json
-      when 'deregistered'
-        @emit 'deregistered', json
-      when 'speak'
-        @emit 'speak', json
-      when 'pmmed'
-        @emit 'pmmed', json
+
+  treatCommand: (json) ->
+    command = json['command']
+    switch command
       when 'nosong'
         @currentDjId   = null
         @currentSongId = null
         @emit 'endsong', @tmpSong
-        @emit 'nosong', json
       when 'newsong'
         if @currentSongId
           @emit 'endsong', @tmpSong
         @currentDjId   = json.room.metadata.current_dj
         @currentSongId = json.room.metadata.current_song._id
         @setTmpSong json
-        @emit 'newsong', json
       when 'update_votes'
         if @tmpSong
           @tmpSong.room.metadata.upvotes = json.room.metadata.upvotes
           @tmpSong.room.metadata.downvotes = json.room.metadata.downvotes
           @tmpSong.room.metadata.listeners = json.room.metadata.listeners
-        @emit 'update_votes', json
-      when 'booted_user'
-        @emit 'booted_user', json
-      when 'update_user'
-        @emit 'update_user', json
-      when 'add_dj'
-        @emit 'add_dj', json
       when 'rem_dj'
         if json.modid
-          json['command'] = 'escort'
           @emit 'escort', json
-        @emit 'rem_dj', json
-      when 'new_moderator'
-        @emit 'new_moderator', json
-      when 'rem_moderator'
-        @emit 'rem_moderator', json
-      when 'snagged'
-        @emit 'snagged', json
       when 'search_complete'
         query = json['query']
         for i in [0...@currentSearches.length]
@@ -238,13 +223,22 @@ class Bot
             @currentSearches[i].callback json
             @currentSearches.splice i, 1
             break
-      else
-        if json['command']
-          #console.log('Command: ', json)
-        else if typeof(json['msgid']) == 'number'
-          if not json['success']
-            1 == 1
-            #console.log(json)
+    @emit command, json
+
+
+  treatPacket: (packet) ->
+    json = @extractPacketJson(packet)
+    @executeCallback(json)
+    @treatCommand(json)
+
+
+  onMessage: (msg) ->
+    data = msg.data
+    return @treatHeartbeat(data) if @isHeartbeat(data)
+    @log "> #{data}"
+    return @treatNoSession(data) if @isNoSession(data)
+    @lastActivity = Date.now()
+    @treatPacket(data)
 
 
   _heartbeat: (msg) ->
