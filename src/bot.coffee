@@ -363,8 +363,9 @@ class Bot
       self.directoryGraph (directoryGraphData) ->
         if not directoryGraphData.success
           return callback directoryGraphData
-        rooms = directoryGraphData.rooms
-        for room, users in rooms
+        for graphObj in directoryGraphData.rooms
+          room = graphObj[0]
+          users = graphObj[1]
           for user in users
             if user.userid == userId
               if allInfos
