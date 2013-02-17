@@ -1,4 +1,4 @@
-var Bot    = require('../index');
+var Bot    = require('ttapi');
 var AUTH   = 'xxxxxxxxxxxxxxxxxxxxxxxx';
 var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
 var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';

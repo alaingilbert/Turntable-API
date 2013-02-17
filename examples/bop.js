@@ -4,7 +4,7 @@
  * Reccomended for rooms with less people in it!
  */
 
-var Bot    = require('../index');
+var Bot    = require('ttapi');
 var AUTH   = 'xxxxxxxxxxxxxxxxxxxxxxxx';
 var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
 var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';

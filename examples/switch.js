@@ -2,7 +2,7 @@
  * On/Off bot switch with basic variables in nodejs.
  */
 
-var Bot    = require('../index')
+var Bot    = require('ttapi')
   , AUTH   = 'xxxxxxxxxxxxxxxxxxxxxxxx'
   , USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx'
   , ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
