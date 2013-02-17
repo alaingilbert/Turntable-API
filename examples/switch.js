@@ -3,7 +3,7 @@
  */
 
 var Bot    = require('../index')
-  , AUTH   = 'auth+live+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+  , AUTH   = 'xxxxxxxxxxxxxxxxxxxxxxxx'
   , USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx'
   , ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
 

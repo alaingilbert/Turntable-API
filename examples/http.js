@@ -1,5 +1,5 @@
 var Bot    = require('../index');
-var AUTH   = 'auth+live+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+var AUTH   = 'xxxxxxxxxxxxxxxxxxxxxxxx';
 var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
 var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
 
