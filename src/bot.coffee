@@ -295,7 +295,7 @@ class Bot
 
 
   updatePresence: (callback) ->
-    rq = api: 'presence.update', status: this.currentStatus
+    rq = api: 'presence.update', status: @currentStatus
     @_send rq, callback
 
 
