@@ -73,10 +73,12 @@ That will print on the terminal all the data that you get and all the data that 
 
 # Hosting
 
-* [https://no.de/](https://no.de/) : Free (250mb memory/500mb storage) hosting for nodejs projects with SSH root access.
-* [http://www.nodejitsu.com/](http://www.nodejitsu.com/) : Free (scalable memory/storage not to be abused) hosting for nodejs projects.
-* [https://openshift.redhat.com/](https://openshift.redhat.com/) : Free (1.5gb memory/3gb storage) PaaS service that supports nodejs.
-
+* [https://c9.io/](https://c9.io/) : Free (up to 128MB memory/storage) hosting for nodejs-based projects with full SSH access, FTP, and unlimited collaborators.
+* [https://openshift.redhat.com/](https://openshift.redhat.com/) : Free (up to 1.5GB memory/3GB storage) Git-based PaaS service that supports nodejs with limited SSH access.
+* [http://www.heroku.com/](http://www.heroku.com/) : Free (up to 1 dyno/512MB memory/200MB storage) Git-based PaaS service that supports nodejs with a easy-to-use frontend.
+* [http://nodester.com/](http://nodester.com/) : Free (unlimited applications/50GB transfer/up to 2GB memory) PaaS service that supports nodejs and comes with easy deployment options.
+* [https://modulus.io/](https://modulus.io/) : Cheap (scaleable memory not to be abused) nodejs hosting with $25 credit for a limited time.
+* [http://www.nodejitsu.com/](http://www.nodejitsu.com/) : Cheap (scaleable memory/storage not to be abused) hosting for nodejs-based projects.
 
 # Documentation
 
