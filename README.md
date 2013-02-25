@@ -395,29 +395,26 @@ Get the private conversation history.
 
 Set your current status.
 
-### playlistAll ( [ playlistName:string, ] callback:fn )
+### playlistAll ( callback:fn )
 
 Get all information about a playlist.
 
 ##### Arguments
 
-* `playlistName` (optional) default: `default`
 * `callback` (required)
 
 ##### Examples
 
 ```js
 bot.playlistAll(callback);
-bot.playlistAll(playlistName, callback);
 ```
 
-### playlistAdd ( [ playlistName:string, ] songId:string [, index:int [, callback:fn]] )
+### playlistAdd ( songId:string [, index:int [, callback:fn]] )
 
 Add a song to a playlist.
 
 #### Arguments
 
-* `playlistName` (optional) default: `default`
 * `songId` (required)
 * `index` (optional) default: `0`
 * `callback` (optional)
@@ -429,20 +426,16 @@ bot.playlistAdd(songId);
 bot.playlistAdd(songId, idx);
 bot.playlistAdd(songId, callback);
 bot.playlistAdd(songId, idx, callback);
-bot.playlistAdd(playlistName, songId, idx);
-bot.playlistAdd(playlistName, songId, callback);
-bot.playlistAdd(playlistName, songId, idx, callback);
 bot.playlistAdd(false, songId, callback); // Backward compatibility
 bot.playlistAdd(false, songId);           // Backward compatibility
 ````
 
-### playlistRemove ( [ playlistName:string, ] index:int [, callback:fn ] )
+### playlistRemove ( index:int [, callback:fn ] )
 
 Remove a song on a playlist.
 
 ##### Arguments
 
-* `playlistName` (optional) default: `default`
 * `index` (optional) default: `0`
 * `callback` (optional)
 
@@ -451,17 +444,14 @@ Remove a song on a playlist.
 bot.playlistRemove();
 bot.playlistRemove(index);
 bot.playlistRemove(index, callback);
-bot.playlistRemove(playlistName, index);
-bot.playlistRemove(playlistName, index, callback);
 ```
 
-### playlistReorder ( [ playlistName:string, ] indexFrom:int, indexTo:int [, callback:fn ] )
+### playlistReorder ( indexFrom:int, indexTo:int [, callback:fn ] )
 
 Reorder a playlist. Take the song at index `indexFrom` and move it to index `indexTo`.
 
 ##### Arguments
 
-* `playlistName` (optional) default: `default`
 * `indexFrom` (required) default: `0`
 * `indexTo` (required) default: `0`
 * `callback` (optional)
@@ -471,8 +461,6 @@ Reorder a playlist. Take the song at index `indexFrom` and move it to index `ind
 ```js
 bot.playlistReorder(indexFrom, indexTo);
 bot.playlistReorder(indexFrom, indexTo, callback);
-bot.playlistReorder(playlistName, indexFrom, indexTo);
-bot.playlistReorder(playlistName, indexFrom, indexTo, callback);
 ```
 
 ### searchSong ( query:string, callback:fn )
