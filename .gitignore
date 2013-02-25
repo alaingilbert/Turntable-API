@@ -1,6 +1,5 @@
 .DS_Store
 *.swp
 *.pyc
-bot.js
 python_ttapi/settings.py
 node_modules/
