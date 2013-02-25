@@ -656,6 +656,39 @@ class Bot
     @_send rq, callback
 
 
+  playlistListAll: (callback) ->
+    rq = api: 'playlist.list_all'
+    @_send rq, callback
+
+
+  playlistCreate: (playlistName, callback) ->
+    rq = api: 'playlist.create', playlist_name: playlistName
+    @_send rq, callback
+
+
+  playlistDelete: (playlistName, callback) ->
+    rq = api: 'playlist.delete', playlist_name: playlistName
+    @_send rq, callback
+
+
+  playlistRename: (oldPlaylistName, newPlaylistName, callback) ->
+    rq =
+      api: 'playlist.rename'
+      old_playlist_name: oldPlaylistName
+      new_playlist_name: newPlaylistName
+    @_send rq, callback
+
+
+  playlistSwitch: (playlistName, callback) ->
+    rq = api: 'playlist.switch', playlist_name: playlistName
+    @_send rq, callback
+
+
+  playlistNewBlockedSongCount: (callback) ->
+    rq = api: 'playlist.new_blocked_song_count'
+    @_send rq, callback
+
+
   playlistAll: ->
     playlistName = 'default'
     callback     = null
