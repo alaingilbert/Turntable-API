@@ -167,11 +167,15 @@ class Bot
           when 'room.register'
             if json.success == true
               @roomId = rq.roomid
-              @roomInfo (data) ->
-                @setTmpSong data
-                @emit 'roomChanged', data
+              ((clb) =>
+                @roomInfo (data) ->
+                  @setTmpSong data
+                  @emit 'roomChanged', data
+                  clb.call @, data
+              )(clb)
             else
               @emit 'roomChanged', json
+              clb.call @, json
             clb = null
           when 'room.deregister'
             if json.success == true
