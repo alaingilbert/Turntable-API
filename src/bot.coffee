@@ -175,7 +175,7 @@ class Bot
               )(clb)
             else
               @emit 'roomChanged', json
-              clb.call @, json
+              clb?.call @, json
             clb = null
           when 'room.deregister'
             if json.success == true
