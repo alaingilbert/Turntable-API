@@ -171,7 +171,7 @@ class Bot
                 @roomInfo (data) ->
                   @setTmpSong data
                   @emit 'roomChanged', data
-                  clb.call @, data
+                  clb?.call @, data
               )(clb)
             else
               @emit 'roomChanged', json
