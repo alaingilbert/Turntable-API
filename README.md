@@ -9,7 +9,6 @@ See also [turntabler](https://github.com/obrie/turntabler) (Ruby) maintained by 
 
 ## Installation
     npm install ttapi
-If you are having problems with npm (like with Windows nodejs or portable versions), just clone the repo and edit the templates in the 'examples' folder!
 
 ## Examples
 
