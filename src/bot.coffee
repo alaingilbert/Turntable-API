@@ -500,7 +500,7 @@ class Bot
 
 
   stopSong: (callback) ->
-    rq = api: 'room.stop_song', roomid: @roomId
+    rq = api: 'room.stop_song', roomid: @roomId, current_song: @currentSongId
     @_send rq, callback
 
 
