@@ -328,7 +328,7 @@ bot.getUserId('@alain_gilbert', function (data) { console.log(data); });
 
 ```
 
-### getProfile ( [[userId:string, ]callback:fn] )
+### getProfile ( [[profileId:string, ]callback:fn] )
 
 Get a user's profile.
 
