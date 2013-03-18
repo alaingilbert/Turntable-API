@@ -615,9 +615,9 @@ class Bot
       if typeof arguments[0] == 'function'
         callback = arguments[0]
       else if typeof arguments[0] == 'string'
-        rq.userid = arguments[0]
+        rq.profileid = arguments[0]
     else if arguments.length == 2
-      rq.userid = arguments[0]
+      rq.profileid = arguments[0]
       callback  = arguments[1]
     @_send rq, callback
 
