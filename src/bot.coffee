@@ -315,6 +315,17 @@ class Bot
     @_send rq, callback
 
 
+  searchRooms: (options, callback) ->
+    if typeof options != 'object'
+      callback = options
+      options = {}
+
+    rq = api: 'room.search', limit: options.limit ? 10
+    if (options.query)
+      rq.query = options.query
+    @_send rq, callback
+
+
   directoryGraph: (callback) ->
     rq = api: 'room.directory_graph'
     @_send rq, callback

@@ -195,6 +195,15 @@ Get the turntable server time.
 
 Get 20 rooms.
 
+### searchRooms( [options:obj, ]callback:fn )
+
+Search the directory for rooms
+
+##### options
+
+* `limit` - The number of rooms to return
+* `query` - Filter based on this search term
+
 ### directoryGraph ( callback:fn )
 
 Get the location of your friends/idols.
