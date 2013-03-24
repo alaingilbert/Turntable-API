@@ -9,7 +9,7 @@ import re
 import json
 import logging
 
-__version__ = '1.1.1'
+__version__ = '1.2.0'
 
 logger = logging.getLogger("turntable-api")
 
@@ -460,6 +460,7 @@ class Bot(object):
         self._send(rq, callback)
 
     def playlistAll(self, *args):
+        """List information about a playlist."""
         playlistName = 'default'
         callback = None
         if len(args) == 1:
@@ -474,6 +475,7 @@ class Bot(object):
         self._send(rq, callback)
 
     def playlistAdd(self, *args):
+        """Add a song to a playlist."""
         playlistName = 'default'
         songId = None
         index = 0
@@ -512,7 +514,25 @@ class Bot(object):
               'song_dict': {'fileid': songId}, 'index': index}
         self._send(rq, callback)
 
+    def playlistCreate(self, playlistName, callback=None):
+        """Create a playlist."""
+        rq = {'api': 'playlist.create',
+              'playlist_name': playlistName}
+        self._send(rq, callback)
+
+    def playlistDelete(self, playlistName, callback=None):
+        """Delete a playlist."""
+        rq = {'api': 'playlist.delete',
+              'playlist_name': playlistName}
+        self._send(rq, callback)
+
+    def playlistListAll(self, callback=None):
+        """List all of your playlists."""
+        rq = {'api': 'playlist.list_all'}
+        self._send(rq, callback)
+
     def playlistRemove(self, *args):
+        """Remove a song from a playlist."""
         playlistName = 'default'
         index = 0
         callback = None
@@ -530,7 +550,15 @@ class Bot(object):
               'index': index}
         self._send(rq, callback)
 
+    def playlistRename(self, oldPlaylistName, newPlaylistName, callback=None):
+        """Rename oldPLaylistName to newPlaylistName."""
+        rq = {'api': 'playlist.rename',
+              'old_playlist_name': oldPlaylistName,
+              'new_playlist_name': newPlaylistName}
+        self._send(rq, callback)
+
     def playlistReorder(self, *args):
+        """Reorder a playlist."""
         playlistName = 'default'
         indexFrom = 0
         indexTo = 0
@@ -548,6 +576,12 @@ class Bot(object):
             playlistName, indexFrom, indexTo, callback = args
         rq = {'api': 'playlist.reorder', 'playlist_name': playlistName,
               'index_from': indexFrom, 'index_to': indexTo}
+        self._send(rq, callback)
+
+    def playlistSwitch(self, playlistName, callback=None):
+        """Switch to playlist playlistName."""
+        rq = {'api': 'playlist.switch',
+              'playlist_name': playlistName}
         self._send(rq, callback)
 
     def getStickers(self, callback=None):
