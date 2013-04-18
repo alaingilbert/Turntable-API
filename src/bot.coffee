@@ -98,7 +98,7 @@ class Bot
           [host, port] = data[1].chatserver
           callback.call(self, host, port)
         else
-          @log "Failed to determine which server to use: #{dataStr}"
+          self.log "Failed to determine which server to use: #{dataStr}"
 
 
   setTmpSong: (data) ->
