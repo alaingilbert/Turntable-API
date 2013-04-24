@@ -8,11 +8,7 @@ var getDownAfterSong = false;
 var bot = new Bot(AUTH, USERID, ROOMID);
 
 bot.on ('roomChanged',  function (data) {
-<<<<<<< HEAD
-bot.roomInfo (true, function(data) {
-=======
 bot.roomInfo(true, function(data) {
->>>>>>> 164d73243046ff167f0194d5a476f9c40faca127
 // Get the DJ count upon entering the room
   var djcount = data.room.metadata.djcount;
 // If DJ count less than or equal to 1, get on decks 	
