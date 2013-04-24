@@ -8,7 +8,7 @@ Ttapi is also available in [Python](https://github.com/alaingilbert/Turntable-AP
 See also [turntabler](https://github.com/obrie/turntabler) (Ruby) maintained by [obrie](https://github.com/obrie).
 
 ## Installation
-    npm install ttapi
+npm install ttapi
 
 ## Examples
 
@@ -23,7 +23,7 @@ var bot = new Bot(AUTH, USERID, ROOMID);
 bot.on('speak', function (data) {
   // Respond to "/hello" command
   if (data.text.match(/^\/hello$/)) {
-    bot.speak('Hey! How are you @'+data.name+' ?');
+    bot.speak('Hey! I am so glad to see you @'+data.name+' .');
   }
 });
 ```
