@@ -16,8 +16,9 @@ bot.on('roomChanged',  function (data) {
       bot.addDj();
      }
    });
+    });
 
-bot.on ('newsong', function (data) {
+   bot.on ('newsong', function (data) {
   // Check if bot is the new DJ when new song begins
   var djid = data.room.metadata.current_song.djid;
   if (djid == USERID){
@@ -53,8 +54,9 @@ bot.on('add_dj', function (data) {
     }
     }
   });
- 
-bot.on ('rem_dj', function (data) {
+   });
+
+ bot.on ('rem_dj', function (data) {
   // Checks DJ count when a DJ steps down
   bot.roomInfo (false, function(data) {
     var djcount = data.room.metadata.djcount;
@@ -63,4 +65,4 @@ bot.on ('rem_dj', function (data) {
       bot.addDj();
   }
 });
- 
+ });
