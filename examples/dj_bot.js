@@ -27,3 +27,4 @@ bot.on ('speak', function (data) {
     bot.snag();
   }
   });
+  
