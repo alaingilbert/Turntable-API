@@ -16,8 +16,7 @@ bot.on('speak', function (data) {
   } else if (text == '/skip') {
     // Bot skips it's own song (if bot is the current DJ) on /skip command
     bot.skip();
-  }
-  if (text == '/addsong') {
+  } else if (text == '/addsong') {
     // Bot adds song to the bottom of it's DJ queue on /addsong command
     bot.playlistAll(function (data) {
       bot.playlistAdd(songId, data.list.length);
