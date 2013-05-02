@@ -8,14 +8,12 @@ var getDownAfterSong = false;
 var bot = new Bot(AUTH, USERID, ROOMID);
 
 bot.on('roomChanged', function (data) {
-  bot.roomInfo(false, function (data) {
-    // Get the DJ count upon entering the room
-    var djcount = data.room.metadata.djcount;
-    // If DJ count less than or equal to 1, get on decks 	
-    if (djcount <= 1) {
-      bot.addDj();
-    }
-  });
+  // Get the DJ count upon entering the room
+  var djcount = data.room.metadata.djcount;
+  // If DJ count less than or equal to 1, get on decks
+  if (djcount <= 1) {
+    bot.addDj();
+  }
 });
 
 bot.on('newsong', function (data) {
@@ -34,8 +32,8 @@ bot.on('endsong', function (data) {
   }
 
   // If triggered to get down during Bot's song, step down now
-  if (getDownAfterSong == true) {
-    bot.remDj(USERID);
+  if (getDownAfterSong) {
+    bot.remDj();
     getDownAfterSong = false;
   }
 });
@@ -50,7 +48,7 @@ bot.on('add_dj', function (data) {
       if (imDjing) {
         getDownAfterSong = true;
       } else {
-        bot.remDj(USERID);
+        bot.remDj();
       }
     }
   });
