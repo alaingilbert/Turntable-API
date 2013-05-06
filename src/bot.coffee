@@ -412,12 +412,12 @@ class Bot
 
   remFavorite: (roomId, callback) ->
     rq = api: 'room.rem_favorite', roomid: roomId
-    @_send(rq, callback)
+    @_send rq, callback
 
 
   roomVerify: (roomId, callback) ->
     rq = api: 'room.info', roomid: roomId
-    @_send(rq, callback)
+    @_send rq, callback
 
 
   roomRegister: (roomId, callback) ->
@@ -611,7 +611,7 @@ class Bot
 
   getFanOf: (callback) ->
     rq = api: 'user.get_fan_of'
-    @_send(rq, callback)
+    @_send rq, callback
 
 
   getFans: (callback) ->
