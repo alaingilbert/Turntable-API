@@ -415,6 +415,11 @@ class Bot
     @_send(rq, callback)
 
 
+  roomVerify: (roomId, callback) ->
+    rq = api: 'room.info', roomid: roomId
+    @_send(rq, callback)
+
+
   roomRegister: (roomId, callback) ->
     if @ws
       @ws.onclose = ->
