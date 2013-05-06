@@ -44,6 +44,7 @@ class Bot
     @clientId        = Date.now() + '-0.59633534294921572'
     @_msgId          = 0
     @_cmds           = []
+    @_isAuthenticated = false
     @_isConnected    = false
     @fanOf           = []
     @currentStatus   = 'available'
@@ -130,6 +131,7 @@ class Bot
 
   treatNoSession: (packet) ->
     @userAuthenticate ->
+      @_isAuthenticated = true
       if not @_isConnected
         @getFanOf (data) ->
           @fanOf = data.fanof
@@ -256,6 +258,10 @@ class Bot
     msg = JSON.stringify(rq)
 
     @log "< #{msg}"
+
+    if not @_isAuthenticated and rq.api != 'user.authenticate'
+      console.log "Bot is not ready. Can't send : '#{rq.api}'"
+      return
 
     @ws.send "~m~#{msg.length}~m~#{msg}"
     @_cmds.push [@_msgId, rq, callback]
