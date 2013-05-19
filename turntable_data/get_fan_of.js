@@ -1,5 +1,5 @@
 { msgid: 1,
-  fanof: 
+  fanof: // fan array
    [ '4deceed64fe7d0042800d697',
      '4de9aaa14fe7d013dc026a71',
      '4de8ed5d4fe7d0517b0ce9c7',
