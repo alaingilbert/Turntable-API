@@ -62,12 +62,15 @@ class Bot
     @connect(@roomId ? randomHash)
 
 
-  log: (message) ->
-    if @debug
+  log: ->
+    args = Array.prototype.slice.call(arguments)
+    if typeof @debug == 'function'
+      @debug.apply(@, args)
+    else if @debug
       if @stdout == 'stderr'
-        console.error message
+        console.error.apply(@, args)
       else
-        console.log message
+        console.log.apply(@, args)
 
 
   connect: (roomId) ->
