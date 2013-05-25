@@ -42,6 +42,7 @@ class Bot
     @lastHeartbeat   = Date.now()
     @lastActivity    = Date.now()
     @clientId        = Date.now() + '-0.59633534294921572'
+    @disconnectInterval = 120000
     @_msgId          = 0
     @_cmds           = []
     @_isAuthenticated = false
@@ -150,10 +151,23 @@ class Bot
           @fanOf = data.fanof
           @updatePresence()
           # TODO: I don't like setInterval !
-          setInterval(@updatePresence.bind(@), 10000)
+          setInterval(@maintainPresence.bind(@), 10000)
           @emit 'ready'
       @callback()
       @_isConnected = true
+
+
+  maintainPresence: ->
+    if @lastHeartbeat > @lastActivity
+      activity = @lastHeartbeat
+    else
+      activity = @lastActivity
+    if @_isConnected and (Date.now() - activity) > @disconnectInterval
+      @_isAuthenticated = false
+      @_isConnected = false
+      @emit 'disconnect'
+    else
+      @updatePresence()
 
 
   extractPacketJson: (packet) ->
