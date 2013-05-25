@@ -263,7 +263,7 @@ class Bot
     @log "< #{msg}"
 
     if not @_isAuthenticated and rq.api != 'user.authenticate'
-      console.log "Bot is not ready. Can't send : '#{rq.api}'"
+      @log "Bot is not ready. Can't send : '#{rq.api}'"
       return
 
     @ws.send "~m~#{msg.length}~m~#{msg}"
