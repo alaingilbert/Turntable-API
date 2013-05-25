@@ -84,25 +84,24 @@ class Bot
 
 
   whichServer: (roomid, callback) ->
-    self = @
     options =
       host: 'turntable.fm'
       port: 80
       path: "/api/room.which_chatserver?roomid=#{roomid}"
-    http.get options, (res) ->
+    http.get options, (res) =>
       dataStr = ''
-      res.on 'data', (chunk) ->
+      res.on 'data', (chunk) =>
         dataStr += chunk.toString()
-      res.on 'end', ->
+      res.on 'end', =>
         try
           data = JSON.parse dataStr
         catch err
           data = []
         if data[0]
           [host, port] = data[1].chatserver
-          callback.call(self, host, port)
+          callback.call(@, host, port)
         else
-          self.log "Failed to determine which server to use: #{dataStr}"
+          @log "Failed to determine which server to use: #{dataStr}"
 
 
   setTmpSong: (data) ->
@@ -276,29 +275,27 @@ class Bot
 
 
   listen: (port, address) ->
-    self = @
-    http.createServer((req, res) ->
+    http.createServer((req, res) =>
       dataStr = ''
-      req.on 'data', (chunk) ->
+      req.on 'data', (chunk) =>
         dataStr += chunk.toString()
-      req.on 'end', ->
+      req.on 'end', =>
         data = querystring.parse(dataStr)
         req._POST = data
-        self.emit('httpRequest', req, res)
+        @emit 'httpRequest', req, res
     ).listen(port, address)
 
 
   tcpListen: (port, address) ->
-    self = @
-    net.createServer((socket) ->
-      socket.on 'connect', ->
-        self.emit('tcpConnect', socket)
-      socket.on 'data', (data) ->
+    net.createServer((socket) =>
+      socket.on 'connect', =>
+        @emit 'tcpConnect', socket
+      socket.on 'data', (data) =>
         msg = data.toString()
         if msg[msg.length - 1] == '\n'
-          self.emit('tcpMessage', socket, msg.substr(0, msg.length-1))
+          @emit 'tcpMessage', socket, msg.substr(0, msg.length-1)
       socket.on 'end', ->
-        self.emit('tcpEnd', socket)
+        @emit 'tcpEnd', socket
     ).listen(port, address)
 
 
@@ -351,25 +348,23 @@ class Bot
     for opt in options
       query.push "#{opt}=#{encodeURIComponent(options[opt])}"
 
-    self = @
     httpOptions =
       host: 'turntable.fm'
       port: 80
       path: '/api/room.directory_rooms?' + query.join("&")
-    http.get httpOptions, (res) ->
+    http.get httpOptions, (res) =>
       dataStr = ''
-      res.on 'data', (chunk) ->
+      res.on 'data', (chunk) =>
         dataStr += chunk.toString()
-      res.on 'end', ->
+      res.on 'end', =>
         try
           data = JSON.parse dataStr
         catch err
           data = []
-        callback.call self, data
+        callback.call @, data
 
 
   stalk: ->
-    self     = @
     userId   = ''
     allInfos = false
     callback = ->
@@ -383,8 +378,8 @@ class Bot
         allInfos = arguments[1]
         callback = arguments[2]
 
-    getGraph = ->
-      self.directoryGraph (directoryGraphData) ->
+    getGraph = =>
+      @directoryGraph (directoryGraphData) ->
         if not directoryGraphData.success
           return callback directoryGraphData
         for graphObj in directoryGraphData.rooms
