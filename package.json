@@ -1,9 +1,16 @@
 {
   "author": "Alain Gilbert <alain.gilbert.15@gmail.com> (http://agilbert.name/)",
-  "contributors": ["Jeff Stieler <jeff.m.stieler@gmail.com> (http://jeffstieler.com)"],
+  "contributors": [
+    "Jeff Stieler <jeff.m.stieler@gmail.com> (http://jeffstieler.com)"
+  ],
   "name": "ttapi",
   "description": "A turntable.fm API",
-  "keywords": ["turntable.fm", "turntable", "stickybits", "realtime"],
+  "keywords": [
+    "turntable.fm",
+    "turntable",
+    "stickybits",
+    "realtime"
+  ],
   "version": "2.3.1",
   "repository": {
     "type": "git",
@@ -17,5 +24,7 @@
     "node": ">= v0.4.0"
   },
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "coffee-script": "~1.6.2"
+  }
 }
