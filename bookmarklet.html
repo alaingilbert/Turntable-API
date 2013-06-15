@@ -163,12 +163,12 @@
        obj.style.backgroundColor = "#fff";
        obj.style.fontSize = "13px";
        var auth = document.createElement("div");
-           auth.innerHTML = "Auth: "+turntable.user.auth;
+           auth.innerHTML = "var AUTH = &#39;"+turntable.user.auth+"&#39;&#59;";
        var userid = document.createElement("div");
-           userid.innerHTML = "UserId: "+turntable.user.id;
+           userid.innerHTML = "var USERID = &#39;"+turntable.user.id+"&#39;&#59;";
        for (var i in turntable) { if (turntable[i].roomId) { var rid = turntable[i].roomId; break; } }
        var roomid = document.createElement("div");
-           roomid.innerHTML = "RoomId: "+rid;
+           roomid.innerHTML = "var ROOMID = &#39;"+rid+"&#39;&#59;";
        obj.appendChild(auth);
        obj.appendChild(userid);
        obj.appendChild(roomid);
