@@ -105,8 +105,10 @@ class Bot
           callback.call(@, host, port)
         else
           @log "Failed to determine which server to use: #{dataStr}"
+          @emit 'error', 'unable to parse server response'
     .on 'error', (err) =>
       @log err.message
+      @emit 'error', err.message
 
 
   setTmpSong: (data) ->
@@ -114,6 +116,10 @@ class Bot
       command : 'endsong'
       room : data.room
       success : true
+
+
+  onError: (data) ->
+    @emit 'error', data
 
 
   onClose: ->
