@@ -105,8 +105,8 @@ class Bot
           callback.call(@, host, port)
         else
           @log "Failed to determine which server to use: #{dataStr}"
-    .on 'error', (e) =>
-      @log "whichServer error: #{e}"
+    .on 'error', (err) =>
+      @log err.message
 
 
   setTmpSong: (data) ->
