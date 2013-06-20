@@ -350,6 +350,7 @@ Modify your profile. Any missing properties from the 'profile' object will be re
 * `profile`:obj (required)
   * `name`:string (optional)
   * `twitter`:string (optional)
+  * `soundcloud`:string (optional)
   * `facebook`:string (optional)
   * `website`:string (optional)
   * `about`:string (optional)
