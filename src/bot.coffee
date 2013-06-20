@@ -652,7 +652,7 @@ class Bot
     rq = api: 'user.modify_profile'
     rq.name       = profile.name if profile.name
     rq.twitter    = profile.twitter if profile.twitter
-    rq.soundcloud    = profile.soundcloud if profile.soundcloud
+    rq.soundcloud = profile.soundcloud if profile.soundcloud
     rq.facebook   = profile.facebook if profile.facebook
     rq.website    = profile.website if profile.website
     rq.about      = profile.about if profile.about
