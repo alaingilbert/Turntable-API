@@ -108,10 +108,9 @@ class Bot
           callback.call(@, host, port)
         else
           @log "Failed to determine which server to use: #{dataStr}"
-          @emit 'error', 'unable to parse server response'
+          @emit 'error', new Error "Error parsing server response"
     .on 'error', (err) =>
-      @log err.message
-      @emit 'error', err.message
+      @onError err
 
 
   setTmpSong: (data) ->
@@ -121,8 +120,9 @@ class Bot
       success : true
 
 
-  onError: (data) ->
-    @emit 'error', data
+  onError: (err) ->
+    @log err.message
+    @emit 'error', err
 
 
   onClose: ->
@@ -457,6 +457,7 @@ class Bot
   roomRegister: (roomId, callback) ->
     if @ws
       @ws.onclose = ->
+      @ws.onerror = ->
       @ws.close()
     @callback = ->
       rq = api: 'room.register', roomid: roomId
