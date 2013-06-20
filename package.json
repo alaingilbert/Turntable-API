@@ -11,7 +11,7 @@
     "stickybits",
     "realtime"
   ],
-  "version": "2.4.0",
+  "version": "2.4.1",
   "repository": {
     "type": "git",
     "url": "git://github.com/alaingilbert/Turntable-API.git"
