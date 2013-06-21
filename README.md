@@ -86,6 +86,16 @@ That will print on the terminal all the data that you get and all the data that 
 
 [Here are some examples of the data that you'll receive from those events.](https://github.com/alaingilbert/Turntable-API/tree/master/turntable_data)
 
+### on('ready', function () { })
+
+Triggered when the bot is connected.
+
+### on('error', function (error) { })
+
+Triggered on connection errors, connection timeouts, and other unexpected low-level events.
+
+*If you do not handle this event, your bot will stop running when these events occur.*
+
 ### on('tcpConnect', function (socket) { })
 
 Triggered when a socket opens a connection.
