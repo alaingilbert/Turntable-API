@@ -169,7 +169,7 @@ class Bot
     if @_isConnected and (Date.now() - activity) > @disconnectInterval
       @_isAuthenticated = false
       @_isConnected = false
-      @emit 'disconnect'
+      @emit 'error', new Error 'No response from server'
     else
       @updatePresence()
 
