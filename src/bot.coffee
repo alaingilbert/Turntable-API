@@ -619,13 +619,31 @@ class Bot
         callback {ids: res, success: true}
 
 
-  getFanOf: (callback) ->
+  getFanOf: ->
     rq = api: 'user.get_fan_of'
+    callback = null
+    if arguments.length == 1
+      if typeof arguments[0] == 'function'
+        callback = arguments[0]
+      else if typeof arguments[0] == 'string'
+        rq.userid = arguments[0]
+    else if arguments.length == 2
+      rq.userid = arguments[0]
+      callback  = arguments[1]
     @_send rq, callback
 
 
-  getFans: (callback) ->
+  getFans: ->
     rq = api: 'user.get_fans'
+    callback = null
+    if arguments.length == 1
+      if typeof arguments[0] == 'function'
+        callback = arguments[0]
+      else if typeof arguments[0] == 'string'
+        rq.userid = arguments[0]
+    else if arguments.length == 2
+      rq.userid = arguments[0]
+      callback  = arguments[1]
     @_send rq, callback
 
 
