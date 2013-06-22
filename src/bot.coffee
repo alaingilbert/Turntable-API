@@ -86,8 +86,6 @@ class Bot
       @ws.onerror = @onError.bind(@)
       @ws.onclose = @onClose.bind(@)
 
-  onError: (data) ->
-    @emit 'wserror', data
 
   whichServer: (roomid, callback) ->
     options =
