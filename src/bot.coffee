@@ -42,8 +42,11 @@ class Bot
     @lastHeartbeat   = Date.now()
     @lastActivity    = Date.now()
     @clientId        = Date.now() + '-0.59633534294921572'
+    @disconnectInterval = 120000
+    @presenceInterval = 10000
     @_msgId          = 0
     @_cmds           = []
+    @_intervalId     = null
     @_isAuthenticated = false
     @_isConnected    = false
     @fanOf           = []
@@ -83,8 +86,6 @@ class Bot
       @ws.onerror = @onError.bind(@)
       @ws.onclose = @onClose.bind(@)
 
-  onError: (data) ->
-    @emit 'wserror', data
 
   whichServer: (roomid, callback) ->
     options =
@@ -105,8 +106,9 @@ class Bot
           callback.call(@, host, port)
         else
           @log "Failed to determine which server to use: #{dataStr}"
-    .on 'error', (e) =>
-      @log "whichServer error: #{e}"
+          @emit 'error', new Error "Error parsing server response"
+    .on 'error', (err) =>
+      @onError err
 
 
   setTmpSong: (data) ->
@@ -114,6 +116,11 @@ class Bot
       command : 'endsong'
       room : data.room
       success : true
+
+
+  onError: (err) ->
+    @log err.message
+    @emit 'error', err
 
 
   onClose: ->
@@ -144,10 +151,25 @@ class Bot
           @fanOf = data.fanof
           @updatePresence()
           # TODO: I don't like setInterval !
-          setInterval(@updatePresence.bind(@), 10000)
+          if @_intervalId
+            clearInterval(@_intervalId)
+          @_intervalId = setInterval(@maintainPresence.bind(@), @presenceInterval)
           @emit 'ready'
       @callback()
       @_isConnected = true
+
+
+  maintainPresence: ->
+    if @lastHeartbeat > @lastActivity
+      activity = @lastHeartbeat
+    else
+      activity = @lastActivity
+    if @_isConnected and (Date.now() - activity) > @disconnectInterval
+      @_isAuthenticated = false
+      @_isConnected = false
+      @emit 'error', new Error 'No response from server'
+    else
+      @updatePresence()
 
 
   extractPacketJson: (packet) ->
@@ -433,6 +455,7 @@ class Bot
   roomRegister: (roomId, callback) ->
     if @ws
       @ws.onclose = ->
+      @ws.onerror = ->
       @ws.close()
     @callback = ->
       rq = api: 'room.register', roomid: roomId
