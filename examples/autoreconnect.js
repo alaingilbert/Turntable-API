@@ -94,7 +94,7 @@ bot.on('pmmed', function (data) {
 // 88888P Y88888       "888 888        888 T88b   888 T88b   888     888 888 T88b   
 // 8888P   Y8888 Y88b  d88P 888        888  T88b  888  T88b  Y88b. .d88P 888  T88b  
 // 888P     Y888  "Y8888P"  8888888888 888   T88b 888   T88b  "Y88888P"  888   T88b 
-bot.on('wserror', function (data) { // Loss of connection detected, takes about 20 seconds
+bot.on('error', function (data) { // Loss of connection detected, takes about 20 seconds
   console.log("[ BOT GOT WS ERROR ]: " + data + " on " + Date());
   botDownDATEtime = Date(); // save the down date/time.
   botDownUTCtime = Date.now(); // save the UTC time the bot went down.
