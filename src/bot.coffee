@@ -437,6 +437,7 @@ class Bot
   roomRegister: (roomId, callback) ->
     if @ws
       @ws.onclose = ->
+      @ws.onerror = ->
       @ws.close()
     @callback = ->
       rq = api: 'room.register', roomid: roomId
