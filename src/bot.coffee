@@ -42,8 +42,10 @@ class Bot
     @lastHeartbeat   = Date.now()
     @lastActivity    = Date.now()
     @clientId        = Date.now() + '-0.59633534294921572'
+    @presenceInterval = 10000
     @_msgId          = 0
     @_cmds           = []
+    @_intervalId     = null
     @_isAuthenticated = false
     @_isConnected    = false
     @fanOf           = []
@@ -144,7 +146,9 @@ class Bot
           @fanOf = data.fanof
           @updatePresence()
           # TODO: I don't like setInterval !
-          setInterval(@updatePresence.bind(@), 10000)
+          if @_intervalId
+            clearInterval(@_intervalId)
+          @_intervalId = setInterval(@updatePresence.bind(@), @presenceInterval)
           @emit 'ready'
       @callback()
       @_isConnected = true
