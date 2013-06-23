@@ -85,9 +85,6 @@ class Bot
       @ws.onerror = @onError.bind(@)
       @ws.onclose = @onClose.bind(@)
 
-  onError: (data) ->
-    @emit 'wserror', data
-
   whichServer: (roomid, callback) ->
     options =
       host: 'turntable.fm'
@@ -107,8 +104,10 @@ class Bot
           callback.call(@, host, port)
         else
           @log "Failed to determine which server to use: #{dataStr}"
+          @onError new Error 'Error parsing server response'
     .on 'error', (e) =>
       @log "whichServer error: #{e}"
+      @onError e
 
 
   setTmpSong: (data) ->
@@ -116,6 +115,10 @@ class Bot
       command : 'endsong'
       room : data.room
       success : true
+
+
+  onError: (data) ->
+    @emit 'error', data
 
 
   onClose: ->
