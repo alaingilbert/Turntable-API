@@ -86,13 +86,17 @@ That will print on the terminal all the data that you get and all the data that 
 
 [Here are some examples of the data that you'll receive from those events.](https://github.com/alaingilbert/Turntable-API/tree/master/turntable_data)
 
+### on('ready', function (socket) { })
+
+Triggered when the bot is connected. Do not attempt to use any actions until you receive this event.
+
 ### on('tcpConnect', function (socket) { })
 
 Triggered when a socket opens a connection.
 
 ### on('tcpMessage', function (socket, msg) { })
 
-Triggered when the bot receives a tcp message.
+Triggered when the bot receives a TCP message.
 
 ### on('tcpEnd', function (socket) { })
 
@@ -100,45 +104,45 @@ Triggered when a socket closes its connection.
 
 ### on('httpRequest', function (request, response) { })
 
-Triggered when the bot receives an http request.
+Triggered when the bot receives an HTTP request.
 
-### on('roomChanged', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/room_infos.js)) { })
+### on('roomChanged', function ([data](turntable_data/room_infos.js)) { })
 
 Triggered when the bot enters a room.
 
-### on('registered', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/registered.js)) { })
+### on('registered', function ([data](turntable_data/registered.js)) { })
 
 Triggered when a user enters the room.
 
-### on('deregistered', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/deregistered.js)) { })
+### on('deregistered', function ([data](turntable_data/deregistered.js)) { })
 
 Triggered when a user leaves the room.
 
-### on('speak', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/speak.js)) { })
+### on('speak', function ([data](turntable_data/speak.js)) { })
 
 Triggered when a new message is sent via the chat.
 
-### on('endsong', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/endsong.js)) { })
+### on('endsong', function ([data](turntable_data/endsong.js)) { })
 
 Triggered at the end of the song. (Just before the newsong/nosong event)
 
 The data returned by this event contains information about the song that has just ended.
 
-### on('newsong', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/newsong.js)) { })
+### on('newsong', function ([data](turntable_data/newsong.js)) { })
 
 Triggered when a new song starts.
 
-### on('nosong', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/nosong.js)) { })
+### on('nosong', function ([data](turntable_data/nosong.js)) { })
 
 Triggered when there is no song.
 
-### on('update_votes', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/update_votes.js)) { })
+### on('update_votes', function ([data](turntable_data/update_votes.js)) { })
 
 Triggered when a user votes.
 
 ###### Note
 
-The userid is shown only if the user vote up, or changed his mind and then vote down.
+The userid is provided only if the user votes up, or later changes their mind and votes down.
 
 ### on('booted_user', function (data) { })
 
@@ -148,31 +152,31 @@ Triggered when a user gets booted.
 
 Triggered when a user updates their name/profile.
 
-### on('add_dj', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/add_dj.js)) { })
+### on('add_dj', function ([data](turntable_data/add_dj.js)) { })
 
 Triggered when a user takes a dj spot.
 
-### on('rem_dj', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/rem_dj.js)) { })
+### on('rem_dj', function ([data](turntable_data/rem_dj.js)) { })
 
 Triggered when a user leaves a dj spot.
 
-### on('escort', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/escort.js)) { })
+### on('escort', function ([data](turntable_data/escort.js)) { })
 
 Triggered when a user is escorted off the stage.
 
-### on('new_moderator', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/new_moderator.js)) { })
+### on('new_moderator', function ([data](turntable_data/new_moderator.js)) { })
 
 Triggered when a user is promoted to a moderator.
 
-### on('rem_moderator', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/rem_moderator.js)) { })
+### on('rem_moderator', function ([data](turntable_data/rem_moderator.js)) { })
 
-Triggered when a user loses his moderator title.
+Triggered when a user loses their moderator title.
 
-### on('snagged', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/snagged.js)) { })
+### on('snagged', function ([data](turntable_data/snagged.js)) { })
 
 Triggered when a user queues the currently playing song.
 
-### on('pmmed', function ([data](https://github.com/alaingilbert/Turntable-API/blob/master/turntable_data/pmmed.js)) { })
+### on('pmmed', function ([data](turntable_data/pmmed.js)) { })
 
 Triggered when the bot receives a private message.
 
@@ -181,15 +185,15 @@ Triggered when the bot receives a private message.
 
 ### tcpListen ( port, address )
 
-Start a tcp server.
+Start a TCP server.
 
 ### listen ( port, address )
 
-Start an http server.
+Start an HTTP server.
 
 ### roomNow ( [callback:fn] )
 
-Get the turntable server time.
+Get the Turntable server time.
 
 ### listRooms ( skip=0:int [, callback:fn] )
 
@@ -197,7 +201,7 @@ Get 20 rooms.
 
 ### searchRooms( [options:obj, ]callback:fn )
 
-Search the directory for rooms
+Search the directory for rooms.
 
 ##### options
 
@@ -210,7 +214,7 @@ Get the location of your friends/idols.
 
 ### directoryRooms( options:obj, callback:fn )
 
-Get a directory of rooms
+Get a directory of rooms.
 
 ##### options
 
@@ -218,13 +222,13 @@ Get a directory of rooms
 * `section_aware`
 * `sort` - What to sort by
 
-### stalk ( userId:string [, allInformations=false:bool ], callback:fn )
+### stalk ( userId:string [, allInformation=false:bool ], callback:fn )
 
-Get the location of a user. If `allInformations` is `true`, you'll also receive the information about the room and the user.
+Get the location of a user. If `allInformation` is `true`, you'll also receive the information about the room and the user.
 
 ###### Warning
 
-This function will make the bot become a fan of the user.
+This function will make you become a fan of the user.
 
 ### getFavorites ( callback:fn )
 
@@ -272,15 +276,19 @@ Remove a moderator. (Note the person does NOT have to be in the room to remove t
 
 ### addDj ( [callback:fn] )
 
-Add yourself as a Dj.
+Add yourself as a DJ.
 
 ### remDj ( [[userId:string, ]callback:fn] )
 
-Remove a Dj.
+Remove the specified DJ, or yourself if not specified.
 
 ### stopSong ( [callback:fn] )
 
-Skip the current song.
+Stop the song you are currently playing.
+
+###### Note
+
+This cannot affect other DJs.
 
 ### skip ( [callback:fn] )
 
@@ -308,15 +316,15 @@ Get all available avatars.
 
 ### getAvatarIds ( callback:fn )
 
-Get the avatar ids that the bot can currently use.
+Get the avatar ids that you can currently use.
 
 ### getFanOf ( [[userId:string, ]callback:fn )
 
-Get the list of who the specified userid has become a fan of, or who you've become a fan of if no userid is specified.
+Get the list of everyone the specified userid is a fan of, or the list of everyone you are a fan of if a userid is not specified.
 
 ### getFans ( [[userId:string, ]callback:fn )
 
-Returns an array of everyone who is a fan of the specified userid, or an array of everyone who is a fan of yours if no userid is specified.
+Get the list of everyone who is a fan of the specified userid, or the list of everyone who is your fan if a userid is not specified.
 
 ##### example
 
@@ -327,7 +335,7 @@ bot.getFans(function (data) { console.log(data); });
 
 ### getUserId ( name:string, callback:fn )
 
-Get a user's id by his name.
+Get a user's id by their name.
 
 ##### Example
 
@@ -337,9 +345,9 @@ bot.getUserId('@alain_gilbert', function (data) { console.log(data); });
 
 ```
 
-### getProfile ( [[profileId:string, ]callback:fn] )
+### getProfile ( [[userId:string, ]callback:fn] )
 
-Get a user's profile.
+Get the profile for the specified user, or your profile if a userid is not specified.
 
 ### modifyProfile ( profile:obj [, callback:fn] )
 
@@ -386,11 +394,11 @@ Unfan someone.
 
 ### snag ( [ callback:fn ] )
 
-Snag the song.
+Trigger the heart animation used to show that you've snagged the currently playing song.
 
 ###### Warning
 
-This function will not add the song into the queue, only trigger the heart animation. Use this with a callback to `.playlistAdd`, or the latter method alone to queue a song;
+This function will not add the song into the queue. Use `.playlistAdd` to queue the song, and if successful, then use `.snag` to trigger the animation.
 
 ### pm (msg:string, receiverId:string [, callback:fn] )
 
@@ -570,7 +578,7 @@ bot.searchSong(query, callback);
 
 ### getStickers ( callback:fn )
 
-Get all stickers informations.
+Get all stickers information.
 
 ##### Example
 
@@ -581,7 +589,7 @@ bot.getStickers(function (data) { console.log(data); });
 
 ### getStickerPlacements ( userid:string, callback:fn )
 
-Get the information about a user stickers.
+Get the information about a user's stickers.
 
 ##### Example
 
@@ -591,7 +599,7 @@ bot.getStickerPlacements('4e0889d4a3f7517d1100af78', function (data) { console.l
 ```
 ### placeStickers ( placements:array.&lt;object&gt; [, callback:fn] )
 
-Sets a users stickers.  The placements object is formatted the same as the placements object retrieved 
+Sets your sticker placements.  The placements object is formatted the same as the placements object retrieved
 in the getStickerPlacements callback.
 
 ##### Example
