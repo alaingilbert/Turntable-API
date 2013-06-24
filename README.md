@@ -312,11 +312,11 @@ Get the avatar ids that the bot can currently use.
 
 ### getFanOf ( [[userId:string, ]callback:fn )
 
-Get the list of who the specified user has become a fan of.
+Get the list of who the specified userid has become a fan of, or who you've become a fan of if no userid is specified.
 
 ### getFans ( [[userId:string, ]callback:fn )
 
-Returns an array of everyone who is a fan of the specified user.
+Returns an array of everyone who is a fan of the specified userid, or an array of everyone who is a fan of yours if no userid is specified.
 
 ##### example
 
