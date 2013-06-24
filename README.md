@@ -86,7 +86,7 @@ That will print on the terminal all the data that you get and all the data that 
 
 [Here are some examples of the data that you'll receive from those events.](https://github.com/alaingilbert/Turntable-API/tree/master/turntable_data)
 
-### on('ready', function (socket) { })
+### on('ready', function ( ) { })
 
 Triggered when the bot is connected. Do not attempt to use any actions until you receive this event.
 
