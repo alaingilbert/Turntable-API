@@ -90,6 +90,14 @@ That will print on the terminal all the data that you get and all the data that 
 
 Triggered when the bot is connected. Do not attempt to use any actions until you receive this event.
 
+### on('error', function (error:Error) { })
+
+Triggered on connection errors, connection timeouts, and other unexpected low-level events.
+
+##### Warning
+
+If you do not handle this event, your bot will stop running when these events occur.
+
 ### on('tcpConnect', function (socket) { })
 
 Triggered when a socket opens a connection.
