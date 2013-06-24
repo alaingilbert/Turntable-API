@@ -658,7 +658,7 @@ class Bot
 
 
   getProfile: ->
-    rq = api: 'user.get_profile_info'
+    rq = api: 'user.get_profile'
     callback = null
     if arguments.length == 1
       if typeof arguments[0] == 'function'
