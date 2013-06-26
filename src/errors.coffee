@@ -8,25 +8,25 @@ class AbstractError extends Error
 
     @message = msg ? 'Error'
 
-AbstractError::name = 'Abstract Error'
+AbstractError::name = 'AbstractError'
 
 class ConnectionError extends AbstractError
   constructor: (msg) ->
     super msg, @constructor
 
-ConnectionError::name = 'Connection Error'
+ConnectionError::name = 'ConnectionError'
 
 class SocketError extends AbstractError
   constructor: (err) ->
     super err.message, err.constructor
 
-SocketError::name = 'Socket Error'
+SocketError::name = 'SocketError'
 
 class TimeoutError extends AbstractError
   constructor: (msg) ->
     super msg, @constructor
 
-TimeoutError::name = 'Timeout Error'
+TimeoutError::name = 'TimeoutError'
 
 
 exports.AbstractError   = AbstractError
