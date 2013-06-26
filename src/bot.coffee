@@ -79,13 +79,14 @@ class Bot
 
   connect: (roomId) ->
     if not /^[0-9a-f]{24}$/.test(roomId)
-      throw new Error "Invalid roomId: cannot connect to '#{roomId}'"
-    @whichServer roomId, (host, port) ->
-      url  = "ws://#{host}:#{port}/socket.io/websocket"
-      @ws = new WebSocket(url)
-      @ws.onmessage = @onMessage.bind(@)
-      @ws.onerror = @onError.bind(@)
-      @ws.onclose = @onClose.bind(@)
+      @emit 'error', new RangeError "Invalid roomId: cannot connect to '#{roomId}'"
+    else
+      @whichServer roomId, (host, port) ->
+        url  = "ws://#{host}:#{port}/socket.io/websocket"
+        @ws = new WebSocket(url)
+        @ws.onmessage = @onMessage.bind(@)
+        @ws.onerror = @onError.bind(@)
+        @ws.onclose = @onClose.bind(@)
 
   whichServer: (roomid, callback) ->
     options =
