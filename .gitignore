@@ -2,4 +2,5 @@
 *.swp
 *.pyc
 python_ttapi/settings.py
-node_modules/
+node_modules/.bin
+node_modules/coffee-script

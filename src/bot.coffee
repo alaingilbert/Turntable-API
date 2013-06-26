@@ -21,6 +21,7 @@
 #
 
 WebSocket   = require('./websocket').WebSocket
+Errors      = require('ttapi-errors')
 events      = require('events').EventEmitter
 crypto      = require('crypto')
 http        = require('http')
@@ -105,10 +106,10 @@ class Bot
           callback.call(@, host, port)
         else
           @log "Failed to determine which server to use: #{dataStr}"
-          @onError new Error 'Error parsing server response'
+          @emit 'error', new Errors.ConnectionError 'Error parsing server response'
     .on 'error', (e) =>
       @log "whichServer error: #{e}"
-      @onError e
+      @emit 'error', new Errors.ConnectionError e
 
 
   setTmpSong: (data) ->
@@ -118,8 +119,8 @@ class Bot
       success : true
 
 
-  onError: (data) ->
-    @emit 'error', data
+  onError: (e) ->
+    @emit 'error', new Errors.SocketError e
 
 
   onClose: ->
@@ -167,7 +168,7 @@ class Bot
       @_isAuthenticated = false
       @_isConnected = false
       @log 'No response from server; is there a proxy/firewall problem?'
-      @onError new Error 'No response from server'
+      @emit 'error', new TimeoutError 'No response from server'
     else
       @updatePresence()
 
