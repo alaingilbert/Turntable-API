@@ -76,6 +76,15 @@ class Bot
         console.log.apply(@, args)
 
 
+  disconnect: (err) ->
+    @_isAuthenticated = false
+    @_isConnected = false
+    if @listeners('disconnected').length > 0
+      @emit 'disconnected', err
+    else
+      @emit 'error', err
+
+
   connect: (roomId) ->
     if not /^[0-9a-f]{24}$/.test(roomId)
       throw new Error "Invalid roomId: cannot connect to '#{roomId}'"
@@ -116,15 +125,6 @@ class Bot
       command : 'endsong'
       room : data.room
       success : true
-
-
-  disconnect: (err) ->
-    @_isAuthenticated = false
-    @_isConnected = false
-    if @listeners('disconnected').length
-      @emit 'disconnected', err
-    else
-      throw err
 
 
   onClose: ->
