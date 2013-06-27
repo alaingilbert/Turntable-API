@@ -83,7 +83,7 @@ class Bot
       url  = "ws://#{host}:#{port}/socket.io/websocket"
       @ws = new WebSocket(url)
       @ws.onmessage = @onMessage.bind(@)
-      @ws.onerror = @onError.bind(@)
+      @ws.onerror = @disconnect.bind(@)
       @ws.onclose = @onClose.bind(@)
 
   whichServer: (roomid, callback) ->
@@ -105,10 +105,10 @@ class Bot
           callback.call(@, host, port)
         else
           @log "Failed to determine which server to use: #{dataStr}"
-          @onError new Error 'Error parsing server response'
+          @disconnect new Error 'Error parsing server response'
     .on 'error', (e) =>
       @log "whichServer error: #{e}"
-      @onError e
+      @disconnect e
 
 
   setTmpSong: (data) ->
@@ -118,8 +118,13 @@ class Bot
       success : true
 
 
-  onError: (data) ->
-    @emit 'error', data
+  disconnect: (err) ->
+    @_isAuthenticated = false
+    @_isConnected = false
+    if @listeners('disconnected').length
+      @emit 'disconnected', err
+    else
+      throw err
 
 
   onClose: ->
@@ -164,10 +169,8 @@ class Bot
     else
       activity = @lastActivity
     if @_isConnected and (Date.now() - activity) > @disconnectInterval
-      @_isAuthenticated = false
-      @_isConnected = false
       @log 'No response from server; is there a proxy/firewall problem?'
-      @onError new Error 'No response from server'
+      @disconnect new Error 'No response from server'
     else
       @updatePresence()
 
