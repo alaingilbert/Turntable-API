@@ -42,6 +42,7 @@ class Bot
     @lastHeartbeat   = Date.now()
     @lastActivity    = Date.now()
     @clientId        = Date.now() + '-0.59633534294921572'
+    @disconnectInterval = 120000
     @presenceInterval = 10000
     @_msgId          = 0
     @_cmds           = []
@@ -75,6 +76,15 @@ class Bot
         console.log.apply(@, args)
 
 
+  disconnect: (err) ->
+    @_isAuthenticated = false
+    @_isConnected = false
+    if @listeners('disconnected').length > 0
+      @emit 'disconnected', err
+    else
+      @emit 'error', err
+
+
   connect: (roomId) ->
     if not /^[0-9a-f]{24}$/.test(roomId)
       throw new Error "Invalid roomId: cannot connect to '#{roomId}'"
@@ -82,11 +92,8 @@ class Bot
       url  = "ws://#{host}:#{port}/socket.io/websocket"
       @ws = new WebSocket(url)
       @ws.onmessage = @onMessage.bind(@)
-      @ws.onerror = @onError.bind(@)
+      @ws.onerror = @disconnect.bind(@)
       @ws.onclose = @onClose.bind(@)
-
-  onError: (data) ->
-    @emit 'wserror', data
 
   whichServer: (roomid, callback) ->
     options =
@@ -107,8 +114,10 @@ class Bot
           callback.call(@, host, port)
         else
           @log "Failed to determine which server to use: #{dataStr}"
+          @disconnect new Error 'Error parsing server response'
     .on 'error', (e) =>
       @log "whichServer error: #{e}"
+      @disconnect e
 
 
   setTmpSong: (data) ->
@@ -148,10 +157,22 @@ class Bot
           # TODO: I don't like setInterval !
           if @_intervalId
             clearInterval(@_intervalId)
-          @_intervalId = setInterval(@updatePresence.bind(@), @presenceInterval)
+          @_intervalId = setInterval(@maintainPresence.bind(@), @presenceInterval)
           @emit 'ready'
       @callback()
       @_isConnected = true
+
+
+  maintainPresence: ->
+    if @lastHeartbeat > @lastActivity
+      activity = @lastHeartbeat
+    else
+      activity = @lastActivity
+    if @_isConnected and (Date.now() - activity) > @disconnectInterval
+      @log 'No response from server; is there a proxy/firewall problem?'
+      @disconnect new Error 'No response from server'
+    else
+      @updatePresence()
 
 
   extractPacketJson: (packet) ->

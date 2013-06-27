@@ -86,16 +86,16 @@ bot.on('pmmed', function (data) {
   }
 });
 
-// 888       888  .d8888b.  8888888888 8888888b.  8888888b.   .d88888b.  8888888b.  
-// 888   o   888 d88P  Y88b 888        888   Y88b 888   Y88b d88P" "Y88b 888   Y88b 
-// 888  d8b  888 Y88b.      888        888    888 888    888 888     888 888    888 
-// 888 d888b 888  "Y888b.   8888888    888   d88P 888   d88P 888     888 888   d88P 
-// 888d88888b888     "Y88b. 888        8888888P"  8888888P"  888     888 8888888P"  
-// 88888P Y88888       "888 888        888 T88b   888 T88b   888     888 888 T88b   
-// 8888P   Y8888 Y88b  d88P 888        888  T88b  888  T88b  Y88b. .d88P 888  T88b  
-// 888P     Y888  "Y8888P"  8888888888 888   T88b 888   T88b  "Y88888P"  888   T88b 
-bot.on('wserror', function (data) { // Loss of connection detected, takes about 20 seconds
-  console.log("[ BOT GOT WS ERROR ]: " + data + " on " + Date());
+// 8888888b. 8888888 .d8888b.   .d8888b.   .d88888b.  888b    888 888b    888 8888888888 .d8888b. 88888888888 8888888888 8888888b.
+// 888  "Y88b  888  d88P  Y88b d88P  Y88b d88P" "Y88b 8888b   888 8888b   888 888       d88P  Y88b    888     888        888  "Y88b
+// 888    888  888  Y88b.      888    888 888     888 88888b  888 88888b  888 888       888    888    888     888        888    888
+// 888    888  888   "Y888b.   888        888     888 888Y88b 888 888Y88b 888 8888888   888           888     8888888    888    888
+// 888    888  888      "Y88b. 888        888     888 888 Y88b888 888 Y88b888 888       888           888     888        888    888
+// 888    888  888        "888 888    888 888     888 888  Y88888 888  Y88888 888       888    888    888     888        888    888
+// 888  .d88P  888  Y88b  d88P Y88b  d88P Y88b. .d88P 888   Y8888 888   Y8888 888       Y88b  d88P    888     888        888  .d88P
+// 8888888P" 8888888 "Y8888P"   "Y8888P"   "Y88888P"  888    Y888 888    Y888 8888888888 "Y8888P"     888     8888888888 8888888P"
+bot.on('disconnected', function (data) { // Loss of connection detected, takes about 20 seconds
+  console.log("[ BOT WAS DISCONNECTED ]: " + data + " on " + Date());
   botDownDATEtime = Date(); // save the down date/time.
   botDownUTCtime = Date.now(); // save the UTC time the bot went down.
   setTimeout(function () {
