@@ -102,9 +102,9 @@ If you do not handle this event, your bot will stop running when this error occu
 
 Triggered on recoverable connection errors.
 
-##### Warning
+###### Note
 
-If you do not handle this event, your bot will stop running when the connection to Turntable is lost.
+If you do not handle this event, an ``error`` event will be triggered when the connection to Turntable is lost.
 
 ### on('tcpConnect', function (socket) { })
 
