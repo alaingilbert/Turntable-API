@@ -90,6 +90,22 @@ That will print on the terminal all the data that you get and all the data that 
 
 Triggered when the bot is connected. Do not attempt to use any actions until you receive this event.
 
+### on('error', function (error:Error) { })
+
+Triggered when attempting to connect using an invalid roomid.
+
+##### Warning
+
+If you do not handle this event, your bot will stop running when this error occurs.
+
+### on('disconnected', function (error:Error) { })
+
+Triggered on recoverable connection errors.
+
+##### Warning
+
+If you do not handle this event, your bot will stop running when the connection to Turntable is lost.
+
 ### on('tcpConnect', function (socket) { })
 
 Triggered when a socket opens a connection.
