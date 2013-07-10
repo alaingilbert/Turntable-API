@@ -678,6 +678,21 @@ class Bot
     @_send rq, callback
 
 
+  getPresence: ->
+    rq = api: 'presence.get'
+    callback = null
+    if arguments.length == 1
+      if typeof arguments[0] == 'function'
+        rq.uid = @userId
+        callback = arguments[0]
+      else if typeof arguments[0] == 'string'
+        rq.uid = arguments[0]
+    else if arguments.length == 2
+      rq.uid = arguments[0]
+      callback  = arguments[1]
+    @_send rq, callback
+
+
   getProfile: ->
     rq = api: 'user.get_profile_info'
     callback = null
