@@ -361,6 +361,10 @@ bot.getUserId('@alain_gilbert', function (data) { console.log(data); });
 
 ```
 
+### getPresence ( [[userId:string, ]callback:fn] )
+
+Get presence for the specified user, or your presence if a userid is not specified.
+
 ### getProfile ( [[userId:string, ]callback:fn] )
 
 Get the profile for the specified user, or your profile if a userid is not specified.
