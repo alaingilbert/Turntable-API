@@ -91,9 +91,13 @@ class Bot
     @whichServer roomId, (host, port) ->
       url  = "ws://#{host}:#{port}/socket.io/websocket"
       @ws = new WebSocket(url)
-      @ws.onmessage = @onMessage.bind(@)
-      @ws.onerror = @disconnect.bind(@)
-      @ws.onclose = @onClose.bind(@)
+      @ws.on 'message', (data) =>
+        @onMessage data
+      .on 'wserror', (e) =>
+        @disconnect e
+      .on 'close', =>
+        @onClose()
+
 
   whichServer: (roomid, callback) ->
     options =
@@ -265,8 +269,7 @@ class Bot
     @treatCommand(json)
 
 
-  onMessage: (msg) ->
-    data = msg.data
+  onMessage: (data) ->
     @emit 'alive'
     return @treatHeartbeat(data) if @isHeartbeat(data)
     @log "> #{data}"
@@ -457,8 +460,9 @@ class Bot
 
   roomRegister: (roomId, callback) ->
     if @ws
-      @ws.onclose = ->
-      @ws.onerror = ->
+      @ws.removeAllListeners 'message'
+      @ws.removeAllListeners 'wserror'
+      @ws.removeAllListeners 'close'
       @ws.close()
     @callback = ->
       rq = api: 'room.register', roomid: roomId
