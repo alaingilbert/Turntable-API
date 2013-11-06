@@ -379,8 +379,8 @@ class Bot
     options.client = 'web'
 
     query = []
-    for opt in options
-      query.push "#{opt}=#{encodeURIComponent(options[opt])}"
+    for opt,val of options
+      query.push "#{opt}=#{encodeURIComponent(val)}"
 
     httpOptions =
       host: 'turntable.fm'
