@@ -236,7 +236,8 @@ Get a directory of rooms.
 
 * `limit` - The number of rooms to return
 * `section_aware`
-* `sort` - What to sort by
+* `sort` - What to sort by,
+* `skip` - The number of rooms to skip
 
 ### stalk ( userId:string [, allInformation=false:bool ], callback:fn )
 
