@@ -87,7 +87,7 @@ class Bot
 
   connect: (roomId) ->
     if not /^[0-9a-f]{24}$/.test(roomId)
-      throw new Error "Invalid roomId: can't connect to '#{roomId}'"
+      throw new Error "Invalid roomId: cannot connect to '#{roomId}'"
     @whichServer roomId, (host, port) ->
       url  = "ws://#{host}:#{port}/socket.io/websocket"
       @ws = new WebSocket(url)
