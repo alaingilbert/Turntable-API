@@ -85,7 +85,7 @@ var createSecretKey = function() {
         s = s.substring(0, pos) + c + s.substring(pos, s.length);
     }
 
-    // We shoudln't have any spaces in our value until we insert them
+    // We shouldn't have any spaces in our value until we insert them
     assert.equal(s.indexOf(' '), -1);
 
     // Insert 'numSpaces' worth of spaces
