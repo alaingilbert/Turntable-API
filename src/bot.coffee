@@ -676,7 +676,27 @@ class Bot
       callback  = arguments[1]
     @_send rq, callback
 
-
+    showFans: function (e) {
+        var t = this.user,
+            i = "user.get_fan_info";
+        new r({
+            user: t,
+            profileid: e,
+            apiString: i,
+            titleString: "Fans"
+        })
+    },
+    showFanOfs: function (e) {
+        var t = this.user,
+            i = "user.get_fan_of_info";
+        new r({
+            user: t,
+            profileid: e,
+            apiString: i,
+            titleString: "Fanned"
+        })
+    },
+    
   getUserId: (name, callback) ->
     rq = api: 'user.get_id', name: name.toString()
     @_send rq, callback
@@ -954,7 +974,27 @@ class Bot
       roomid: @roomId
     @_send rq, callback
 
-
+    showFans: function (e) {
+        var t = this.user,
+            i = "user.get_fan_info";
+        new r({
+            user: t,
+            profileid: e,
+            apiString: i,
+            titleString: "Fans"
+        })
+    },
+    showFanOfs: function (e) {
+        var t = this.user,
+            i = "user.get_fan_of_info";
+        new r({
+            user: t,
+            profileid: e,
+            apiString: i,
+            titleString: "Fanned"
+        })
+    },
+    
 Bot::__proto__ = events.prototype
 
 exports.Bot = Bot
