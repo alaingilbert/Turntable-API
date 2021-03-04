@@ -29,15 +29,17 @@
 // IN THE SOFTWARE.
 //
 
-const WebSocket   = require('ws');
-const events      = require('events').EventEmitter;
-const crypto      = require('crypto');
-const http        = require('http');
-const net         = require('net');
+const WebSocket = require('ws');
+const { EventEmitter } = require('events');
+const crypto = require('crypto');
+const http = require('http');
+const net = require('net');
 const querystring = require('querystring');
 
-class Bot {
+class Bot extends EventEmitter {
   constructor(auth, userId, roomId=null) {
+    super();
+
     this.auth            = auth;
     this.userId          = userId;
     this.roomId          = roomId;
@@ -1179,8 +1181,5 @@ class Bot {
     return this._send(rq, callback);
   }
 }
-
-
-Bot.prototype.__proto__ = events.prototype;
 
 exports.Bot = Bot;
