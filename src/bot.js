@@ -1,6 +1,5 @@
 /*
  * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
  * DS102: Remove unnecessary code created because of implicit returns
  * DS202: Simplify dynamic range loops
  * DS205: Consider reworking code to avoid use of IIFEs
@@ -139,7 +138,7 @@ class Bot extends EventEmitter {
           data = [];
         }
         if (data[0]) {
-          const [host, port] = Array.from(data[1].chatserver);
+          const [host, port] = data[1].chatserver;
           return callback.call(this, host, port);
         } else {
           this.log(`Failed to determine which server to use: ${dataStr}`);
@@ -238,7 +237,7 @@ class Bot extends EventEmitter {
     return (() => {
       const result = [];
       while (index < this._cmds.length) {
-        let [id, rq, clb] = Array.from(this._cmds[index]);
+        let [id, rq, clb] = this._cmds[index];
         let is_search = false;
 
         if (id === json.msgid) {
@@ -529,10 +528,10 @@ class Bot extends EventEmitter {
         if (!directoryGraphData.success) {
           return callback(directoryGraphData);
         }
-        for (let graphObj of Array.from(directoryGraphData.rooms)) {
+        for (let graphObj of directoryGraphData.rooms) {
           const room = graphObj[0];
           const users = graphObj[1];
-          for (let user of Array.from(users)) {
+          for (let user of users) {
             if (user.userid === userId) {
               if (allInfos) {
                 return callback({roomId: room.roomid, room},
@@ -799,12 +798,12 @@ class Bot extends EventEmitter {
       const acl = userInfos.acl != null ? userInfos.acl : 0;
       return this.userAvailableAvatars(function(avatars) {
         const res = [];
-        for (let avatar of Array.from(avatars.avatars)) {
+        for (let avatar of avatars.avatars) {
           if (points >= avatar.min) {
             if (avatar.acl && (acl < avatar.acl)) {
               continue;
             }
-            for (let id of Array.from(avatar.avatarids)) {
+            for (let id of avatar.avatarids) {
               if (res.indexOf(id) === -1) {
                 res.push(id);
               }
