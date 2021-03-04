@@ -31,14 +31,12 @@ const WebSocket = require('ws');
 const { EventEmitter } = require('events');
 const crypto = require('crypto');
 const fetch = require('node-fetch')
-const http = require('http');
-const net = require('net');
-const querystring = require('querystring');
 
 class Bot extends EventEmitter {
   constructor(auth, userId, roomId=null) {
     super();
 
+    this.apiUrl          = 'https://turntable.fm/';
     this.auth            = auth;
     this.userId          = userId;
     this.roomId          = roomId;
@@ -120,9 +118,11 @@ class Bot extends EventEmitter {
 
 
   whichServer(roomid, callback) {
-    callback('chat1.turntable.fm', 8080);
-    return;
+    setImmediate(() => {
+      callback('chat1.turntable.fm', 8080);
+    });
 
+    /*
     return fetch(`https://turntable.fm/api/room.which_chatserver/roomid=${roomid}`)
       .then((res) => res.json())
       .then((data) => {
@@ -133,6 +133,7 @@ class Bot extends EventEmitter {
       .catch((err) => {
         this.disconnect(err);
       });
+    */
   }
 
 
@@ -371,6 +372,9 @@ class Bot extends EventEmitter {
 
 
   listen(port, address) {
+    const http = require('http');
+    const querystring = require('querystring');
+
     return http.createServer((req, res) => {
       let dataStr = '';
       req.on('data', chunk => {
@@ -386,6 +390,8 @@ class Bot extends EventEmitter {
 
 
   tcpListen(port, address) {
+    const net = require('net');
+
     return net.createServer(socket => {
       socket.on('connect', () => {
         return this.emit('tcpConnect', socket);
@@ -457,31 +463,10 @@ class Bot extends EventEmitter {
 
     options.client = 'web';
 
-    const query = [];
-    for (let opt in options) {
-      const val = options[opt];
-      query.push(`${opt}=${encodeURIComponent(val)}`);
-    }
-
-    const httpOptions = {
-      host: 'turntable.fm',
-      port: 80,
-      path: '/api/room.directory_rooms?' + query.join("&")
-    };
-    return http.get(httpOptions, res => {
-      let dataStr = '';
-      res.on('data', chunk => {
-        return dataStr += chunk.toString();
-      });
-      return res.on('end', () => {
-        let data;
-        try {
-          data = JSON.parse(dataStr);
-        } catch (err) {
-          data = [];
-        }
-        return callback.call(this, data);
-      });
+    const url = new URL('/api/room.directory_rooms', this.apiUrl);
+    url.search = new URLSearchParams(options);
+    fetch(url).then((res) => res.json()).then(callback, (err) => {
+      this.emit('error', err);
     });
   }
 

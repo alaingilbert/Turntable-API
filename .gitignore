@@ -3,3 +3,4 @@
 *.pyc
 python_ttapi/settings.py
 node_modules/
+.env

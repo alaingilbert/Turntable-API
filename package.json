@@ -32,5 +32,8 @@
   },
   "scripts": {
     "start": "./examples/chat_bot.js"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0"
   }
 }
