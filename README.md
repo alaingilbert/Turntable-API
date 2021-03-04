@@ -8,7 +8,10 @@ Ttapi is also available in [Python](https://github.com/alaingilbert/Turntable-AP
 See also [turntabler](https://github.com/obrie/turntabler) (Ruby) maintained by [obrie](https://github.com/obrie).
 
 ## Installation
-    npm install ttapi
+
+```bash
+npm install ttapi
+```
 
 ## Examples
 
@@ -50,7 +53,7 @@ bot.on('registered',   function (data) { console.log('Someone registered', data)
 
 ### Dynamic bot
 
-[REPL](http://nodejs.org/docs/v0.6.0/api/repl.html) allows you to dynamically call the bot functions and modify his variables during his execution.
+[REPL](https://nodejs.org/docs/latest-v14.x/api/repl.html) allows you to dynamically call the bot functions and modify his variables during his execution.
 
 ```js
 var Bot  = require('ttapi')

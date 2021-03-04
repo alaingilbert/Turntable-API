@@ -10,8 +10,17 @@
     "node-fetch": "^2.6.1",
     "ws": "^7.4.3"
   },
+  "devDependencies": {
+    "dotenv": "^8.2.0"
+  },
   "engines": {
-    "node": ">= 10"
+    "node": ">= 14"
+  },
+  "exports": {
+    ".": {
+      "import": "./wrapper.mjs",
+      "default": "./src/index.js"
+    }
   },
   "keywords": [
     "realtime",
@@ -20,20 +29,11 @@
     "turntable.fm"
   ],
   "main": "./src/index.js",
-  "exports": {
-    ".": {
-      "import": "./wrapper.mjs",
-      "default": "./src/index.js"
-    }
-  },
   "repository": {
     "type": "git",
     "url": "git://github.com/alaingilbert/Turntable-API.git"
   },
   "scripts": {
-    "start": "./examples/chat_bot.js"
-  },
-  "devDependencies": {
-    "dotenv": "^8.2.0"
+    "start": "node --require dotenv/config ./examples/chat_bot.mjs"
   }
 }
