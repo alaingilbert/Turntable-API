@@ -16,15 +16,12 @@
     "type": "git",
     "url": "git://github.com/alaingilbert/Turntable-API.git"
   },
-  "main": "lib/index.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "./examples/chat_bot.js"
   },
   "engines": {
     "node": ">= v0.4.0"
   },
-  "dependencies": {},
-  "devDependencies": {
-    "coffee-script": "~1.6.3"
-  }
+  "dependencies": {}
 }
