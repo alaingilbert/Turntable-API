@@ -29,16 +29,12 @@
 // IN THE SOFTWARE.
 //
 
-const {
-  WebSocket
-} = require('./websocket');
+const WebSocket   = require('ws');
 const events      = require('events').EventEmitter;
 const crypto      = require('crypto');
 const http        = require('http');
 const net         = require('net');
 const querystring = require('querystring');
-
-
 
 class Bot {
   constructor(auth, userId, roomId=null) {
