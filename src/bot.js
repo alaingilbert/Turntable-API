@@ -1,6 +1,5 @@
 /*
  * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
  * DS202: Simplify dynamic range loops
  * DS205: Consider reworking code to avoid use of IIFEs
  * DS207: Consider shorter variations of null checks
@@ -234,65 +233,61 @@ class Bot extends EventEmitter {
 
   executeCallback(json) {
     let index = 0;
-    return (() => {
-      const result = [];
-      while (index < this._cmds.length) {
-        let [id, rq, clb] = this._cmds[index];
-        let is_search = false;
+    while (index < this._cmds.length) {
+      let [id, rq, clb] = this._cmds[index];
+      let is_search = false;
 
-        if (id === json.msgid) {
-          switch (rq.api) {
-            case 'room.info':
-              if (json.success === true) {
-                const currentDj   = json.room.metadata.current_dj;
-                const currentSong = json.room.metadata.current_song;
-                if (currentDj) { this.currentDjId = currentDj; }
-                if (currentSong) { this.currentSongId = currentSong._id; }
+      if (id === json.msgid) {
+        switch (rq.api) {
+          case 'room.info':
+            if (json.success === true) {
+              const currentDj   = json.room.metadata.current_dj;
+              const currentSong = json.room.metadata.current_song;
+              if (currentDj) { this.currentDjId = currentDj; }
+              if (currentSong) { this.currentSongId = currentSong._id; }
+            }
+            break;
+          case 'room.register':
+            if (json.success === true) {
+              this.roomId = rq.roomid;
+              (clb => {
+                return this.roomInfo(function(data) {
+                  this.setTmpSong(data);
+                  this.emit('roomChanged', data);
+                  return (clb != null ? clb.call(this, data) : undefined);});
               }
-              break;
-            case 'room.register':
-              if (json.success === true) {
-                this.roomId = rq.roomid;
-                (clb => {
-                  return this.roomInfo(function(data) {
-                    this.setTmpSong(data);
-                    this.emit('roomChanged', data);
-                    return (clb != null ? clb.call(this, data) : undefined);});
-                }
-                )(clb);
-              } else {
-                this.emit('roomChanged', json);
-                if (clb != null) {
-                  clb.call(this, json);
-                }
+              )(clb);
+            } else {
+              this.emit('roomChanged', json);
+              if (clb != null) {
+                clb.call(this, json);
               }
-              clb = null;
-              break;
-            case 'room.deregister':
-              if (json.success === true) {
-                this.roomId = null;
-              }
-              break;
-            case 'file.search':
-              if (json.success === true) {
-                is_search = true;
-                this.currentSearches.push({query: rq.query, callback: clb});
-              }
-              break;
-          }
-
-          if (!is_search && clb) {
-            clb.call(this, json);
-          }
-
-          this._cmds.splice(index, 1);
-          break;
-        } else {
-          result.push(index++);
+            }
+            clb = null;
+            break;
+          case 'room.deregister':
+            if (json.success === true) {
+              this.roomId = null;
+            }
+            break;
+          case 'file.search':
+            if (json.success === true) {
+              is_search = true;
+              this.currentSearches.push({query: rq.query, callback: clb});
+            }
+            break;
         }
+
+        if (!is_search && clb) {
+          clb.call(this, json);
+        }
+
+        this._cmds.splice(index, 1);
+        break;
+      } else {
+        index++;
       }
-      return result;
-    })();
+    }
   }
 
 
