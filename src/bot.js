@@ -30,6 +30,7 @@
 const WebSocket = require('ws');
 const { EventEmitter } = require('events');
 const crypto = require('crypto');
+const fetch = require('node-fetch')
 const http = require('http');
 const net = require('net');
 const querystring = require('querystring');
@@ -104,8 +105,8 @@ class Bot extends EventEmitter {
     if (!/^[0-9a-f]{24}$/.test(roomId)) {
       throw new Error(`Invalid roomId: cannot connect to '${roomId}'`);
     }
-    return this.whichServer(roomId, function(host, port) {
-      const url  = `ws://${host}:${port}/socket.io/websocket`;
+    return this.whichServer(roomId, (host, port) => {
+      const url  = `wss://${host}:${port}/socket.io/websocket`;
       this.ws = new WebSocket(url);
       return this.ws.on('message', data => {
         return this.onMessage(data);
@@ -119,35 +120,19 @@ class Bot extends EventEmitter {
 
 
   whichServer(roomid, callback) {
-    const options = {
-      host: 'turntable.fm',
-      port: 80,
-      path: `/api/room.which_chatserver?roomid=${roomid}`
-    };
-    return http.get(options, res => {
-      let dataStr = '';
-      res.on('data', chunk => {
-        return dataStr += chunk.toString();
+    callback('chat1.turntable.fm', 8080);
+    return;
+
+    return fetch(`https://turntable.fm/api/room.which_chatserver/roomid=${roomid}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        const [host, port] = data[1].chatserver;
+        callback.call(this, host, port);
+      })
+      .catch((err) => {
+        this.disconnect(err);
       });
-      return res.on('end', () => {
-        let data;
-        try {
-          data = JSON.parse(dataStr);
-        } catch (err) {
-          data = [];
-        }
-        if (data[0]) {
-          const [host, port] = data[1].chatserver;
-          return callback.call(this, host, port);
-        } else {
-          this.log(`Failed to determine which server to use: ${dataStr}`);
-          return this.disconnect(new Error('Error parsing server response'));
-        }
-      });
-  }).on('error', e => {
-      this.log(`whichServer error: ${e}`);
-      return this.disconnect(e);
-    });
   }
 
 

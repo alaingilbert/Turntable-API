@@ -1,29 +1,36 @@
 {
+  "name": "ttapi",
+  "description": "A turntable.fm API",
+  "version": "3.1.2",
   "author": "Alain Gilbert <alain.gilbert.15@gmail.com> (http://agilbert.name/)",
   "contributors": [
     "Jeff Stieler <jeff.m.stieler@gmail.com> (http://jeffstieler.com)"
   ],
-  "name": "ttapi",
-  "description": "A turntable.fm API",
-  "keywords": [
-    "turntable.fm",
-    "turntable",
-    "stickybits",
-    "realtime"
-  ],
-  "version": "3.1.2",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/alaingilbert/Turntable-API.git"
-  },
-  "main": "src/index.js",
-  "scripts": {
-    "start": "./examples/chat_bot.js"
+  "dependencies": {
+    "node-fetch": "^2.6.1",
+    "ws": "^7.4.3"
   },
   "engines": {
     "node": ">= 10"
   },
-  "dependencies": {
-    "ws": "^7.4.3"
+  "keywords": [
+    "realtime",
+    "stickybits",
+    "turntable",
+    "turntable.fm"
+  ],
+  "main": "./src/index.js",
+  "exports": {
+    ".": {
+      "import": "./wrapper.mjs",
+      "default": "./src/index.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/alaingilbert/Turntable-API.git"
+  },
+  "scripts": {
+    "start": "./examples/chat_bot.js"
   }
 }
