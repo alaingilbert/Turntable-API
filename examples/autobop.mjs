@@ -4,11 +4,13 @@
  * For more information, visit http://faq.turntable.fm/customer/portal/articles/258935
  */
 
-var Bot    = require('ttapi');
+import Bot from 'ttapi'
+
 var AUTH   = 'xxxxxxxxxxxxxxxxxxxxxxxx';
 var USERID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
 var ROOMID = 'xxxxxxxxxxxxxxxxxxxxxxxx';
 
 var bot = new Bot(AUTH, USERID, ROOMID);
 
-bot.on('newsong', function (data) { bot.bop(); });
+bot.on('roomChanged', () => bot.bop());
+bot.on('newsong', (data) => bot.bop());
