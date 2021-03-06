@@ -1,7 +1,7 @@
 {
   "name": "ttapi",
   "description": "A turntable.fm API",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "author": "Alain Gilbert <alain.gilbert.15@gmail.com> (http://agilbert.name/)",
   "contributors": [
     "Jeff Stieler <jeff.m.stieler@gmail.com> (http://jeffstieler.com)"
@@ -14,7 +14,7 @@
     "dotenv": "^8.2.0"
   },
   "engines": {
-    "node": ">= 14"
+    "node": ">= 12"
   },
   "exports": {
     ".": {
