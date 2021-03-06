@@ -1,5 +1,11 @@
 # Turntable API
 
+-----
+
+Join us on Discord https://discord.gg/4AA2DqWpVc
+
+-----
+
 A simple nodejs wrapper for the turntable API.
 You'll need to find your `AUTH`, `USERID` and `ROOMID` information with [this bookmarklet](http://alaingilbert.github.com/Turntable-API/bookmarklet.html).
 
