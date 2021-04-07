@@ -414,6 +414,10 @@ class Bot extends EventEmitter {
     return this._send(rq, callback);
   }
 
+  setAsBot(callback) {
+    const rq = { api: 'user.set_bot' };
+    return this._send(rq, callback);
+  }
 
   updatePresence(callback) {
     const rq = {api: 'presence.update', status: this.currentStatus};
