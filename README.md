@@ -442,6 +442,16 @@ Get the private conversation history.
 
 Set your current status.
 
+### setAsBot ( callback:fn )
+
+Set the user to be considered a bot. This puts the user under the "Bots" group in the room list. A good place to run this command is in the callback to `.roomRegister`. 
+
+```js
+bot.roomRegister(roomid, function() {
+  bot.setAsBot();
+});
+```
+
 ### playlistListAll ( callback:fn )
 
 List all your playlists.
