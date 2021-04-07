@@ -1,7 +1,7 @@
 {
   "name": "ttapi",
   "description": "A turntable.fm API",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "author": "Alain Gilbert <alain.gilbert.15@gmail.com> (http://agilbert.name/)",
   "contributors": [
     "Jeff Stieler <jeff.m.stieler@gmail.com> (http://jeffstieler.com)"
