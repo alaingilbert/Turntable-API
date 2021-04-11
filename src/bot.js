@@ -674,7 +674,12 @@ class Bot extends EventEmitter {
 
 
   stopSong(callback) {
-    const rq = {api: 'room.stop_song', roomid: this.roomId, current_song: this.currentSongId};
+    const rq = {
+      api: 'room.stop_song',
+      djid: this.currentDjId,
+      roomid: this.roomId,
+      current_song: this.currentSongId
+    };
     return this._send(rq, callback);
   }
 

@@ -310,7 +310,7 @@ Remove the specified DJ, or yourself if not specified.
 
 ### stopSong ( [callback:fn] )
 
-Stop the song you are currently playing.
+Stop the currently playing song. You must be a moderator to stop playing someone else's song.
 
 ###### Note
 
