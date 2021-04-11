@@ -312,10 +312,6 @@ Remove the specified DJ, or yourself if not specified.
 
 Stop the currently playing song. You must be a moderator to stop playing someone else's song.
 
-###### Note
-
-This cannot affect other DJs.
-
 ### skip ( [callback:fn] )
 
 Alias of `stopSong()`.
