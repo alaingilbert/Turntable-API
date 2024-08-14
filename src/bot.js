@@ -36,7 +36,7 @@ class Bot extends EventEmitter {
   constructor(auth, userId, roomId=null) {
     super();
 
-    this.apiUrl          = 'https://turntable.fm/';
+    this.apiUrl          = 'https://deepcut.fm/';
     this.auth            = auth;
     this.userId          = userId;
     this.roomId          = roomId;
@@ -119,7 +119,7 @@ class Bot extends EventEmitter {
 
   whichServer(roomid, callback) {
     setImmediate(() => {
-      callback('chat1.turntable.fm', 8080);
+      callback('chat1.deepcut.fm', 8080);
     });
 
     /*
